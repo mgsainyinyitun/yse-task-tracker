@@ -38,7 +38,7 @@ function Contents({ page }) {
             width: '100%',
             height: '100%',
             overflow: 'scroll',
-            borderRadius: '10px',
+            borderRadius: '10px 10px 0 0',
         }}>
             <Box
                 sx={{

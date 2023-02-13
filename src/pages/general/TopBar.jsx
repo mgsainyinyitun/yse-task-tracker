@@ -28,7 +28,7 @@ function TopBar() {
                 position="sticky"
                 sx={{
                     backgroundColor: 'transparent',
-                    borderRadius: '10px',
+                    borderRadius: '0 0 10px 10px',
                     boxShadow: 'none',
                 }}
             >
@@ -37,7 +37,7 @@ function TopBar() {
                         display: 'flex',
                         justifyContent: 'space-between',
                         backgroundColor: paper,
-                        borderRadius: '10px'
+                        borderRadius: '0 0 10px 10px'
                     }}>
                     <Box
                         color={"inherit"}

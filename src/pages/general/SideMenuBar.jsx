@@ -1,5 +1,5 @@
 import { Avatar, IconButton, Typography } from "@mui/material";
-import { border, borderBottom, Box, width } from "@mui/system";
+import { Box } from "@mui/system";
 import { Menu, MenuItem, Sidebar, useProSidebar } from 'react-pro-sidebar';
 import { ADMIN_MENU, USER_MENU } from './MenuConstant';
 import { Link } from "react-router-dom";
@@ -11,7 +11,7 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 
 
 function SideMenuBar() {
-
+    const currentRoute = window.location.pathname;
     const theme = useTheme();
     const paper = theme.palette.background.paper;
     const background = theme.palette.mode === THEME.DARK.palette.mode ?
@@ -20,15 +20,51 @@ function SideMenuBar() {
     const { collapseSidebar, collapsed, toggleSidebar, broken } = useProSidebar();
 
     return (
-        <Box color={'inherit'}
+        <Box
             sx={{
                 display: 'flex',
+                flexGrow:'1',
                 height: '90vh',
                 overflow: 'scroll',
-                borderRadius: '10px',
+                borderRadius: '10px 10px 0 0',
+
+                '& .ps-menu-button.ps-active:hover:before': {
+                    content:'none',
+                },
+                '& .ps-menu-button.ps-active:hover:after': {
+                    content:'none',
+                },
+
+                '& .ps-menu-button.ps-active': {
+                    fontWeight: 'bold',
+                    color: `${theme.palette.primary.dark}`,
+                    background: `${background}`,
+                    borderRadius: '10px 0 0 10px',
+                },
+                '& .ps-menu-button.ps-active:before': {
+                    position: 'absolute',
+                    content: '""',
+                    height: "30px",
+                    width: "30px",
+                    background: `${paper}`,
+                    right: 0,
+                    bottom: '100%',
+                    borderBottomRightRadius: "13px",
+                    boxShadow: `0 17px 0 ${background}`,
+                },
+                '& .ps-menu-button.ps-active:after': {
+                    position: 'absolute',
+                    content: '""',
+                    height: "30px",
+                    width: "30px",
+                    background: `${paper}`,
+                    right: 0,
+                    top: '100%',
+                    borderTopRightRadius: "13px",
+                    boxShadow: `0 -17px 0 ${background}`,
+                }
             }}
         >
-
             <Sidebar
                 backgroundColor={background}
                 breakPoint={'md'}
@@ -61,12 +97,32 @@ function SideMenuBar() {
                         menuItemStyles={{
                             button: {
                                 '&:hover': {
-                                    background: 'transparent',
-                                    color: 'primary.main',
-                                    border:'1px solid',
-                                    borderRadius:'10px',
-                                    borderColor:`${background}`
+                                   background:`transparent`,
+                                    borderRadius:'10px 0 0 10px',
+                                    borderLeft:`2px solid  ${theme.palette.primary.dark}`,
                                 },
+                                // '&:hover:before': {
+                                //     position: 'absolute',
+                                //     content: '""',
+                                //     height: "30px",
+                                //     width: "30px",
+                                //     background: `${paper}`,
+                                //     right: 0,
+                                //     bottom: '100%',
+                                //     borderBottomRightRadius: "13px",
+                                //     boxShadow: `0 17px 0 ${background}`,
+                                // },
+                                // '&:hover:after': {
+                                //     position: 'absolute',
+                                //     content: '""',
+                                //     height: "30px",
+                                //     width: "30px",
+                                //     background: `${paper}`,
+                                //     right: 0,
+                                //     top: '100%',
+                                //     borderTopRightRadius: "13px",
+                                //     boxShadow: `0 -17px 0 ${background}`,
+                                // },
                             },
                         }}
                     >
@@ -159,6 +215,7 @@ function SideMenuBar() {
 
 
                         <Box
+                            pb={4}
                             sx={{
                                 borderRadius: "10px",
                                 background: `${paper}`,
@@ -171,11 +228,11 @@ function SideMenuBar() {
                             >
                                 User
                             </Typography>
-
                             {
                                 USER_MENU.items.map(item => {
                                     return (
                                         <MenuItem
+                                            active={currentRoute === item.link}
                                             rootStyles={{
                                                 paddingLeft: '10px',
                                             }}
@@ -202,8 +259,9 @@ function SideMenuBar() {
                                 ADMIN_MENU.items.map(item => {
                                     return (
                                         <MenuItem
+                                            active={currentRoute === item.link}
                                             rootStyles={{
-                                                marginLeft: '10px',
+                                                paddingLeft: '10px',
                                             }}
                                             key={item.id}
                                             component={<Link to={item.link} />}
@@ -228,7 +286,7 @@ function SideMenuBar() {
                                 background: `${paper}`,
                                 borderRadius: "10px",
                                 padding: "0.5rem",
-                                minHeight:'150px',
+                                minHeight: '150px',
                             }}
                                 mt={1}
                                 mb={1}

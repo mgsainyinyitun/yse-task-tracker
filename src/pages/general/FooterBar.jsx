@@ -10,11 +10,10 @@ function FooterBar() {
             sx={{
                 display: 'flex',
                 width: '100%',
-                // height:'100px',
                 background: `${paper}`,
-                borderRadius: '10px',
                 justifyContent: 'center',
                 alignItems:'center',
+                borderRadius:'10px 10px 0 0',
             }}
         >
             <Typography
@@ -31,7 +30,6 @@ function FooterBar() {
              >
                 Copyright © 2023 Youth Society for Education
             </Typography>
-
         </Box>
     )
 }
