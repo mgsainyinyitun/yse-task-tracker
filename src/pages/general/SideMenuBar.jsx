@@ -8,7 +8,7 @@ import { useTheme } from "@mui/material";
 import { THEME } from "../../themes";
 
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 
 
 
@@ -19,7 +19,6 @@ function SideMenuBar() {
     const paper = theme.palette.background.paper;
     const background = theme.palette.mode === THEME.DARK.palette.mode ?
         theme.palette.grey[900] : theme.palette.grey[300];
-
 
     const menuActiveStyle  = {
             fontWeight: 'bold',
@@ -75,6 +74,12 @@ function SideMenuBar() {
         setMenuActiveAfter(menuAfterActiveStyle);
         setMenuActiveBefore(menuBeforeActiveStyle);
     }
+
+
+
+    useEffect(()=>{
+        changeMenuActiveStyleLeave();
+    },[theme]);
 
     return (
         <Box
