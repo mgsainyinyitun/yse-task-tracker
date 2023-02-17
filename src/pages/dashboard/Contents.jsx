@@ -55,6 +55,7 @@ function Contents({ page }) {
                         flexGrow: 1,
                         background: `${theme.palette.background.paper}`,
                         borderRadius: '10px',
+                        display:'flex',
                     }}
                 >
                     {renderContents(page)}
