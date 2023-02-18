@@ -4,14 +4,17 @@ import { THEME } from "../../themes";
 import FooterBar from "../general/FooterBar";
 import { PAGE } from "../pageConstants";
 import Profile from "../profile/Profile";
-import Task from "../tasks/Task";
+import TaskDetail from "../tasks/crud/TaskDetail";
+import TasksList from "../tasks/TasksList";
 
 const renderContents = (page) => {
     switch (page) {
         case PAGE.NAME.HOME:
             return <h3>Default Home Page</h3>
-        case PAGE.NAME.TASKS:
-            return <Task />;
+        case PAGE.NAME.TASKS.INDEX:
+            return <TasksList/>;
+        case PAGE.NAME.TASKS.DETAIL:
+            return <TaskDetail/>;
         case PAGE.NAME.PROFILE:
             return <Profile />;
         case PAGE.NAME.PROJETCS:
@@ -30,6 +33,7 @@ const renderContents = (page) => {
 }
 
 function Contents({ page }) {
+    
     const theme = useTheme();
     const background = theme.palette.mode === THEME.DARK.palette.mode ?
         theme.palette.grey[900] : theme.palette.grey[300];

@@ -265,6 +265,7 @@ function SideMenuBar() {
                                     return (
                                         <MenuItem
                                             active={currentRoute === item.link}
+                                            // active={item.link.includes(currentRoute)}
                                             rootStyles={{
                                                 paddingLeft: '10px',
                                             }}

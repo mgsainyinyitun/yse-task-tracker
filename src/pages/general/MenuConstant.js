@@ -28,7 +28,7 @@ export const USER_MENU = {
         id:'3',
         group:"data",
         title:'Tasks',
-        link:`${PAGE.LINK.TASKS}`,
+        link:`${PAGE.LINK.TASKS.INDEX}`,
         icon:<AssignmentOutlinedIcon/>
     },
     {

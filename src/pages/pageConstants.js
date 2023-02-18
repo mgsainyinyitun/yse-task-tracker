@@ -5,7 +5,13 @@ export const PAGE =
         SIGNIN:'sign.page',
         SIGNUP:'signup.page',
         HOME: 'user.home.page',
-        TASKS: 'user.tasks.page',
+        TASKS: 
+        {
+            INDEX:'user.tasks.page',
+            DETAIL:'user.tasks.detail.page',
+            EDIT:'user.tasks.edit.page',
+            CREATE:'user.tasks.create.page',
+        },
         PROFILE: 'user.profile.page',
         PROJETCS: 'user.projects.page',
         CALENDAR: 'user.calendar.page',
@@ -18,7 +24,13 @@ export const PAGE =
         SIGNIN:'/signin',
         SIGNUP:'/signup',
         HOME: '/',
-        TASKS: '/user/tasks',
+        TASKS: 
+        {
+            INDEX:'/user/tasks',
+            DETAIL:'detail/:id',
+            EDIT:'edit/:id',
+            CREATE:'create',
+        },
         PROFILE: '/user/profile',
         PROJETCS: '/user/projects',
         CALENDAR: '/user/calendar',
