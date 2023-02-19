@@ -13,12 +13,11 @@ function MainRoutes() {
             {/** After Login Contents Routes */}
             <Route path={PAGE.LINK.HOME}         element={<Main page={PAGE.NAME.HOME}/>} />
             {/** Tasks  Routes               */}
-            <Route path={PAGE.LINK.TASKS.INDEX} >
-                <Route index element={<Main page={PAGE.NAME.TASKS.INDEX}/>}/>
-                <Route path={PAGE.LINK.TASKS.DETAIL} element={<Main page={PAGE.NAME.TASKS.DETAIL} /> }/>
-                <Route path={PAGE.LINK.TASKS.CREATE} element={<Main page={PAGE.NAME.TASKS.CREATE} /> }/>
-                <Route path={PAGE.LINK.TASKS.EDIT}   element={<Main page={PAGE.NAME.TASKS.EDIT} /> }/>
-            </Route>
+            <Route path={PAGE.LINK.TASKS.INDEX}  element={<Main page={PAGE.NAME.TASKS.INDEX}/>} />
+            <Route path={PAGE.LINK.TASKS.DETAIL} element={<Main page={PAGE.NAME.TASKS.DETAIL} /> }/>
+            <Route path={PAGE.LINK.TASKS.CREATE} element={<Main page={PAGE.NAME.TASKS.CREATE} /> }/>
+            <Route path={PAGE.LINK.TASKS.EDIT}   element={<Main page={PAGE.NAME.TASKS.EDIT} /> }/>
+            
             <Route path={PAGE.LINK.PROFILE}      element={<Main page={PAGE.NAME.PROFILE}/>}/>
             <Route path={PAGE.LINK.PROJETCS}     element={<Main page={PAGE.NAME.PROJETCS}/>}/>
             <Route path={PAGE.LINK.CALENDAR}     element={<Main page={PAGE.NAME.CALENDAR}/>}/>

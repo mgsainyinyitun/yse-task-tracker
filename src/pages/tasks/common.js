@@ -1,9 +1,15 @@
-import { Avatar, Chip ,Box,Button,IconButton} from "@mui/material";
+import { Avatar, Chip, Box, Button, IconButton } from "@mui/material";
 import { DeleteOutline, EditOutlined } from "@mui/icons-material";
+import NotStartedOutlinedIcon from '@mui/icons-material/NotStartedOutlined';
+import WorkHistoryOutlinedIcon from '@mui/icons-material/WorkHistoryOutlined';
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import { Link } from "react-router-dom";
+import { findTask } from "../../utils/commonFunctions";
+import { mockTasks } from "../../data/mockData";
+
 
 export function renderName(params) {
-    if (params.value == null){
+    if (params.value == null) {
         return '';
     }
     return (
@@ -37,15 +43,37 @@ export function renderPriority(params) {
 }
 
 export function renderStatus(params) {
+
+    let content = null;
+    switch (params.value) {
+        case 'notyet':
+            content =
+                <>
+                    <NotStartedOutlinedIcon sx={{marginRight:'5px', color:'error.main'}}/>
+                    {`Not Start`}
+                </>; break;
+        case 'inprogress':
+            content =
+                <>
+                    <WorkHistoryOutlinedIcon sx={{marginRight:'5px',color:'primary.main'}}/>
+                    {`In Progress`}
+                </>; break;
+        case 'finished':
+            content =
+                <>
+                    <CheckCircleOutlineOutlinedIcon sx={{marginRight:'5px',color:'success.main'}}/>
+                    {`Finished`}
+                </>; break;
+    }
+
     return (
         <Box sx={{
             width: '100%',
             height: '100%',
-            display: 'felex',
-            justifyContent: 'center',
+            display: 'flex',
             alignItems: 'center',
         }}>
-            {params.value}
+            {content}
         </Box>
     )
 }
@@ -66,7 +94,7 @@ export function renderDetail(params) {
 
 export function renderEdit(params) {
     return (
-        <IconButton>
+        <IconButton sx={{color:'primary.dark'}}>
             <Link to={`edit/${params.value}`}
                 style={{
                     textDecoration: 'none',
@@ -78,16 +106,13 @@ export function renderEdit(params) {
         </IconButton>)
 
 }
-export function renderDelete(params) {
-    return (<IconButton>
-        <Link to={`delete/${params.value}`}
-            style={{
-                textDecoration: 'none',
-                textTransform: 'none',
-                color: 'red',
-                fontWeight: 'bold',
-            }}>
-            <DeleteOutline />
-        </Link>
+export function renderDelete(params,setOpen,setDeleteTask) {
+    const onClickOpenDeleteModal = ()=>{
+        setDeleteTask(findTask(params.value,mockTasks));
+        setOpen(true);
+    }
+    return (
+    <IconButton sx={{color:'red'}} onClick={onClickOpenDeleteModal}>
+        <DeleteOutline />
     </IconButton>);
 }

@@ -27,9 +27,9 @@ export const PAGE =
         TASKS: 
         {
             INDEX:'/user/tasks',
-            DETAIL:'detail/:id',
-            EDIT:'edit/:id',
-            CREATE:'create',
+            DETAIL:'/user/tasks/detail/:id',
+            EDIT:'/user/tasks/edit/:id',
+            CREATE:'/user/tasks/create',
         },
         PROFILE: '/user/profile',
         PROJETCS: '/user/projects',

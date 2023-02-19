@@ -3,8 +3,7 @@
 html,
 body,
 #root,
-.app
- {
+.app {
   height: 100%;
   width: 100%;
   font-family: "Source Sans Pro", sans-serif;
@@ -13,7 +12,7 @@ body,
   /* background-color: gray; */
 }
 
-.content{
+.content {
   border: 1px solid red;
   padding: 0;
 }
@@ -24,10 +23,17 @@ body,
   display: flex;
   position: relative;
 }
-.action-area{
-    height: 84vh;
-    max-height: 84vh;
-    overflow: scroll;
+
+.action-area {
+  height: 84vh;
+  max-height: 84vh;
+  overflow: scroll;
+}
+
+.shadow {
+  box-shadow: -2px 1px 18px 0px rgba(0, 0, 0, 0.52);
+  -webkit-box-shadow: -2px 1px 18px 0px rgba(0, 0, 0, 0.52);
+  -moz-box-shadow: -2px 1px 18px 0px rgba(0, 0, 0, 0.52);
 }
 
 /* .inputRounded .MuiOutlinedInput-root {
@@ -57,7 +63,7 @@ body,
 
 
 @media only screen and (max-width: 1000px) {
-  .app{
+  .app {
     flex-direction: column;
   }
 

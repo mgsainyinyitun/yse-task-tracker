@@ -8,7 +8,7 @@ import { useTheme } from "@mui/material";
 import { THEME } from "../../themes";
 
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 
 
 
@@ -18,58 +18,59 @@ function SideMenuBar() {
     const theme = useTheme();
     const paper = theme.palette.background.paper;
     const background = theme.palette.mode === THEME.DARK.palette.mode ?
-        theme.palette.grey[900] : theme.palette.grey[300];
+        theme.palette.grey[900] : theme.palette.custom.background;
 
-    const menuActiveStyle  = {
-            fontWeight: 'bold',
-            color: `${theme.palette.primary.dark}`,
-            background: `${background}`,
-            borderRadius: '10px 0 0 10px',
-        };
+    const menuActiveStyle = {
+        fontWeight: 'bold',
+        color: `${theme.palette.primary.main}`,
+        
+        background: `${background}`,
+        borderRadius: '10px 0 0 10px',
+    };
 
     const menuBeforeActiveStyle = {
-            position: 'absolute',
-            content: '""',
-            height: "30px",
-            width: "30px",
-            background: `${paper}`,
-            right: 0,
-            bottom: '100%',
-            borderBottomRightRadius: "13px",
-            boxShadow: `0 17px 0 ${background}`,
-        }
-
-    const menuAfterActiveStyle  = {
-            position: 'absolute',
-            content: '""',
-            height: "30px",
-            width: "30px",
-            background: `${paper}`,
-            right: 0,
-            top: '100%',
-            borderTopRightRadius: "13px",
-            boxShadow: `0 -17px 0 ${background}`,
+        position: 'absolute',
+        content: '""',
+        height: "30px",
+        width: "30px",
+        background: `${paper}`,
+        right: 0,
+        bottom: '100%',
+        borderBottomRightRadius: "13px",
+        boxShadow: `0 17px 0 ${background}`,
     }
 
-    const [menuActive,setMenuActive] = useState(menuActiveStyle);
-    const [menuActiveBefore,setMenuActiveBefore] = useState(menuBeforeActiveStyle);
-    const [menuActiveAfter,setMenuActiveAfter] = useState(menuAfterActiveStyle);
+    const menuAfterActiveStyle = {
+        position: 'absolute',
+        content: '""',
+        height: "30px",
+        width: "30px",
+        background: `${paper}`,
+        right: 0,
+        top: '100%',
+        borderTopRightRadius: "13px",
+        boxShadow: `0 -17px 0 ${background}`,
+    }
+
+    const [menuActive, setMenuActive] = useState(menuActiveStyle);
+    const [menuActiveBefore, setMenuActiveBefore] = useState(menuBeforeActiveStyle);
+    const [menuActiveAfter, setMenuActiveAfter] = useState(menuAfterActiveStyle);
 
     const { collapseSidebar, collapsed, toggleSidebar, broken } = useProSidebar();
 
-    function changeMenuActiveStyleEnter(){
-                setMenuActive({
-                    ...menuActive, background: `transparent`,
-                });
-                setMenuActiveBefore({
-                    content:'none',
-                });
-                setMenuActiveAfter({
-                    content:'none',
-                })
-        }
+    function changeMenuActiveStyleEnter() {
+        setMenuActive({
+            ...menuActive, background: `transparent`,
+        });
+        setMenuActiveBefore({
+            content: 'none',
+        });
+        setMenuActiveAfter({
+            content: 'none',
+        })
+    }
 
-    function changeMenuActiveStyleLeave(){
+    function changeMenuActiveStyleLeave() {
         setMenuActive(menuActiveStyle);
         setMenuActiveAfter(menuAfterActiveStyle);
         setMenuActiveBefore(menuBeforeActiveStyle);
@@ -77,9 +78,10 @@ function SideMenuBar() {
 
 
 
-    useEffect(()=>{
+    useEffect(() => {
+        console.log('run useEffect Reset Them')
         changeMenuActiveStyleLeave();
-    },[theme]);
+    }, [theme]);
 
     return (
         <Box
@@ -183,16 +185,19 @@ function SideMenuBar() {
 
                         {/* Avator and some text */}
                         {(!collapsed &&
-                            <Box sx={{
-                                minHeight: "200px",
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                background: `${paper}`,
-                                borderRadius: "10px",
-                                padding: "0.5rem",
-                            }}
+                            <Box
+                                sx={{
+                                    minHeight: "200px",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    background: `${paper}`,
+                                    borderRadius: "10px",
+                                    padding: "0.5rem",
+                                    boxShadow:1,
+                                }}
+                                
                                 mb={1}
                             >
                                 <Avatar
@@ -246,10 +251,11 @@ function SideMenuBar() {
                         <Box
                             pb={4}
                             onMouseEnter={() => changeMenuActiveStyleEnter()}
-                            onMouseLeave={()=> changeMenuActiveStyleLeave()}
+                            onMouseLeave={() => changeMenuActiveStyleLeave()}
                             sx={{
                                 borderRadius: "10px",
                                 background: `${paper}`,
+                                boxShadow: 1,
                             }}
 
                         >
@@ -320,6 +326,7 @@ function SideMenuBar() {
                                 borderRadius: "10px",
                                 padding: "0.5rem",
                                 minHeight: '150px',
+                                boxShadow: 1,
                             }}
                                 mt={1}
                                 mb={1}

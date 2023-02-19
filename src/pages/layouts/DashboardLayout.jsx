@@ -6,7 +6,7 @@ function DashboardLayout(props) {
     const theme = useTheme();
 
     const background = theme.palette.mode === THEME.DARK.palette.mode ?
-        theme.palette.grey[900] : theme.palette.grey[300];
+        theme.palette.grey[900] :  theme.palette.custom.background;
     return (
 
         <Box    

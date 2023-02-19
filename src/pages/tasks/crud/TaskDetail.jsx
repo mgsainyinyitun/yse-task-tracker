@@ -1,10 +1,11 @@
 import { Avatar, Button, Card, CardContent, CardHeader, Divider, Paper, Stack, TextField, Typography } from "@mui/material";
-import { Box } from "@mui/system";
+import { Box } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import ArrowBackIosOutlinedIcon from '@mui/icons-material/ArrowBackIosOutlined';
 import StartOutlinedIcon from '@mui/icons-material/StartOutlined';
 import { mockTasks } from "../../../data/mockData";
 import { styled } from '@mui/material/styles';
+import { findTask } from "../../../utils/commonFunctions";
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -15,12 +16,9 @@ const Item = styled(Paper)(({ theme }) => ({
     minWidth: 30,
 }));
 
-
 function TaskDetail() {
     const { id } = useParams();
-    const task = mockTasks.find(item => {
-        return item.id == id;
-    });
+    const task = findTask(id,mockTasks);
     const nevigate = useNavigate();
     return (
         <Box
