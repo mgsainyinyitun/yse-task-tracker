@@ -6,14 +6,9 @@ import { Link } from "react-router-dom";
 import YSE_LOGO from "../../assets/images/YSE Logo (Color).png";
 import { useTheme } from "@mui/material";
 import { THEME } from "../../themes";
-
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import { useState, useEffect } from "react";
 
-
-
-
-function SideMenuBar() {
+function SideMenuBar({ toggleSideBar }) {
     const currentRoute = window.location.pathname;
     const theme = useTheme();
     const paper = theme.palette.background.paper;
@@ -23,7 +18,7 @@ function SideMenuBar() {
     const menuActiveStyle = {
         fontWeight: 'bold',
         color: `${theme.palette.primary.main}`,
-        
+
         background: `${background}`,
         borderRadius: '10px 0 0 10px',
     };
@@ -56,7 +51,8 @@ function SideMenuBar() {
     const [menuActiveBefore, setMenuActiveBefore] = useState(menuBeforeActiveStyle);
     const [menuActiveAfter, setMenuActiveAfter] = useState(menuAfterActiveStyle);
 
-    const { collapseSidebar, collapsed, toggleSidebar, broken } = useProSidebar();
+    const { collapsed, toggleSidebar, broken } = useProSidebar();
+
 
     function changeMenuActiveStyleEnter() {
         setMenuActive({
@@ -157,32 +153,6 @@ function SideMenuBar() {
                             },
                         }}
                     >
-
-                        {/* <MenuItem
-                            onClick={() => collapseSidebar()}
-                            icon={collapsed ? <MenuOutlinedIcon /> : undefined}
-                            style={{
-                                margin: "10px 0 10px 0",
-                                color: 'GrayText',
-                            }}
-                        >
-                            {!collapsed && (
-                                <Box
-                                    display="flex"
-                                    justifyContent="space-between"
-                                    alignItems="center"
-                                    ml="15px"
-                                >
-                                    <Typography variant="h6" color={'gray'} >
-                                        Sai Nyi
-                                    </Typography>
-                                    <IconButton>
-                                        <MenuOutlinedIcon />
-                                    </IconButton>
-                                </Box>
-                            )}
-                        </MenuItem> */}
-
                         {/* Avator and some text */}
                         {(!collapsed &&
                             <Box
@@ -195,9 +165,9 @@ function SideMenuBar() {
                                     background: `${paper}`,
                                     borderRadius: "10px",
                                     padding: "0.5rem",
-                                    boxShadow:1,
+                                    boxShadow: 1,
                                 }}
-                                
+
                                 mb={1}
                             >
                                 <Avatar
@@ -234,7 +204,6 @@ function SideMenuBar() {
                         {/* Avator and some text */}
                         {(collapsed &&
                             <Box sx={{
-                                minHeight: "200px",
                                 width: "80px",
                                 background: `${paper}`,
                                 display: 'flex',
@@ -256,16 +225,19 @@ function SideMenuBar() {
                                 borderRadius: "10px",
                                 background: `${paper}`,
                                 boxShadow: 1,
+                                paddingTop: '30px',
                             }}
 
                         >
-                            <Typography
-                                variant="body1"
-                                m={1}
-                                fontWeight={'bold'}
-                            >
-                                User
-                            </Typography>
+                            {(!collapsed &&
+                                <Typography
+                                    variant="body1"
+                                    m={1}
+                                    fontWeight={'bold'}
+                                >
+                                    User
+                                </Typography>
+                            )}
                             {
                                 USER_MENU.items.map(item => {
                                     return (
@@ -273,7 +245,8 @@ function SideMenuBar() {
                                             active={currentRoute === item.link}
                                             // active={item.link.includes(currentRoute)}
                                             rootStyles={{
-                                                paddingLeft: '10px',
+                                                paddingLeft: !collapsed ? '10px' : '3px',
+                                                zIndex: 1,
                                             }}
                                             key={item.id}
                                             component={<Link to={item.link} />}
@@ -287,20 +260,22 @@ function SideMenuBar() {
                             }
 
                             {/** Admin Role Only  */}
-                            <Typography
-                                variant="body1"
-                                m={1}
-                                fontWeight={'bold'}
-                            >
-                                Admin
-                            </Typography>
+                            {(!collapsed &&
+                                <Typography
+                                    variant="body1"
+                                    m={1}
+                                    fontWeight={'bold'}
+                                >
+                                    Admin
+                                </Typography>
+                            )}
                             {
                                 ADMIN_MENU.items.map(item => {
                                     return (
                                         <MenuItem
                                             active={currentRoute === item.link}
                                             rootStyles={{
-                                                paddingLeft: '10px',
+                                                paddingLeft: !collapsed ? '10px' : '3px',
                                             }}
                                             key={item.id}
                                             component={<Link to={item.link} />}
@@ -312,8 +287,6 @@ function SideMenuBar() {
                                     );
                                 })
                             }
-
-
                         </Box>
                         {(!collapsed &&
                             <Box sx={{
@@ -341,6 +314,33 @@ function SideMenuBar() {
                                     }}
                                 />
                             </Box>)}
+                        {(collapsed &&
+                            <Box sx={{
+                                display: "flex",
+                                flexGrow: 1,
+                                justifyContent: "center",
+                                alighItems: 'center',
+                                background: `${paper}`,
+                                padding: "0.5rem",
+                                borderRadius: "10px",
+                                boxShadow:1
+                            }}
+                                mt={1}
+                                mb={1}
+                            >
+                                <Typography sx={{
+                                    color:"primary.main",
+                                    writingMode:'vertical-lr',
+                                    transform:'rotate(180deg)',
+                                    textAlign:'center',
+                                    fontWeight:'bold',
+                                }}>
+                                    Youth Society for Education
+                                </Typography>
+
+
+                            </Box>
+                        )}
                     </Menu>
                 </Box>
             </Sidebar>

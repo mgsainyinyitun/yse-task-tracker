@@ -1,4 +1,4 @@
-import { Autocomplete, Avatar, Box, Button, Container, Divider, Grid, IconButton, Paper, Stack, TextField, Typography } from "@mui/material";
+import { Autocomplete, Avatar, Box, Button, Divider, Grid, IconButton, Paper, Stack, TextField, Typography, Fab } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import ArrowBackIosOutlinedIcon from '@mui/icons-material/ArrowBackIosOutlined';
 import { findTask } from "../../../utils/commonFunctions";
@@ -86,9 +86,9 @@ function TaskEdit() {
                         </Box>
 
                         <Divider color={'primary.dark'} sx={{
-                            marginTop:'10px',
-                            marginBottom:'10px',
-                            height:3
+                            marginTop: '10px',
+                            marginBottom: '10px',
+                            height: 3
                         }} />
 
 
@@ -181,10 +181,10 @@ function TaskEdit() {
                                 multiline
                                 rows={3}
                             />
-                        <Divider color={'primary.dark'} sx={{
-                            marginTop:'10px',
-                            height:3
-                        }} />
+                            <Divider color={'primary.dark'} sx={{
+                                marginTop: '10px',
+                                height: 3
+                            }} />
                             <Box>
                                 <Button startIcon={<SaveOutlined />} variant={'contained'} sx={{ borderRadius: '20px' }}> Save </Button>
                             </Box>

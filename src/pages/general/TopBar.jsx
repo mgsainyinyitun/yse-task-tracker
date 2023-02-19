@@ -12,9 +12,12 @@ import MenuOpenOutlinedIcon from '@mui/icons-material/MenuOpenOutlined';
 import { useTheme } from "@mui/material";
 import { useContext } from "react";
 import { ColorModeContext } from "../main/Main";
+import { useProSidebar } from "react-pro-sidebar";
 
 
 function TopBar() {
+
+    const { collapseSidebar, collapsed } = useProSidebar();
     const theme = useTheme();
     const paper = theme.palette.background.paper;
     const colorMode = useContext(ColorModeContext);
@@ -46,9 +49,10 @@ function TopBar() {
                             alignItems: 'center',
                             flexGrow: 1,
                         }}>
-                        <IconButton>
+                        <IconButton onClick={()=> collapseSidebar()}>
+
                             <MenuOpenOutlinedIcon sx={{
-                                transform:'rotate(0deg)',
+                                transform:!collapsed?'rotate(0deg)':'rotate(180deg)',
                             }} />
                         </IconButton>
                         <Search
