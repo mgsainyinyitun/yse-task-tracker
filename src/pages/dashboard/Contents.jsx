@@ -4,6 +4,7 @@ import { THEME } from "../../themes";
 import FooterBar from "../general/FooterBar";
 import { PAGE } from "../pageConstants";
 import Profile from "../profile/Profile";
+import ProjectsList from "../projects/ProjectsList";
 import TaskDetail from "../tasks/crud/TaskDetail";
 import TaskEdit from "../tasks/crud/TaskEdit";
 import TasksList from "../tasks/TasksList";
@@ -24,7 +25,7 @@ const renderContents = (page) => {
             return <Profile />;
         /* PROJETCS    */
         case PAGE.NAME.PROJETCS:
-            return <h3>Projects Page</h3>;
+            return <ProjectsList/>;
         /* CALENDAR    */
         case PAGE.NAME.CALENDAR:
             return <h3>Calendar Page</h3>;

@@ -22,7 +22,7 @@ export const mockProject = [
         scope: 1,  // Department id or 'all' 
     },
     {
-        id: 1,
+        id: 2,
         title: 'IELTS Basic Training',
         description: 'This is a IELTS project by YSE, in cooperation with good IELTS teachers',
         creator: {
@@ -42,6 +42,74 @@ export const mockProject = [
         endDate: new Date("2021-04-25"),
         progress: 20,
         scope: 'all',
+    },
+    {
+        id: 3,
+        title: 'IELTS Advance Training',
+        description: 'This is a IELTS project by YSE, in cooperation with good IELTS teachers',
+        creator: {
+            id: '1',
+            name: 'Mg Mg',
+        },
+        createdAt: new Date("2021-03-25"),
+        updatedAt: new Date("2021-04-01"),
+        members: 
+        [
+           {id:1,name:'Mg Mg'},
+           {id:2,name:'Ko Ko'},
+           {id:3,name:'Hla Hla'},
+        ],
+        tasks: [1, 2, 3], // ID of related tasks
+        startDate: new Date("2021-03-25"),
+        endDate: new Date("2021-04-25"),
+        progress: 20,
+        scope: 'all',
+    },
+    {
+        id: 4,
+        title: 'Basic Google Training',
+        description: 'This is a training program by YSE, in cooperation with good tech teachers',
+        creator: {
+            id: '1',
+            name: 'Ko Ko',
+        },
+        createdAt: new Date("2021-03-25"),
+        updatedAt: new Date("2021-02-03"),
+        members: 
+        [
+           {id:1,name:'Mg Mg'},
+           {id:2,name:'Ko Ko'},
+           {id:3,name:'Hla Hla'},
+           {id:4,name:'Mya Mya'},
+        ],
+        tasks: [1, 2, 3, 4, 5,6], // ID of related tasks
+        startDate: new Date("2021-03-25"),
+        endDate: new Date("2021-04-25"),
+        progress: 80,
+        scope: 3,
+    },
+    {
+        id: 5,
+        title: 'Basic Google Advance Training',
+        description: 'This is a training program by YSE, in cooperation with good tech teachers',
+        creator: {
+            id: '1',
+            name: 'Ko Ko',
+        },
+        createdAt: new Date("2021-03-25"),
+        updatedAt: new Date("2021-02-03"),
+        members: 
+        [
+           {id:1,name:'Mg Mg'},
+           {id:2,name:'Ko Ko'},
+           {id:3,name:'Hla Hla'},
+           {id:4,name:'Mya Mya'},
+        ],
+        tasks: [1, 2, 3, 4, 5,6], // ID of related tasks
+        startDate: new Date("2021-03-25"),
+        endDate: new Date("2021-04-25"),
+        progress: 10.58,
+        scope: 2,
     }
 ];
 
@@ -66,7 +134,7 @@ export const mockUser = [
         address: 'yangon',
         phone: '09980004010',
         position: 3,
-        department: 3,
+        department: 2,
         createdAt: new Date("2021-03-25"),
         updatedAt: new Date("2021-03-26"),
     }

@@ -21,10 +21,10 @@ function FooterBar() {
              textAlign={'center'}
              sx={{
                 fontSize:{
-                    lg:20,
-                    md:15,
-                    sm:15,
-                    xs:15,   
+                    lg:16,
+                    md:13,
+                    sm:13,
+                    xs:11,   
                 }
              }}
              >
