@@ -1,6 +1,7 @@
 import { useTheme } from "@emotion/react";
 import { Box } from "@mui/material";
 import { THEME } from "../../themes";
+import Calendar from "../calendar/Calendar";
 import FooterBar from "../general/FooterBar";
 import { PAGE } from "../pageConstants";
 import Profile from "../profile/Profile";
@@ -28,7 +29,7 @@ const renderContents = (page) => {
             return <ProjectsList/>;
         /* CALENDAR    */
         case PAGE.NAME.CALENDAR:
-            return <h3>Calendar Page</h3>;
+            return <Calendar/>;
         /* USERS       */
         case PAGE.NAME.USERS:
             return <h3>Users Page</h3>;
