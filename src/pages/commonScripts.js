@@ -161,7 +161,7 @@ export function renderDepartment(params){
     }
 
     let department = mockDepartment.find(dep=>{
-        return dep.id == params.value;
+        return dep.id === params.value;
     })
 
     if(department){;

@@ -13,6 +13,7 @@ function Profile() {
                 height: '83vh',
                 overflow:'scroll',
                 flexDirection:'column',
+                
             }}
         >
             <Container>

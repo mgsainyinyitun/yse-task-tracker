@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, CardContent, CardHeader, Divider, Paper, Stack, TextField, Typography } from "@mui/material";
+import { Avatar, Button, Card, CardContent, CardHeader, Divider, IconButton, Paper, Stack, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import ArrowBackIosOutlinedIcon from '@mui/icons-material/ArrowBackIosOutlined';
@@ -6,19 +6,22 @@ import StartOutlinedIcon from '@mui/icons-material/StartOutlined';
 import { mockTasks } from "../../../data/mockData";
 import { styled } from '@mui/material/styles';
 import { findTask } from "../../../utils/commonFunctions";
+import { CalendarTodayOutlined } from "@mui/icons-material";
 
-const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
+const DayCard = styled(Card)(({theme}) => ({
+    flex: 0.2,
+    maxHeight: '25%',
     borderRadius: '10px',
-    color: theme.palette.text.secondary,
-    minWidth: 30,
 }));
 
+
+
 function TaskDetail() {
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
     const { id } = useParams();
-    const task = findTask(id,mockTasks);
+    const task = findTask(id, mockTasks);
     const nevigate = useNavigate();
     return (
         <Box
@@ -34,12 +37,14 @@ function TaskDetail() {
         >
             <Box
             >
-                <Button
-                    variant="contained"
-                    startIcon={<ArrowBackIosOutlinedIcon />}
-                    size={'small'}
-                    onClick={() => nevigate(-1)}
-                >Back</Button>
+                <IconButton onClick={() => nevigate(-1)}
+                    sx={{
+                        color: theme => theme.palette.primary.dark,
+                        fontWeight: 'bold',
+                    }}
+                >
+                    <ArrowBackIosOutlinedIcon />
+                </IconButton>
             </Box>
             <Box
                 sx={{
@@ -47,69 +52,69 @@ function TaskDetail() {
                     width: '100%',
                     height: '83vh',
                     overflow: 'scroll',
-                    flexDirection: 'column',
                     padding: '10px',
+                    gap: 1
                 }}>
 
-                <Card sx={{ minWidth: 100, borderRadius: '10px', }}>
+                <DayCard>
                     <CardHeader
-                        avatar={<Avatar>{task.title[0]}</Avatar>}
-                        title={<Typography variant="h5">{task.title}</Typography>}
-                        sx={{
-                            borderBottom: '1px solid grey'
-                        }}
+                       
+                        avatar={<CalendarTodayOutlined />}
+                        title={'START DATE'}
                     />
                     <CardContent>
-
-                        <Typography>Description:</Typography>
-
-                        <TextField
-                            sx={{
-                                marginBottom: '10px',
-                            }}
-                            fullWidth
-                            value={task.description}
-                            multiline
-                            rows={5}
-                        />
-
-                        <Stack direction={'row'} spacing={2}>
-                            <Item>
-                                <Typography variant="h6">
-                                    CONSIGNER:
-                                </Typography>
-                                <Divider />
-                                <Typography variant="h6">
-                                    {task.consigner.name}
-                                </Typography>
-                            </Item>
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}
-
-                            >
-                                <StartOutlinedIcon />
-                            </Box>
-
-
-                            <Item>
-                                <Typography variant="h6">
-                                    CONSIGNEE:
-                                </Typography>
-                                <Divider />
-                                <Typography variant="h6">
-                                    {task.consignee.name}
-                                </Typography>
-                            </Item>
-                        </Stack>
-
+                        <Typography variant="h6" sx={{ display: 'flex', justifyContent: 'flex-start', gap: 3 }}>
+                            {monthNames[task.startDate.getMonth()]}
+                            <Avatar>
+                                {task.startDate.getDay()}
+                            </Avatar>
+                        </Typography>
+                        <Typography>
+                            {task.startDate.getFullYear()}
+                        </Typography>
                     </CardContent>
-                </Card>
-            </Box>
+                </DayCard>
 
+                <DayCard>
+                    <CardHeader
+                        sx={{ color: 'error.dark' }}
+                        avatar={<CalendarTodayOutlined />}
+                        title={'DUE DATE'}
+                    />
+                    <CardContent>
+                        <Typography variant="h6" sx={{ display: 'flex', justifyContent: 'flex-start', gap: 3 }}>
+                            {monthNames[task.dueDate.getMonth()]}
+                            <Avatar>
+                                {task.dueDate.getDay()}
+                            </Avatar>
+
+                        </Typography>
+                        <Typography>
+                            {task.dueDate.getFullYear()}
+                        </Typography>
+                    </CardContent>
+                </DayCard>
+
+                <DayCard
+                >
+                    <CardHeader
+                        sx={{ color: 'main.dark' }}
+                        avatar={<CalendarTodayOutlined />}
+                        title={'FINISHED DATE'}
+                    />
+                    <CardContent>
+                        <Typography variant="h6" sx={{ display: 'flex', justifyContent: 'flex-start', gap: 3 }}>
+                            {monthNames[task.finishedDate.getMonth()]}
+                            <Avatar>
+                                {task.finishedDate.getDay()}
+                            </Avatar>
+                        </Typography>
+                        <Typography>
+                            {task.finishedDate.getFullYear()}
+                        </Typography>
+                    </CardContent>
+                </DayCard>
+            </Box>
         </Box>
     )
 }
