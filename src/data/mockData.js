@@ -195,7 +195,7 @@ export const mockTasks= [
         status: 'notyet',
         startDate: new Date("2023-01-05"),
         dueDate:new Date("2023-02-07"),
-        finishedDate:new Date("2023-02-05"),
+        finishedDate:new Date("2023-02-09"),
         deliverable:'Content Links',
         remarks:null,
     },
@@ -240,7 +240,7 @@ export const mockTasks= [
         startDate: new Date("2023-01-05"),
         dueDate:new Date("2023-02-07"),
         finishedDate:new Date("2023-02-05"),
-        deliverable:'Content Links',
+        deliverable:'https://google.com/text23r3/kdfkj3/Content Links',
         remarks:null,
     },
     {
