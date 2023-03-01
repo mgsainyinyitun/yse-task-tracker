@@ -19,7 +19,13 @@ function MainRoutes() {
             <Route path={PAGE.LINK.TASKS.EDIT}   element={<Main page={PAGE.NAME.TASKS.EDIT} /> }/>
             
             <Route path={PAGE.LINK.PROFILE}      element={<Main page={PAGE.NAME.PROFILE}/>}/>
-            <Route path={PAGE.LINK.PROJETCS}     element={<Main page={PAGE.NAME.PROJETCS}/>}/>
+
+            {/** Projects Routes */}
+            <Route path={PAGE.LINK.PROJETCS.INDEX}     element={<Main page={PAGE.NAME.PROJETCS.INDEX}/>}/>
+            <Route path={PAGE.LINK.PROJETCS.DETAIL}     element={<Main page={PAGE.NAME.PROJETCS.DETAIL}/>}/>
+            <Route path={PAGE.LINK.PROJETCS.EDIT}     element={<Main page={PAGE.NAME.PROJETCS.EDIT}/>}/>
+            <Route path={PAGE.LINK.PROJETCS.CREATE}     element={<Main page={PAGE.NAME.PROJETCS.CREATE}/>}/>
+            
             <Route path={PAGE.LINK.CALENDAR}     element={<Main page={PAGE.NAME.CALENDAR}/>}/>
             {/** Admin Only Routes           */}
             <Route path={PAGE.LINK.USERS}        element={<Main page={PAGE.NAME.USERS}/>}/>

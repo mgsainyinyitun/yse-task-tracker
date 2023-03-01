@@ -35,7 +35,7 @@ export const USER_MENU = {
         id:'4',
         group:"data",
         title:'Projects',
-        link:`${PAGE.LINK.PROJETCS}`,
+        link:`${PAGE.LINK.PROJETCS.INDEX}`,
         icon:<AutoAwesomeMosaicIcon/>
     },
     {

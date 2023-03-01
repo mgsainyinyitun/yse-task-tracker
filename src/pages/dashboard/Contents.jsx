@@ -25,7 +25,7 @@ const renderContents = (page) => {
         case PAGE.NAME.PROFILE:
             return <Profile />;
         /* PROJETCS    */
-        case PAGE.NAME.PROJETCS:
+        case PAGE.NAME.PROJETCS.INDEX:
             return <ProjectsList/>;
         /* CALENDAR    */
         case PAGE.NAME.CALENDAR:
