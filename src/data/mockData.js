@@ -30,16 +30,19 @@ export const mockProject = [
             name: 'Mg Mg',
         },
         createdAt: new Date("2021-03-25"),
-        updatedAt: new Date("2021-04-01"),
+        updatedAt: new Date("2021-6-01"),
         members: 
         [
            {id:1,name:'Mg Mg'},
            {id:2,name:'Ko Ko'},
            {id:3,name:'Hla Hla'},
+           {id:4,name:'Tom'},
+           {id:5,name:'Luci'},
+           {id:6,name:'Davis'},
         ],
         tasks: [1, 2, 3], // ID of related tasks
-        startDate: new Date("2021-03-25"),
-        endDate: new Date("2021-04-25"),
+        startDate: new Date("2021-3-25"),
+        endDate: new Date("2022-4-1"),
         progress: 20,
         scope: 'all',
     },

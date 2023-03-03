@@ -13,7 +13,7 @@ import { THEME } from '../../themes';
 export const ColorModeContext = createContext({ toggleColorMode: () => { } });
 
 function Main(props) {
-    const [mode, setMode] = useState(THEME.LIGHT.palette.mode);
+    const [mode, setMode] = useState(THEME.DARK.palette.mode);
     const colorMode = useMemo(
         () => ({
             toggleColorMode: () => {
