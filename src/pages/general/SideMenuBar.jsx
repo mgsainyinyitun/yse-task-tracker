@@ -8,7 +8,7 @@ import { useTheme } from "@mui/material";
 import { THEME } from "../../themes";
 import { useState, useEffect } from "react";
 
-function SideMenuBar({ toggleSideBar }) {
+function SideMenuBar() {
     const currentRoute = window.location.pathname;
     const theme = useTheme();
     const paper = theme.palette.background.paper;
@@ -75,7 +75,6 @@ function SideMenuBar({ toggleSideBar }) {
 
 
     useEffect(() => {
-        console.log('run useEffect Reset Them')
         changeMenuActiveStyleLeave();
     }, [theme]);
 

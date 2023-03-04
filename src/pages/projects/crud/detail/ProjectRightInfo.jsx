@@ -102,7 +102,11 @@ function ProjectRightInfo({ project }) {
                 }
 
                 <Box>
-                    <Button variant="contained">
+                    <Button variant="contained"
+                        sx={{
+                            borderRadius:'10px',
+                        }}
+                    >
                         More
                     </Button>
                 </Box>
