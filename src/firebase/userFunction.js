@@ -8,12 +8,7 @@ export async function signin(email,password,dispatch){
     await signInWithEmailAndPassword(auth,email,password)
         .then((userCredential) => {
             const user = userCredential.user;
-
-            /** Stroe in Redux Store */
-                dispatch(addUser(user))
-                // addUser(user))
-            /** END  */
-
+            dispatch(addUser(user));
             const data = {
                 status:'success',
                 user,

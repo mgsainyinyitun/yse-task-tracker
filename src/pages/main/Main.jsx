@@ -13,6 +13,8 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { redirect, useNavigate } from 'react-router-dom';
 import {PAGE} from '../../pages/pageConstants';
+import { useDispatch } from 'react-redux';
+import { addUser } from '../../redux/reducers/userSlice';
 
 export const ColorModeContext = createContext({ toggleColorMode: () => { } });
 
@@ -20,6 +22,7 @@ function Main(props) {
     const [mode, setMode] = useState(THEME.DARK.palette.mode);
     const [user,setUser] = useState(null);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const colorMode = useMemo(
         () => ({
             toggleColorMode: () => {
@@ -55,6 +58,7 @@ function Main(props) {
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 setUser(user);
+                dispatch(addUser(user));
                 console.log(user);
             } else {
                 setUser(null);

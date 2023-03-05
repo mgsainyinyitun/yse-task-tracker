@@ -3,6 +3,7 @@ import { Box } from "@mui/material";
 import { THEME } from "../../themes";
 import Calendar from "../calendar/Calendar";
 import FooterBar from "../general/FooterBar";
+import Home from "../home/Home";
 import { PAGE } from "../pageConstants";
 import Profile from "../profile/Profile";
 import DetailProject from "../projects/crud/detail/DetailProject";
@@ -15,7 +16,7 @@ import TasksList from "../tasks/TasksList";
 const renderContents = (page) => {
     switch (page) {
         case PAGE.NAME.HOME:
-            return <h3>Default Home Page</h3>
+            return <Home/>
         /* TASKS       */
         case PAGE.NAME.TASKS.INDEX:
             return <TasksList/>;

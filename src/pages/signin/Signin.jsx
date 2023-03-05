@@ -97,8 +97,8 @@ function Signin() {
             />
             <Box
                 sx={{
-                    minWidth: '30%',
-                    width:'25%',
+                    minWidth: '20%',
+                    width:'20%',
                     maxWidth: '90%',
                     minHeight: '20%',
                     border: "none",
