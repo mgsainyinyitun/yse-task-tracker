@@ -7,7 +7,7 @@
  *  5. Projects info (all) except for deparment scope -> store in redux store
  */
 
-import { Button, TextField, Typography } from "@mui/material";
+import { Button, Container, TextField, Typography } from "@mui/material";
 import { Box, Stack } from "@mui/system";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
@@ -17,15 +17,15 @@ import YSELOGO from "../../assets/images/YSE Logo (Color).png";
 import ErrorAlert from "../../components/ErrorAlert";
 import OverlayLoading from "../../components/OverlayLoading";
 import { auth } from "../../firebase";
-import { signin } from "../../firebase/userFunction";
+import { signin } from "../../firebase/auth/userFunction";
 import { PAGE } from "../pageConstants";
 
 function Signin() {
 
     const [loading, setLoading] = useState(false);
-    const [error,setError] = useState(false);
-    const [errorTitle,setErrorTitle] = useState('');
-    const [errorMessage,setErrorMessage] = useState('');
+    const [error, setError] = useState(false);
+    const [errorTitle, setErrorTitle] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [emailError, setEmailError] = useState(false);
@@ -36,10 +36,8 @@ function Signin() {
     function handleSiginSubmit(e) {
         e.preventDefault();
         setError(false);
-
-        console.log(typeof(email));
-        email.length    === 0 ? setEmailError(true)     : setEmailError(false);
-        password.length === 0 ? setPasswordError(true)  : setPasswordError(false);
+        email.length === 0 ? setEmailError(true) : setEmailError(false);
+        password.length === 0 ? setPasswordError(true) : setPasswordError(false);
 
         console.log(emailError);
         console.log(passwordError);
@@ -47,13 +45,13 @@ function Signin() {
         if (!(emailError && passwordError)) {
             setLoading(true);
             console.log('start siginining');
-            console.log('email',email);
-            console.log('password',password);
+            console.log('email', email);
+            console.log('password', password);
             // 1. set loading
             // 2. submit signin info to firebase
             // 3. success => redirect to home page
             //    error   => display error message
-            signin(email, password,dispatch)
+            signin(email, password, dispatch)
                 .then(data => {
                     setLoading(false);
                     if (data.status === 'success') {
@@ -68,13 +66,15 @@ function Signin() {
         }
     }
 
-    useEffect(()=>{
-        onAuthStateChanged(auth,(user)=>{
-            if(user){
+    /** If Already Signin => Redirect to Home Page */
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
                 navigate(PAGE.LINK.HOME);
             }
         });
-    },[])
+    }, [])
+    /** END */
 
     return (
         <Box
@@ -85,22 +85,19 @@ function Signin() {
                 height: '100%',
                 overflow: 'hidden',
                 display: 'flex',
-                flexDirection:'column',
+                flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
             }}
         >
-            <ErrorAlert 
-                open={error} 
+            <ErrorAlert
+                open={error}
                 title={errorTitle}
                 message={errorMessage}
             />
-            <Box
+            <Container
+                maxWidth={'xs'}
                 sx={{
-                    minWidth: '20%',
-                    width:'20%',
-                    maxWidth: '90%',
-                    minHeight: '20%',
                     border: "none",
                     overflow: 'hidden',
                     padding: '1rem',
@@ -163,7 +160,7 @@ function Signin() {
                         </Typography>
                     </Stack>
                 </form>
-            </Box>
+            </Container>
             <OverlayLoading open={loading} />
         </Box>
     )

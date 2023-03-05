@@ -5,6 +5,6 @@ import userReducer from './reducers/userSlice';
 export const store = configureStore({
     reducer:{
         leftmenu:leftMenuReducer,
-        user:userReducer,
+        users:userReducer,
     }
 });

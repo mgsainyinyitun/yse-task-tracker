@@ -1,10 +1,10 @@
 import { useSelector } from "react-redux";
 
 function Home(){
-    const user = useSelector(state=>state.user.user)
+    const user = useSelector(state=>state.users.user)
     return(
         <h3>
-            Welcome - {user.email}
+            Welcome - {user.displayName}
         </h3>
     )
 }
