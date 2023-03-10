@@ -1,4 +1,4 @@
-import {  Card, CardContent } from "@mui/material";
+import { Card, CardContent } from "@mui/material";
 import { Box, Container } from "@mui/system";
 import cover_image from "../../assets/images/cover.jpg";
 import ProfileContents from "./ProfileContents";
@@ -7,22 +7,22 @@ import ProfileHeader from "./ProfileHeader";
 function Profile() {
     return (
         <Box
+            pb={1}
             sx={{
                 display: 'flex',
                 width: '100%',
-                height: '83vh',
-                overflow:'scroll',
-                flexDirection:'column',
-                
+                overflow:'auto',
+                height: '100%',
+                flexDirection: 'column',
+                alignItems: 'center',
             }}
         >
             <Container>
                 <Card
                     sx={{
                         display: 'flex',
-                        borderRadius: '0px 0px 10px 10px',
+                        borderRadius: '10px 10px 10px 10px',
                         flexDirection: 'column',
-                        height: '100%',
                     }}
                 >
                     <img
@@ -35,13 +35,16 @@ function Profile() {
                         }}
                     />
                     <CardContent>
-                        <ProfileHeader/>
-                        <ProfileContents/>
+                        <ProfileHeader />
                     </CardContent>
                 </Card>
-            </Container>
 
+                <Box>
+                    <ProfileContents/>
+                </Box>
+
+            </Container>
         </Box>
-    )
+    );
 }
 export default Profile;

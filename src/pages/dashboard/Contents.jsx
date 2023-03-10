@@ -16,27 +16,27 @@ import TasksList from "../tasks/TasksList";
 const renderContents = (page) => {
     switch (page) {
         case PAGE.NAME.HOME:
-            return <Home/>
+            return <Home />
         /* TASKS       */
         case PAGE.NAME.TASKS.INDEX:
-            return <TasksList/>;
+            return <TasksList />;
         case PAGE.NAME.TASKS.DETAIL:
-            return <TaskDetail/>;
+            return <TaskDetail />;
         case PAGE.NAME.TASKS.EDIT:
-            return <TaskEdit/>;
+            return <TaskEdit />;
         /* PROFILE     */
         case PAGE.NAME.PROFILE:
             return <Profile />;
         /* PROJETCS    */
         case PAGE.NAME.PROJETCS.INDEX:
-            return <ProjectsList/>;
+            return <ProjectsList />;
         case PAGE.NAME.PROJETCS.DETAIL:
-            return <DetailProject/>;
+            return <DetailProject />;
         case PAGE.NAME.PROJETCS.EDIT:
-            return <EditProject/>;
+            return <EditProject />;
         /* CALENDAR    */
         case PAGE.NAME.CALENDAR:
-            return <Calendar/>;
+            return <Calendar />;
         /* USERS       */
         case PAGE.NAME.USERS:
             return <h3>Users Page</h3>;
@@ -52,41 +52,22 @@ const renderContents = (page) => {
 }
 
 function Contents({ page }) {
-    
+
     const theme = useTheme();
     const background = theme.palette.mode === THEME.DARK.palette.mode ?
         theme.palette.grey[900] : theme.palette.custom.background;
 
     console.log(theme.palette.custom.background);
     return (
-        <Box sx={{
-            width: '100%',
-            height: '100%',
-            overflow: 'scroll',
-            borderRadius: '10px 10px 0 0',
-            
-        }}>
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: '100%',
-                    background: `${background}`,
-                }}
-            >
-                <Box
-                    mb={1}
-                    p={1}
-                    sx={{
-                        flexGrow: 1,
-                        background: `${theme.palette.background.paper}`,
-                        borderRadius: '10px',
-                    }}
-                >
-                    {renderContents(page)}
-                </Box>
-                <FooterBar />
-            </Box>
+        <Box
+            sx={{
+                flexGrow: 1,
+                background: `${theme.palette.background.paper}`,
+                borderRadius: '10px',
+                display:'flex',
+            }}
+        >
+            {renderContents(page)}
         </Box>
     );
 }

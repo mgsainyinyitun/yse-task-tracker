@@ -1,17 +1,24 @@
-import { Box, Typography, Grid, Paper } from "@mui/material";
+import { Box, Typography, Grid, Paper, Card } from "@mui/material";
 import PasswordChangeCard from "./PasswordChangeCard";
 import PersonalInformation from "./PersonalInformation";
 
 function ProfileContents() {
     return (
         <Box>
-
+            <Card
+                sx={{
+                    borderRadius:'10px',
+                    margin:'7px 0 7px 0',
+                    padding:'0.5rem',
+                }}
+            >
             <Typography
                 mt={3}
                 mb={3}
                 variant="h4">
                 PERSONAL INFORMATION
             </Typography>
+            </Card>
 
             <Grid container spacing={1}>
                 <Grid item md={6} xs={12}>

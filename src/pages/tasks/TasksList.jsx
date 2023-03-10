@@ -66,8 +66,7 @@ function TasksList() {
         sx={{
             display: 'flex',
             width: '100%',
-            height: '83vh',
-            overflow: 'scroll',
+            height: '100%',
             flexDirection: 'column',
         }}
     >

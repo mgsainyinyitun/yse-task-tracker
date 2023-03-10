@@ -8,8 +8,7 @@ function Calendar(){
             p={2}
             sx={{
                 width:'100%',
-                height: '83vh',
-                overflow: 'scroll',
+                height: '100%',
             }}
         >
         <FullCalendar

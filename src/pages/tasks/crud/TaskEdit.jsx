@@ -30,7 +30,7 @@ function TaskEdit() {
             sx={{
                 display: 'flex',
                 width: '100%',
-                height: '83vh',
+                height: '100%',
                 overflow: 'scroll',
                 flexDirection: 'column',
                 padding: '10px',

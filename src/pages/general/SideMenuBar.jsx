@@ -83,9 +83,9 @@ function SideMenuBar() {
             sx={{
                 display: 'flex',
                 flexGrow: '1',
-                height: '90vh',
-                overflow: 'scroll',
-                borderRadius: '10px 10px 0 0',
+                height:'100%',
+                overflow: 'auto',
+                borderRadius: '10px 10px 10px 10px',
                 '& .ps-menu-button.ps-active': menuActive,
                 '& .ps-menu-button.ps-active:before': menuActiveBefore,
                 '& .ps-menu-button.ps-active:after': menuActiveAfter,
@@ -301,7 +301,7 @@ function SideMenuBar() {
                                 boxShadow: 1,
                             }}
                                 mt={1}
-                                mb={1}
+                                mb={2}
                             >
                                 <Avatar
                                     variant="square"
@@ -322,7 +322,7 @@ function SideMenuBar() {
                                 background: `${paper}`,
                                 padding: "0.5rem",
                                 borderRadius: "10px",
-                                boxShadow:1
+                                boxShadow:1,
                             }}
                                 mt={1}
                                 mb={1}
