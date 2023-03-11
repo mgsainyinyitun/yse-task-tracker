@@ -18,6 +18,9 @@ import ErrorAlert from "../../components/ErrorAlert";
 import OverlayLoading from "../../components/OverlayLoading";
 import { auth } from "../../firebase";
 import { signin } from "../../firebase/auth/userFunction";
+import { getUserById } from "../../firebase/firestore/userStoreFunction";
+import { setUserDataToLocal } from "../../localstorage/user";
+import { addUser } from "../../redux/reducers/userSlice";
 import { PAGE } from "../pageConstants";
 
 function Signin() {
@@ -39,23 +42,23 @@ function Signin() {
         email.length === 0 ? setEmailError(true) : setEmailError(false);
         password.length === 0 ? setPasswordError(true) : setPasswordError(false);
 
-        console.log(emailError);
-        console.log(passwordError);
-
         if (!(emailError && passwordError)) {
             setLoading(true);
-            console.log('start siginining');
-            console.log('email', email);
-            console.log('password', password);
             // 1. set loading
             // 2. submit signin info to firebase
             // 3. success => redirect to home page
             //    error   => display error message
             signin(email, password, dispatch)
                 .then(data => {
-                    setLoading(false);
                     if (data.status === 'success') {
-                        navigate(PAGE.LINK.HOME)
+                        getUserById(data.user.uid).then(
+                            userData=>{
+                                setUserDataToLocal(userData);
+                                dispatch(addUser(userData));
+                                setLoading(false);
+                                navigate(PAGE.LINK.HOME)
+                            }
+                        )
                     }
                     else {
                         setError(true);
@@ -70,7 +73,14 @@ function Signin() {
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                navigate(PAGE.LINK.HOME);
+                console.log(user.uid);
+                getUserById(user.uid).then(
+                    userData=>{
+                        setUserDataToLocal(userData);
+                        dispatch(addUser(userData));
+                        navigate(PAGE.LINK.HOME)
+                    }
+                );
             }
         });
     }, [])

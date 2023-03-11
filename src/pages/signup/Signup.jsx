@@ -2,12 +2,16 @@ import { Autocomplete, Button, Container, TextField, Typography } from "@mui/mat
 import { Box, Stack } from "@mui/system";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import YSELOGO from "../../assets/images/YSE Logo (Color).png";
 import ErrorAlert from "../../components/ErrorAlert";
 import OverlayLoading from "../../components/OverlayLoading";
 import { mockDepartment, mockPosition } from "../../data/mockData";
 import { signup } from "../../firebase/auth/userFunction";
+import { getUserById } from "../../firebase/firestore/userStoreFunction";
+import { setUserDataToLocal } from "../../localstorage/user";
+import { addUser } from "../../redux/reducers/userSlice";
 import { validateDepartment, validatePasswordEmpty, validateEmail, validatePhone, validatePosition, validateSamePassword, validateUsername } from "../../validation/SignupValidation";
 import { PAGE } from "../pageConstants";
 
@@ -18,6 +22,7 @@ function Signup() {
     const [errorTitle, setErrorTitle] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { errors } = formState
     function checkError(data, validator) {
         const response = validator(data);
@@ -34,12 +39,25 @@ function Signup() {
     }
     function handleSignUpSubmit(data) {
         setLoading(true);
-        const { username, email, phone,address, department, position, password } = data;
-        signup(username, email, phone, address,department, position, password)
+        const { username, email, phone, address, department, position, password } = data;
+        signup(username, email, phone, address, department, position, password)
             .then(response => {
-                setLoading(false);
-                if (response.status == 'success') {
-                    navigate(PAGE.LINK.HOME);
+                if (response.status === 'success') {
+                    console.log('user id', response.user.uid);
+                    getUserById(response.user.uid).then(
+                        userData => {
+
+                            if (userData) {
+                                console.log('userData', userData)
+                                setUserDataToLocal(userData);
+                                dispatch(addUser(userData));
+                                setLoading(false);
+                                navigate(PAGE.LINK.HOME); 
+                            }else{
+                                navigate(PAGE.LINK.SIGNUP);
+                            }
+                        }
+                    )
                 } else {
                     setError(true);
                     setErrorTitle(response.error.code);

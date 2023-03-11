@@ -1,7 +1,7 @@
 import { Avatar, Box, Typography,Paper } from "@mui/material";
 import PersonIcon from '@mui/icons-material/Person';
 
-function ProfileHeader() {
+function ProfileHeader({user}) {
     return (
         <Paper
             display={'flex'}
@@ -27,13 +27,13 @@ function ProfileHeader() {
             </Avatar>
             <Box pl={3} pb={3} pt={1}>
                 <Typography variant="h5">
-                    Sai Nyi Nyi Tun
+                    {user.username}
                 </Typography>
                 <Typography variant="body1">
-                    Web Desiger
+                    {user.position}
                 </Typography>
                 <Typography variant="body2">
-                    Social Media and Design Department
+                    {user.department}
                 </Typography>
             </Box>
         </Paper>

@@ -6,13 +6,13 @@ import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlin
 import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 
-function PersonalInformation() {
+function PersonalInformation({user}) {
     return (
         <Grid container spacing={2}>
             <Grid item xs={12}>
                 <Typography variant="h6">Name</Typography>
                 <TextField
-                    defaultValue={'Sai Nyi Nyi Tun'}
+                    defaultValue={user.username}
                     fullWidth
                     InputProps={{
                         startAdornment: (
@@ -26,7 +26,7 @@ function PersonalInformation() {
             <Grid item xs={12}>
                 <Typography variant="h6">Phone</Typography>
                 <TextField
-                    defaultValue={'09440096473'}
+                    defaultValue={user.phone}
                     fullWidth
                     InputProps={{
                         startAdornment: (
@@ -40,7 +40,7 @@ function PersonalInformation() {
             <Grid item xs={12}>
                 <Typography variant="h6">E-mail</Typography>
                 <TextField
-                    defaultValue={'stun@ysenpo.org'}
+                    defaultValue={user.email}
                     fullWidth
                     InputProps={{
                         startAdornment: (
@@ -54,7 +54,7 @@ function PersonalInformation() {
             <Grid item xs={12}>
                 <Typography variant="h6">Address</Typography>
                 <TextField
-                    defaultValue={'Hlaing Township, Yangon'}
+                    defaultValue={user.address}
                     fullWidth
                     multiline
                     rows={5}
@@ -64,7 +64,7 @@ function PersonalInformation() {
             <Grid item xs={12}>
                 <Typography variant="h6">Position</Typography>
                 <TextField
-                    defaultValue={'Web Designer'}
+                    defaultValue={user.position}
                     fullWidth
                     InputProps={{
                         startAdornment: (
@@ -78,7 +78,7 @@ function PersonalInformation() {
             <Grid item xs={12}>
                 <Typography variant="h6">Department</Typography>
                 <TextField
-                    defaultValue={'Social Media and Design Department'}
+                    defaultValue={user.department}
                     fullWidth
                     InputProps={{
                         startAdornment: (

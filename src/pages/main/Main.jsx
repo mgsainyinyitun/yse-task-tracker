@@ -11,16 +11,17 @@ import { createContext, useEffect, useMemo, useState } from 'react';
 import { THEME } from '../../themes';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../firebase';
-import { redirect, useNavigate } from 'react-router-dom';
-import {PAGE} from '../../pages/pageConstants';
+import { useNavigate } from 'react-router-dom';
+import { PAGE } from '../../pages/pageConstants';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../../redux/reducers/userSlice';
+import { getUserDataInLocal } from '../../localstorage/user';
 
 export const ColorModeContext = createContext({ toggleColorMode: () => { } });
 
 function Main(props) {
     const [mode, setMode] = useState(THEME.DARK.palette.mode);
-    const [user,setUser] = useState(null);
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const colorMode = useMemo(
@@ -55,17 +56,14 @@ function Main(props) {
     )
 
     useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setUser(user);
-                dispatch(addUser(user));
-                console.log(user);
-            } else {
-                setUser(null);
-                console.log(user);
-                navigate(PAGE.LINK.SIGNIN)
-            }
-        });
+        const Luser = getUserDataInLocal();
+        if (Luser) {
+            setUser(Luser);
+        }
+        else {
+            setUser(null);
+            navigate(PAGE.LINK.SIGNIN)
+        }
     }, []);
 
     return (
@@ -73,7 +71,7 @@ function Main(props) {
             <ThemeProvider theme={theme}>
                 <CssBaseline />
                 {(user &&
-                <Dashboard page={props.page} />
+                    <Dashboard page={props.page} />
                 )}
             </ThemeProvider>
         </ColorModeContext.Provider>

@@ -1,10 +1,12 @@
 import { Card, CardContent } from "@mui/material";
 import { Box, Container } from "@mui/system";
+import { useSelector } from "react-redux";
 import cover_image from "../../assets/images/cover.jpg";
 import ProfileContents from "./ProfileContents";
 import ProfileHeader from "./ProfileHeader";
 
 function Profile() {
+    const user = useSelector(state=>state.users.user);
     return (
         <Box
             pb={1}
@@ -35,12 +37,11 @@ function Profile() {
                         }}
                     />
                     <CardContent>
-                        <ProfileHeader />
+                        <ProfileHeader user={user}/>
                     </CardContent>
                 </Card>
-
                 <Box>
-                    <ProfileContents/>
+                    <ProfileContents user={user}/>
                 </Box>
 
             </Container>

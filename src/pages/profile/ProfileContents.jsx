@@ -2,7 +2,7 @@ import { Box, Typography, Grid, Paper, Card } from "@mui/material";
 import PasswordChangeCard from "./PasswordChangeCard";
 import PersonalInformation from "./PersonalInformation";
 
-function ProfileContents() {
+function ProfileContents({user}) {
     return (
         <Box>
             <Card
@@ -32,7 +32,7 @@ function ProfileContents() {
                             padding: '10px',
                             borderRadius: '10px',
                         }}>
-                        <PersonalInformation />
+                        <PersonalInformation user={user}/>
                     </Paper>
                 </Grid>
                 <Grid item md={6} xs={12}>

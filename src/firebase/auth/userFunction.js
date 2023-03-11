@@ -9,7 +9,6 @@ export async function signin(email, password, dispatch) {
         await signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
-                dispatch(addUser(user));
                 const data = {
                     status: 'success',
                     user,
@@ -34,11 +33,13 @@ export async function signup(username, email, phone,address, department, positio
         .then((userCredential) => {
             var userData = {
                 uid: auth.currentUser.uid,
+                email,
                 username,
                 phone,
                 address,
                 department,
                 position,
+                role:'user', // Default Role is User
             }
             updateProfile(auth.currentUser, { displayName: username })
                 .then(() => {
