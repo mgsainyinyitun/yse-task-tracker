@@ -1,0 +1,25 @@
+Backend Firebase
+1. Authentication
+2. firebase firestore
+3. Cloud Functions <-- xxxxxx
+
+Front End
+
+1. assets -> image and css
+2. component -> reuseable component
+3. firebase -> Auth
+            -> firestore 
+4. Pages
+5. state mgmt -> redux (folder -> redux)
+
+Add New Page or Route
+==============
+1. Add Route Name and LINK (constant)
+2. Add Route (Routes)
+
+3. Add Page (folder)
+4. Linkeing Page to Contents (Contents.jsx (Switch Case))
+
+department -> 
+
+ pages -> (department)DepartmentList.jsx

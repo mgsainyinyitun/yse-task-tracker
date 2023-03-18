@@ -164,7 +164,7 @@ function SideMenuBar() {
                                     background: `${paper}`,
                                     borderRadius: "10px",
                                     padding: "0.5rem",
-                                    boxShadow: 1,
+                                    // boxShadow: 1,
                                 }}
 
                                 mb={1}
@@ -223,7 +223,7 @@ function SideMenuBar() {
                             sx={{
                                 borderRadius: "10px",
                                 background: `${paper}`,
-                                boxShadow: 1,
+                                // boxShadow: 1,
                                 paddingTop: '30px',
                             }}
 

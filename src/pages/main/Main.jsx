@@ -59,9 +59,9 @@ function Main(props) {
         const Luser = getUserDataInLocal();
         if (Luser) {
             setUser(Luser);
+            dispatch(addUser(Luser))
         }
         else {
-            setUser(null);
             navigate(PAGE.LINK.SIGNIN)
         }
     }, []);

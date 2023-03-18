@@ -18,6 +18,7 @@ export function renderName(params) {
             label={params.value}
         />)
 }
+
 export function renderPriority(params) {
     let backgroundColor = '';
     switch (params.value) {

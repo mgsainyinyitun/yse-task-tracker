@@ -4,6 +4,7 @@ export const PAGE =
     {
         SIGNIN:'sign.page',
         SIGNUP:'signup.page',
+        
         HOME: 'user.home.page',
         TASKS: 
         {

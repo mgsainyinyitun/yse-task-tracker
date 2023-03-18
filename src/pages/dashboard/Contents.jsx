@@ -2,12 +2,12 @@ import { useTheme } from "@emotion/react";
 import { Box } from "@mui/material";
 import { THEME } from "../../themes";
 import Calendar from "../calendar/Calendar";
-import FooterBar from "../general/FooterBar";
 import Home from "../home/Home";
 import { PAGE } from "../pageConstants";
 import Profile from "../profile/Profile";
 import DetailProject from "../projects/crud/detail/DetailProject";
 import EditProject from "../projects/crud/EditProject";
+import NewProject from "../projects/crud/new/NewProject";
 import ProjectsList from "../projects/ProjectsList";
 import TaskDetail from "../tasks/crud/TaskDetail";
 import TaskEdit from "../tasks/crud/TaskEdit";
@@ -34,6 +34,8 @@ const renderContents = (page) => {
             return <DetailProject />;
         case PAGE.NAME.PROJETCS.EDIT:
             return <EditProject />;
+        case PAGE.NAME.PROJETCS.CREATE:
+            return <NewProject/>;
         /* CALENDAR    */
         case PAGE.NAME.CALENDAR:
             return <Calendar />;
@@ -59,7 +61,7 @@ function Contents({ page }) {
 
     console.log(theme.palette.custom.background);
     return (
-        <Box
+        <Box 
             sx={{
                 flexGrow: 1,
                 background: `${theme.palette.background.paper}`,

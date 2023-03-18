@@ -4,7 +4,7 @@ function Home(){
     const user = useSelector(state=>state.users.user)
     return(
         <h3>
-            Welcome - {user.username}
+            Welcome - {user.username || ''}
         </h3>
     )
 }

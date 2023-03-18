@@ -1,13 +1,17 @@
-import { Box } from "@mui/material";
+import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
+import { Box, Button, Divider, IconButton, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { useNavigate } from 'react-router-dom';
 import {mockProject} from '../../data/mockData';
 import {renderName, renderTotalTasks, renderProgress,renderDepartment,renderDetail,renderEdit,renderDelete} from '../commonScripts';
+import { PAGE } from '../pageConstants';
 
 const mockProjectFinal = mockProject.map(project => {
     return { ...project,creator:project.creator.name,edit: project.id, delete: project.id, detail: project.id }
 });
 
 function ProjectsList(){
+    const navigate = useNavigate();
     const columns = [
         { field: 'id', headerName: 'No.', width: 70 },
         { field: 'title', headerName: 'Title',minWidth: 50, flex: 1 },
@@ -55,6 +59,15 @@ function ProjectsList(){
                 flexDirection:'column',
             }}
         >
+            <Box m={1}>
+                <Button 
+                    variant="outlined" startIcon={<AddCircleOutlinedIcon color="primary"/>}
+                    onClick={()=>navigate(PAGE.LINK.PROJETCS.CREATE)}
+                >
+                    NEW
+                </Button>
+            </Box>
+            <Divider/>
             <DataGrid
                 aria-label="Projects List"
                 columns={columns}
