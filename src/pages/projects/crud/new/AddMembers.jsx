@@ -7,8 +7,12 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
+import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
+import ArrowBackIosOutlinedIcon from '@mui/icons-material/ArrowBackIosOutlined';
 import { useState } from 'react';
+import { mockDepartment, mockUser } from '../../../../data/mockData';
+import { findDepartment } from '../../../../utils/commonFunctions';
+
 
 function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -24,8 +28,8 @@ function union(a, b) {
 
 export function AddMembers() {
   const [checked, setChecked] = useState([]);
-  const [left, setLeft] = useState([0, 1, 2, 3]);
-  const [right, setRight] = useState([4, 5, 6, 7]);
+  const [left, setLeft] = useState(mockUser);
+  const [right, setRight] = useState([]);
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
@@ -67,6 +71,7 @@ export function AddMembers() {
 
   const customList = (title, items) => (
     <Card>
+      {/** Header Section */}
       <CardHeader
         sx={{ px: 2, py: 1 }}
         avatar={
@@ -85,11 +90,13 @@ export function AddMembers() {
         title={title}
         subheader={`${numberOfChecked(items)}/${items.length} selected`}
       />
-      <Divider />
+      {/** User Lists Section */}
       <List
         sx={{
           width: '100%',
-          height: 230,
+          marginTop: '5px',
+          borderRadius: '10px',
+          height: 450,
           bgcolor: 'background.paper',
           overflow: 'auto',
         }}
@@ -97,19 +104,18 @@ export function AddMembers() {
         component="div"
         role="list"
       >
-        {items.map((value) => {
-          const labelId = `transfer-list-all-item-${value}-label`;
+        {items.map((user) => {
+          const labelId = `transfer-list-all-item-${user.id}-label`;
 
           return (
             <ListItem
-              key={value}
+              key={user.id}
               role="listitem"
-              button
-              onClick={handleToggle(value)}
+              onClick={handleToggle(user)}
             >
               <ListItemIcon>
                 <Checkbox
-                  checked={checked.indexOf(value) !== -1}
+                  checked={checked.indexOf(user) !== -1}
                   tabIndex={-1}
                   disableRipple
                   inputProps={{
@@ -117,7 +123,11 @@ export function AddMembers() {
                   }}
                 />
               </ListItemIcon>
-              <ListItemText id={labelId} primary={`List item ${value + 1}`} />
+              <ListItemText
+                 id={labelId} 
+                 primary={user.name} 
+                 secondary={ findDepartment(user.department,mockDepartment).name}
+              />
             </ListItem>
           );
         })}
@@ -126,43 +136,41 @@ export function AddMembers() {
   );
 
   return (
-    <Grid 
-      container 
+    <Grid
+      container
       alignItems="center"
-      spacing={3}
+      spacing={1}
+      flex={1}
     >
       <Grid flex={1} item >
-          {customList('All Members', left)}
+        {customList('All Members', left)}
       </Grid>
-
       <Grid item>
         <Grid container direction="column" alignItems="center">
           <Button
             sx={{ my: 0.5 }}
-            variant="outlined"
+            // variant="outlined"
             size="small"
             onClick={handleCheckedRight}
             disabled={leftChecked.length === 0}
             aria-label="move selected right"
           >
-            &gt;
+            <ArrowForwardIosOutlinedIcon/>
           </Button>
           <Button
             sx={{ my: 0.5 }}
-            variant="outlined"
             size="small"
             onClick={handleCheckedLeft}
             disabled={rightChecked.length === 0}
             aria-label="move selected left"
           >
-            &lt;
+            <ArrowBackIosOutlinedIcon/>
           </Button>
         </Grid>
       </Grid>
-
-      <Grid 
-          item
-          flex={1}
+      <Grid
+        item
+        flex={1}
       >
         {customList('Added Members', right)}
       </Grid>

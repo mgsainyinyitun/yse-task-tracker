@@ -3,17 +3,16 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 
-const steps = [
-    'Project Detail',
-    'Add Members',
-    'Add Tasks',
-    'Success',
-];
-
-export function FormStepper() {
+export function FormStepper({steps,current}) {
     return (
         <Box sx={{ width: '100%' }}>
-            <Stepper activeStep={1} alternativeLabel>
+            <Stepper 
+                activeStep={current} 
+                alternativeLabel
+                sx={{
+                    "& .css-m8a1uf-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed": { color: "green" },
+                }}
+            >
                 {steps.map((label) => (
                     <Step key={label}>
                         <StepLabel>{label}</StepLabel>

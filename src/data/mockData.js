@@ -140,6 +140,18 @@ export const mockUser = [
         department: 2,
         createdAt: new Date("2021-03-25"),
         updatedAt: new Date("2021-03-26"),
+    },
+    {
+        id: 3,
+        name: 'Tom',
+        role: 'admin',
+        email: 'tom@ysenpo.org',
+        address: 'yangon',
+        phone: '09980004010',
+        position: 2,
+        department: 3,
+        createdAt: new Date("2021-03-25"),
+        updatedAt: new Date("2021-03-26"),
     }
 ];
 
