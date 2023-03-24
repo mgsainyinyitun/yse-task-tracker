@@ -12,6 +12,7 @@ import ProjectsList from "../projects/ProjectsList";
 import TaskDetail from "../tasks/crud/TaskDetail";
 import TaskEdit from "../tasks/crud/TaskEdit";
 import TasksList from "../tasks/TasksList";
+import UsersList from "../users/UsersList";
 
 const renderContents = (page) => {
     switch (page) {
@@ -41,7 +42,7 @@ const renderContents = (page) => {
             return <Calendar />;
         /* USERS       */
         case PAGE.NAME.USERS:
-            return <h3>Users Page</h3>;
+            return <UsersList/>;
         /* DEPARTMENTS */
         case PAGE.NAME.DEPARTMENTS:
             return <h3>Department Page</h3>;
