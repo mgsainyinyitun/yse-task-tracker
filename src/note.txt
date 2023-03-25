@@ -21,5 +21,16 @@ Add New Page or Route
 4. Linkeing Page to Contents (Contents.jsx (Switch Case))
 
 department -> 
-
  pages -> (department)DepartmentList.jsx
+
+
+1. HR Manager
+2. HR Officer
+3. Project/Program Officer
+4. Event Officer
+5. Content Creator
+6. Design Manager
+7. Graphic Designer
+8. Web Designer 
+9. Public Relations Officer
+10. Finance Officer

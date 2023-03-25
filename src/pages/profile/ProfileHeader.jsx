@@ -30,10 +30,10 @@ function ProfileHeader({user}) {
                     {user.username}
                 </Typography>
                 <Typography variant="body1">
-                    {user.position}
+                    {user.position.name}
                 </Typography>
                 <Typography variant="body2">
-                    {user.department}
+                    {user.department.name}
                 </Typography>
             </Box>
         </Paper>

@@ -17,3 +17,9 @@ export function findDepartment(id,departments){
         return item.id === parseInt(id);
     })
 }
+
+export function findObjectByName(name,objects){
+    return objects.find(obj=>{
+        return obj.name===name;
+    })
+}

@@ -1,5 +1,5 @@
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../firebase";
+import { db } from "../../../firebase";
 
 export async function addNewUser(userData) {
     try {
@@ -22,8 +22,10 @@ export async function getUserById(uid) {
     const userSnapshot = await getDocs(q);
     if(!userSnapshot.empty) {
         const userData = userSnapshot.docs[0].data();
+        console.log(userData);
         return userData;
     }else{
+        console.log('empyt user data');
         return null;
     }
 }

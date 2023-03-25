@@ -7,8 +7,10 @@ import YSE_LOGO from "../../assets/images/YSE Logo (Color).png";
 import { useTheme } from "@mui/material";
 import { THEME } from "../../themes";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 function SideMenuBar() {
+    const user = useSelector(state=>state.users.user);
     const currentRoute = window.location.pathname;
     const theme = useTheme();
     const paper = theme.palette.background.paper;
@@ -170,18 +172,18 @@ function SideMenuBar() {
                                 mb={1}
                             >
                                 <Avatar
-                                >SN</Avatar>
+                                >{user.username.slice(0,2).toUpperCase()}</Avatar>
                                 <Typography
                                     variant="h6"
                                     mt={1}
                                 >
-                                    Sai Nyi Nyi Tun
+                                   {user.username}
                                 </Typography>
                                 <Typography
                                     variant="body2"
                                     mt={1}
                                 >
-                                    Web Designer
+                                    {user.position.name}
                                 </Typography>
                                 <Box
                                     sx={{
@@ -196,7 +198,7 @@ function SideMenuBar() {
                                     color={'GrayText'}
                                     textAlign={'center'}
                                 >
-                                    Social Media and Design Department
+                                    {user.department.name || ''}
                                 </Typography>
                             </Box>)}
 

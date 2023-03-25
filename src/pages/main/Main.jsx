@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { PAGE } from '../../pages/pageConstants';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../../redux/reducers/userSlice';
-import { getUserDataInLocal } from '../../localstorage/user';
+import { getUserDataInLocal } from '../../backend/localstorage/user';
 
 export const ColorModeContext = createContext({ toggleColorMode: () => { } });
 

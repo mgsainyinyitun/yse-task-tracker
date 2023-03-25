@@ -64,7 +64,7 @@ function PersonalInformation({user}) {
             <Grid item xs={12}>
                 <Typography variant="h6">Position</Typography>
                 <TextField
-                    defaultValue={user.position}
+                    defaultValue={user.position.name}
                     fullWidth
                     InputProps={{
                         startAdornment: (
@@ -78,7 +78,7 @@ function PersonalInformation({user}) {
             <Grid item xs={12}>
                 <Typography variant="h6">Department</Typography>
                 <TextField
-                    defaultValue={user.department}
+                    defaultValue={user.department.name}
                     fullWidth
                     InputProps={{
                         startAdornment: (
