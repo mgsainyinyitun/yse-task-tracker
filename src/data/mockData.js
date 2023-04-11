@@ -261,7 +261,7 @@ export const mockTasks= [
     {
         id:4,
         title:'Interview with new Graphic Designer',
-        description:'To interview with new graphic designer "Mya Mya" ',
+        description:'To interview with new graphic designer "Mya Mya ',
         consigner:{
             id:3,
             name:'Hla Hla',
