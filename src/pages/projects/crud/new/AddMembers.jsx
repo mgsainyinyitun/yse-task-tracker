@@ -9,10 +9,11 @@ import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
 import ArrowBackIosOutlinedIcon from '@mui/icons-material/ArrowBackIosOutlined';
-import { useState } from 'react';
-import { mockDepartment, mockUser } from '../../../../data/mockData';
-import { findDepartment } from '../../../../utils/commonFunctions';
-
+import { useEffect, useState } from 'react';
+import { getAllUsers } from '../../../../backend/firebase/firestore/userStoreFunction';
+import { useDispatch, useSelector } from 'react-redux';
+import OverlayLoading from '../../../../components/OverlayLoading';
+import { addAllUser } from '../../../../redux/reducers/userSlice';
 
 function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -26,24 +27,26 @@ function union(a, b) {
   return [...a, ...not(b, a)];
 }
 
-export function AddMembers() {
+export function AddMembers({ setMembers }) {
   const [checked, setChecked] = useState([]);
-  const [left, setLeft] = useState(mockUser);
   const [right, setRight] = useState([]);
-
+  const [left, setLeft] = useState([]);
+  const [loading,setLoading] = useState(false);
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
 
+  /** All user form redux */
+  const users = useSelector(state=>state.users.all)
+  
+  const dispatch = useDispatch();
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
-
     if (currentIndex === -1) {
       newChecked.push(value);
     } else {
       newChecked.splice(currentIndex, 1);
     }
-
     setChecked(newChecked);
   };
 
@@ -59,6 +62,7 @@ export function AddMembers() {
 
   const handleCheckedRight = () => {
     setRight(right.concat(leftChecked));
+    setMembers(right);
     setLeft(not(left, leftChecked));
     setChecked(not(checked, leftChecked));
   };
@@ -68,6 +72,26 @@ export function AddMembers() {
     setRight(not(right, rightChecked));
     setChecked(not(checked, rightChecked));
   };
+
+  useEffect(() => {
+    setMembers(right);
+  });
+
+  useEffect(() => {
+    setLoading(true);
+    if(users){ /** user alreay in Redux (No Need to Read Again) */
+      setLeft(users);
+      setLoading(false);
+    }else{
+      getAllUsers().then(
+        users => {
+          setLeft(users);
+          dispatch(addAllUser(users));
+          setLoading(false);
+        }
+      )
+    }
+  }, []);
 
   const customList = (title, items) => (
     <Card>
@@ -105,11 +129,11 @@ export function AddMembers() {
         role="list"
       >
         {items.map((user) => {
-          const labelId = `transfer-list-all-item-${user.id}-label`;
+          const labelId = `transfer-list-all-item-${user.uid}-label`;
 
           return (
             <ListItem
-              key={user.id}
+              key={user.uid}
               role="listitem"
               onClick={handleToggle(user)}
             >
@@ -124,9 +148,9 @@ export function AddMembers() {
                 />
               </ListItemIcon>
               <ListItemText
-                 id={labelId} 
-                 primary={user.name} 
-                 secondary={ findDepartment(user.department,mockDepartment).name}
+                id={labelId}
+                primary={user.username}
+                secondary={user.department}
               />
             </ListItem>
           );
@@ -155,7 +179,7 @@ export function AddMembers() {
             disabled={leftChecked.length === 0}
             aria-label="move selected right"
           >
-            <ArrowForwardIosOutlinedIcon/>
+            <ArrowForwardIosOutlinedIcon />
           </Button>
           <Button
             sx={{ my: 0.5 }}
@@ -164,7 +188,7 @@ export function AddMembers() {
             disabled={rightChecked.length === 0}
             aria-label="move selected left"
           >
-            <ArrowBackIosOutlinedIcon/>
+            <ArrowBackIosOutlinedIcon />
           </Button>
         </Grid>
       </Grid>
@@ -174,6 +198,7 @@ export function AddMembers() {
       >
         {customList('Added Members', right)}
       </Grid>
+      <OverlayLoading open={loading} />
     </Grid>
   );
 }

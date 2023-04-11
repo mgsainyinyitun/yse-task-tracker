@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import SubTasksList from "./SubTasksList";
 import TaskForm from "./TaskForm";
 
-function AddTasks() {
+function AddTasks({register,setType,errors,skip,setSkip,taskStartDate,setTaskStartDate,dueDate,setDueDate,tasks}) {
     return (
         <Box
             sx={{
@@ -16,14 +16,24 @@ function AddTasks() {
                     flex:0.6,
                 }}
             >
-                <TaskForm/>
+                <TaskForm
+                    register={register}
+                    setType={setType}
+                    errors={errors}
+                    skip={skip}
+                    setSkip={setSkip}
+                    taskStartDate={taskStartDate}
+                    setTaskStartDate={setTaskStartDate}
+                    dueDate={dueDate}
+                    setDueDate={setDueDate}
+                />
             </Box>
             <Box
                 sx={{
                     flex:0.4,
                 }}
             >
-                <SubTasksList/>
+                <SubTasksList tasks={tasks}/>
             </Box>
             
         </Box>

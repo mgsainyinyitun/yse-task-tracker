@@ -18,6 +18,12 @@ export function findDepartment(id,departments){
     })
 }
 
+export function findUserByUsername(username,users){
+    return users.find(user=>{
+        return user.username === username;
+    })
+}
+
 export function findObjectByName(name,objects){
     return objects.find(obj=>{
         return obj.name===name;

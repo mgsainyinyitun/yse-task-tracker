@@ -6,7 +6,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { PAGE } from "../../../pageConstants";
 
 function Success() {
-    const navigate = useNavigate();
     return (
         <Box
             sx={{
@@ -28,7 +27,6 @@ function Success() {
             >
                 success
             </Typography>
-
             <Link 
                 to={PAGE.LINK.PROJETCS.INDEX}
                 style={{
@@ -36,6 +34,7 @@ function Success() {
                     color:'inherit',
                 }}
             >
+                <br/>
                 <Button
                     variant="contained"
                     startIcon={<ArrowBackIosOutlinedIcon />}

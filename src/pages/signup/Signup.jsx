@@ -7,7 +7,6 @@ import { Link, useNavigate } from "react-router-dom";
 import YSELOGO from "../../assets/images/YSE Logo (Color).png";
 import ErrorAlert from "../../components/ErrorAlert";
 import OverlayLoading from "../../components/OverlayLoading";
-import { mockPosition } from "../../data/mockData";
 import { signup } from "../../backend/firebase/auth/userFunction";
 import { getUserById } from "../../backend/firebase/firestore/userStoreFunction";
 import { getDepartmentsDatafromLocal } from "../../backend/localstorage/departments";

@@ -20,14 +20,25 @@ export async function getUserById(uid) {
     const userRef = collection(db, "users");
     const q = query(userRef, where("uid", "==", uid));
     const userSnapshot = await getDocs(q);
-    if(!userSnapshot.empty) {
+    if (!userSnapshot.empty) {
         const userData = userSnapshot.docs[0].data();
         console.log(userData);
         return userData;
-    }else{
-        console.log('empyt user data');
+    } else {
+        console.log('empty user data');
         return null;
     }
 }
 
-
+export async function getAllUsers() {
+    let users = [];
+    const usersSnap = await getDocs(collection(db, "users"));
+    usersSnap.forEach((doc) => {
+        users.push({
+            uid:doc.data().uid,
+            username:doc.data().username,
+            department:doc.data().department.name,
+        });
+    });
+    return Promise.resolve(users);
+}

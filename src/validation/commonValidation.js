@@ -5,3 +5,9 @@ export function isYseMail(email) {
     }
     return false;
 }
+
+export function checkEmpty(data) {
+    if (data === "") {
+        return "Field cannot be Empty!";
+    } return true;
+}
