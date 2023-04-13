@@ -2,9 +2,9 @@ import { Button, Divider, ListItemText, Stack, TextField, Typography } from "@mu
 import { Box } from "@mui/system";
 import { timestampToDateString } from "../../../../utils/dateFunction";
 
-function SubmitProjectForm({getValues,members,startDate,endDate }) {
+function SubmitProjectForm({getValues,members,startDate,endDate,tasks }) {
 
-    const { title, description} = getValues();
+    const { title, description,department} = getValues();
     return (
         <Box
             sx={{
@@ -30,6 +30,13 @@ function SubmitProjectForm({getValues,members,startDate,endDate }) {
                     value={description}
                     rows={3}
                 />
+                 <TextField
+                    fullWidth
+                    label="Department"
+                    type={'text'}
+                    disabled
+                    value={department?department:'All'}
+                />
                 <TextField
                     fullWidth
                     label="Start Date"
@@ -44,6 +51,7 @@ function SubmitProjectForm({getValues,members,startDate,endDate }) {
                     disabled
                     value={endDate?timestampToDateString(endDate):'Not Defined'}
                 />
+
 
                 <Stack
                     sx={{
@@ -93,15 +101,21 @@ function SubmitProjectForm({getValues,members,startDate,endDate }) {
                             marginBottom:'1rem',
                         }}
                     />
-                    <ListItemText
-                        primary={'Task tiele here'}
-                        secondary={'task description go heree '}
-                    />
-                     <ListItemText
-                        primary={'title of the task'}
-                        secondary={'Social Media and Design Departmet'}
-                    />
-
+                     {
+                        tasks.length>0?
+                        tasks.map(task=>{
+                            return(
+                                <ListItemText
+                                    key={task.title}
+                                    primary={task.title}
+                                    secondary={task.description}
+                                />
+                            )
+                        }):
+                        <Box>
+                            EMPTY
+                        </Box>
+                    }
                 </Stack>
 
                 <Box sx={{
@@ -115,7 +129,6 @@ function SubmitProjectForm({getValues,members,startDate,endDate }) {
                         Submit
                     </Button>
                 </Box>
-
             </Stack>
         </Box>);
 }

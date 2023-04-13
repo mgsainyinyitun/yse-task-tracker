@@ -2,8 +2,12 @@ import { collection, doc, setDoc } from "firebase/firestore";
 import { db } from "../../../firebase";
 
 export async function addProjectToStore(project) {
+    
     const projRef = doc(collection(db, "projects"));
-    const data = await setDoc(projRef, { ...project, id: projRef.id })
+    const data = await setDoc(projRef, {
+            ...project,
+            id: projRef.id,
+         })
         .then(() => {
             return Promise.resolve({
                 status: 0,

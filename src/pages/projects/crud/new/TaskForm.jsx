@@ -34,6 +34,7 @@ function TaskForm({ register, setType, errors, skip, setSkip, taskStartDate, set
                 users => {
                     setUsers(users);
                     dispatch(addAllUser(users));
+                    
                     setLoading(false);
                 }
             )

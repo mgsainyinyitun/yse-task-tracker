@@ -1,16 +1,33 @@
-import { Stack, TextField } from "@mui/material";
+import { Autocomplete, Stack, TextField } from "@mui/material";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
+import { getDepartmentsDatafromLocal } from "../../../../backend/localstorage/departments";
 
 function ProjectDetails({ register, errors,startDate,endDate,setStartDate,setEndDate }) {
 
+    const [deparments,setDepartment] = useState([]);
     const user = useSelector(state => state.users.user);
+    const deps = useSelector(state =>  state.departments);
+
     function checkEmpty(data) {
         if (data === "") {
             return "Field cannot be Empty!";
         } return true;
     }
+
+
+    useEffect(()=>{
+        if(Object.keys(deps).length !== 0){
+            setDepartment(deps.data);
+        } else {
+            let deps = getDepartmentsDatafromLocal();
+            setDepartment(deps);
+        }
+    },[]);
+
 
     return (
         <Stack spacing={5} flex={1}>
@@ -43,6 +60,19 @@ function ProjectDetails({ register, errors,startDate,endDate,setStartDate,setEnd
                 defaultValue={user.username}
                 type={'text'}
                 disabled
+            />
+             <Autocomplete
+                fullWidth
+                options={deparments.map(dep => {
+                    return dep.name;
+                })}
+                renderInput={(params) =>
+                    <TextField
+                        {...params}
+                        {...register("department")}
+                        label="Department"
+                        color="primary"
+                    />}
             />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DesktopDatePicker

@@ -1,13 +1,11 @@
 import { Box, Button, Card, Container, Typography } from "@mui/material";
-import { serverTimestamp, Timestamp } from "firebase/firestore";
+import { serverTimestamp } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { addProjectToStore } from "../../../../backend/firebase/firestore/projectStoreFunctions";
 import { getAllUsers } from "../../../../backend/firebase/firestore/userStoreFunction";
 import FormStepper from "../../../../components/FormStepper";
 import OverlayLoading from "../../../../components/OverlayLoading";
-import { addTask } from "../../../../redux/reducers/taskSlice";
 import { addAllUser } from "../../../../redux/reducers/userSlice";
 import { findObjectByName, findUserByUsername } from "../../../../utils/commonFunctions";
 import BackButton from "../../../general/BackButton/BackButton";
@@ -16,16 +14,16 @@ import AddTasks from "./AddTasks";
 import ProjectDetails from "./ProjectDetails";
 import SubmitProjectForm from "./SubmitProjectForm";
 import Success from "./Success";
-
+import { addProject } from "../../../../backend/controller/projectController";
+import { getDepartmentsDatafromLocal } from "../../../../backend/localstorage/departments";
 const steps = [
     'Project Detail',
     'Add Members',
     'Add Tasks',
     'Submit',
 ];
-
 function NewProject() {
-    const { register, handleSubmit, formState, getValues,reset } = useForm();
+    const { register, handleSubmit, formState, getValues, reset } = useForm();
     const [activeState, setActiveState] = useState(0);
     const [success, setSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -39,10 +37,12 @@ function NewProject() {
     const { errors } = formState;
     const [members, setMembers] = useState([]);
     const [tasks, addTasks] = useState([]);
-    const [users,setUsers] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [departments,setDepartments] = useState([]);
     const dispatch = useDispatch();
-    const user = useSelector(state => state.users.user);
-    const Susers = useSelector(state => state.users.all);
+    const user =    useSelector(state => state.users.user);
+    const Susers =  useSelector(state => state.users.all);
+    const deps = useSelector(state =>  state.departments);
 
     const renderStepForm = () => {
         switch (activeState) {
@@ -84,6 +84,7 @@ function NewProject() {
                     members={members}
                     startDate={startDate}
                     endDate={endDate}
+                    tasks={tasks}
                 />);
             default: return <h3>Not Step</h3>
         }
@@ -106,75 +107,60 @@ function NewProject() {
         });
         return memb;
     }
-    function handleAddTask(data){
+
+    /** Handle Add task form */
+    function handleAddTask(data) {
         console.log(data);
-        const {taskTitle,taskDescription,remark,assignTo,priority} = data;
+        const { taskTitle, taskDescription, remark, assignTo, priority } = data;
         /** Reset Form */
-        reset({
-            taskTitle:'',
-            taskDescription:'',
-            remark:'',
-        });
-        setTaskStartDate(new Date());
-        setDueDate(null);
+        // reset({
+        //     taskTitle: '',
+        //     taskDescription: '',
+        //     remark: '',
+        // });
+
         /** Prepare task state */
-
-        let consignee = findUserByUsername(assignTo,users);
-
-        console.log(consignee);
+        let consignee = findUserByUsername(assignTo, users);
 
         let task = {
-            title:taskTitle,
-            description:taskDescription,
-            consigner:{
+            title: taskTitle,
+            description: taskDescription,
+            consigner: {
                 uid: user.uid,
                 username: user.username,
             },
-            consignee:assignTo?{
-                uid:consignee.uid,
-                username:consignee.username,
-            }:null,
-            priority:priority,
-            status:'notyet',
-            startDate:new Date(taskStartDate),
-            dueDate:dueDate?new Date(dueDate):null,
-            remarks:remark,
-            createdAt:serverTimestamp(),
-            updatedAt:serverTimestamp(),
+            consignee: assignTo ? {
+                uid: consignee.uid,
+                username: consignee.username,
+            } : null,
+            priority: priority,
+            status: 'notyet',
+            startDate: taskStartDate ? new Date(taskStartDate) : null,
+            dueDate: dueDate ? new Date(dueDate) : null,
+            remarks: remark,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
         }
-        addTasks([...tasks,task])
-        // dispatch(addTask(task)) ;
-        console.log(tasks);
+        addTasks([...tasks, task])
     }
 
-
-    function submitProject(project) {
-        setLoading(true);
-        addProjectToStore(project).then(
-            res => {
-                console.log("Response",res);
-                if (res.status === 0) {
-                    setSuccess(true);
-                    setLoading(false);
-                    return res.docId;
-                } else {
-                    console.log(res);
-                }
-                setLoading(false);
-            })
-    }
-
-
+    /** New Project Submit Function */
     function handleProjectSubmit(data, type) {
-        console.log(data);
-        const { title, description } = data;
+        const { title, description,department } = data;
         if (type === 'add') {
+            /** If it is add new task */
             handleAddTask(data);
             return;
         }
 
         if (activeState === 3) {
-            /** Prepare Project data */
+            /************************************/
+            /** if it is in final step          */
+            /** 1.Prepare Project data          */
+            /** 2.Add project to firestore      */
+            /** 3.Add all tasks with project Id */
+            /************************************/
+            // 1. Prepare Project data
             let project = {
                 title,
                 description,
@@ -189,10 +175,21 @@ function NewProject() {
                 tasks: null,
                 createdAt: serverTimestamp(),
                 updatedAt: serverTimestamp(),
+                departments:department?findObjectByName(department,departments):'All',
             }
-            /** submit project */
-            // const projectId = submitProject(project);
-            // console.log('project id',projectId);
+            setLoading(true);
+            addProject(project, tasks,dispatch)
+                .then(res => {
+                    console.log("Response", res);
+                    if (res === 0) {
+                        // Add to redux-store
+                        setSuccess(true);
+                        setLoading(false);
+                    } else {
+                        console.log(res);
+                    }
+                    setLoading(false);
+            });
         } else {
             nextStep(activeState)
         }
@@ -200,6 +197,13 @@ function NewProject() {
 
     useEffect(() => {
         setLoading(true);
+        if(Object.keys(deps).length !== 0){
+            setDepartments(deps.data);
+        }else{
+            let deps = getDepartmentsDatafromLocal();
+            setDepartments(deps);
+        }
+
         if (Susers) {
             setUsers(Susers);
             setLoading(false);
@@ -212,7 +216,7 @@ function NewProject() {
                 }
             )
         }
-    },[])
+    }, [])
 
     return (
         <Box
