@@ -1,9 +1,10 @@
-import { Box, Button, Card, CardContent, Divider, LinearProgress, linearProgressClasses, Paper, Typography } from "@mui/material";
+import { Avatar, Box, Button, Card, CardContent, Divider, LinearProgress, linearProgressClasses, Paper, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { Stack } from "@mui/system";
-import { mockDepartment, mockTasks } from "../../../../data/mockData";
+import { mockTasks } from "../../../../data/mockData";
 import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined';
-import { findDepartment } from "../../../../utils/commonFunctions";
+import { useEffect, useState } from "react";
+import { findTaskById, findTasks } from "../../../../backend/controller/taskController";
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: 15,
@@ -18,6 +19,16 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 }));
 
 function ProjectRightInfo({ project }) {
+
+    const [tasks, setTasks] = useState([]);
+
+    useEffect(() => {
+        findTasks(project.tasks)
+            .then(res => {
+                setTasks(res);
+            })
+    }, []);
+
     return (
         <Box
             mt={4}
@@ -46,7 +57,7 @@ function ProjectRightInfo({ project }) {
                     </Typography>
                     <Box>
                         <Typography variant="h5" sx={{ color: 'primary.dark' }}>
-                            CREATED BY: {project.creator.name}
+                            CREATED BY: {project.creator.username}
                         </Typography>
                     </Box>
                 </Stack>
@@ -58,18 +69,17 @@ function ProjectRightInfo({ project }) {
 
                 <Stack direction={'row'} spacing={3} >
                     <Typography variant="h5">
-                        DEPARTMENT &nbsp; : 
+                        DEPARTMENT &nbsp; :
                     </Typography>
                     <Typography variant="h5">
                         {
-                            project.scope === 'all' ?
-                                `${project.scope.toUpperCase()}` :
-                                findDepartment(project.scope, mockDepartment).name
+                            project.departments === 'All' ?
+                                `${project.departments.toUpperCase()}` :
+                                project.departments ? project.departments.name : 'Null'
                         }
                     </Typography>
                 </Stack>
             </Card>
-
             <Card
                 sx={{
                     borderRadius: '10px',
@@ -81,11 +91,10 @@ function ProjectRightInfo({ project }) {
                     Recent Tasks
                 </Typography>
                 <Divider sx={{ marginTop: '10px', marginBottom: '10px', color: 'primary.main' }} />
-
                 {
-                    mockTasks.slice(0, 3).map(task => {
+                    tasks.slice(0, 3).map((task,index) => {
                         return (
-                            <Paper sx={{ marginBottom: 1, marginTop: 1 }}>
+                            <Paper sx={{ marginBottom: 1, marginTop: 1 }} key={index}>
                                 <CardContent
                                     sx={{
                                         display: 'flex',
@@ -93,24 +102,18 @@ function ProjectRightInfo({ project }) {
                                         gap: 1,
                                     }}
                                 >
-                                    <InsertLinkOutlinedIcon />
+                                    <Avatar>{index + 1}</Avatar>
                                     {task.title}
                                 </CardContent>
                             </Paper>
                         );
                     })
                 }
-
                 <Box>
-                    <Button variant="contained"
-                        sx={{
-                            borderRadius:'10px',
-                        }}
-                    >
+                    <Button variant="contained">
                         More
                     </Button>
                 </Box>
-
             </Card>
 
         </Box>

@@ -4,8 +4,7 @@ import NotStartedOutlinedIcon from '@mui/icons-material/NotStartedOutlined';
 import WorkHistoryOutlinedIcon from '@mui/icons-material/WorkHistoryOutlined';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import { Link } from "react-router-dom";
-import { findTask } from "../utils/commonFunctions";
-import { mockTasks,mockDepartment } from "../data/mockData";
+import { formatDate } from "../utils/dateFunction";
 
 export function renderName(params) {
     if (params.value == null) {
@@ -154,18 +153,19 @@ export function renderProgress(params) {
         </Box>);
 }
 
-
 export function renderDepartment(params){
-    if(params.value === 'all'){
+    if(params.value === 'All'){
         return <Chip label='All' size="small"/>
+    }else{
+        return params.value?(<Chip label={params.value.name} size='small'/>):"";
     }
+}
 
-    let department = mockDepartment.find(dep=>{
-        return dep.id === params.value;
-    })
-
-    if(department){;
-        return <Chip label={department.name} size='small'/>
+export function renderDate(params){
+    if(params.value){
+        return formatDate (params.value);
+    }else{
+        return "Not Defined";
     }
-    return;
+    
 }

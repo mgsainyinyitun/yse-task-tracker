@@ -1,10 +1,8 @@
 import { Avatar, Card, Divider, TextField, Typography } from "@mui/material"
 import { Box, Stack } from "@mui/system"
+import { formatDateMothName } from "../../../../utils/dateFunction";
 
 function ProjectLeftInfo({ project }) {
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ];
     return (
         <Box
             p={2}
@@ -39,13 +37,7 @@ function ProjectLeftInfo({ project }) {
 
                     <Typography variant="h6">
                         {
-                            project.startDate ?
-                                `${monthNames[project.startDate.getMonth()]} ,
-                         ${project.startDate.getDay()} ,
-                         ${project.startDate.getFullYear()}
-                        `
-                                :
-                                'Not Defined'
+                            project.startDate?formatDateMothName(project.startDate):'Not Defined'
                         }
                     </Typography>
                 </Stack>
@@ -56,13 +48,7 @@ function ProjectLeftInfo({ project }) {
 
                     <Typography variant="h6">
                         {
-                            project.startDate ?
-                                `${monthNames[project.endDate.getMonth()]},
-                         ${project.endDate.getDay()} ,
-                         ${project.endDate.getFullYear()}
-                        `
-                                :
-                                'Not Defined'
+                            project.endDate?formatDateMothName(project.endDate):'Not Defined'
                         }
                     </Typography>
                 </Stack>
@@ -85,11 +71,13 @@ function ProjectLeftInfo({ project }) {
                 <Divider sx={{
                     margin:'10px 0 10px 0'
                 }}/>
+
                 {
+                    project.members?
                     project.members.map(member => {
                         return (
                             <Box
-                                key={member.id}
+                                key={member.uid}
                                 sx={{
                                     display: 'flex',
                                     gap: 2,
@@ -97,14 +85,14 @@ function ProjectLeftInfo({ project }) {
                                 }}
                             >
                                 <Avatar sx={{ width: 25, height: 25 }}>
-                                    {member.name[0]}
+                                    {member.username[0]}
                                 </Avatar>
                                 <Typography>
-                                    {member.name}
+                                    {member.username}
                                 </Typography>
                             </Box>
                         )
-                    })
+                    }):'Empty'
                 }
             </Stack>
             </Card>

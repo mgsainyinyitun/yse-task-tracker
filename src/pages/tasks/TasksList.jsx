@@ -1,17 +1,16 @@
 
 import { Box} from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { mockTasks } from '../../data/mockData';
 import {renderDelete,renderEdit,renderName,renderPriority,renderStatus,renderDetail} from "./common";
 import TaskDeleteModal from "./crud/TaskDeleteModal";
+import { readTasks } from "../../backend/controller/taskController";
 
 
 const mocktasksfinal = mockTasks.map(task => {
     return { ...task,consignee:task.consignee.name,consigner:task.consigner.name, edit: task.id, delete: task.id, detail: task.id }
 });
-
-
 
 function TasksList() {
     const [pageSize, setPageSize] = useState(10);
@@ -62,6 +61,16 @@ function TasksList() {
             renderCell: params => renderDelete(params,setOpen,setDeleteTask),
         },
     ];
+
+    useEffect(()=>{
+        readTasks()
+            .then(res=>{
+                console.log(res);
+            })
+    },[])
+
+
+
     return <Box
         sx={{
             display: 'flex',

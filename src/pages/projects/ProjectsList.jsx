@@ -3,17 +3,24 @@ import { Box, Button, Divider, IconButton, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useNavigate } from 'react-router-dom';
 import {mockProject} from '../../data/mockData';
-import {renderName, renderTotalTasks, renderProgress,renderDepartment,renderDetail,renderEdit,renderDelete} from '../commonScripts';
+import {renderName, renderTotalTasks, renderProgress,renderDepartment,renderDetail,renderEdit,renderDelete, renderDate} from '../commonScripts';
 import { PAGE } from '../pageConstants';
+import { useEffect, useState } from 'react';
+import { readProjects } from '../../backend/controller/projectController';
 
-const mockProjectFinal = mockProject.map(project => {
-    return { ...project,creator:project.creator.name,edit: project.id, delete: project.id, detail: project.id }
-});
+function prepareProjects(projects){
+    const pProjects = projects.map((project,index)=>{
+        return { ...project,creator:project.creator.name,edit: project.id, delete: project.id, detail: project.id,no:index+1 }
+    })
+    return pProjects;
+}
 
 function ProjectsList(){
     const navigate = useNavigate();
+    const [projects,setProjects] = useState([]);
+
     const columns = [
-        { field: 'id', headerName: 'No.', width: 70 },
+        { field: 'no', headerName: 'No.', width: 70 },
         { field: 'title', headerName: 'Title',minWidth: 50, flex: 1 },
         { field: 'creator',headerName: 'Creator',flex:0.5,
           renderCell: params => renderName(params),
@@ -24,15 +31,17 @@ function ProjectsList(){
         {
             field: 'startDate', headerName: 'Start Date', flex: 0.5,
             type: 'date',
+            renderCell:params => renderDate(params),
         },
         {
             field: 'endDate', headerName: 'End Date', flex: 0.5,
+            renderCell:params => renderDate(params),
             type: 'date',
         },
         { field: 'progress',headerName:'Progress',flex:0.5,
             renderCell:params => renderProgress(params),
         },
-        { field: 'scope',headerName:'Departments',flex:1,
+        { field: 'departments',headerName:'Departments',flex:1,
             renderCell:params => renderDepartment(params),
         },
         {
@@ -48,6 +57,14 @@ function ProjectsList(){
             renderCell: params => renderDelete(params),
         },
     ];
+
+
+    useEffect(()=>{
+        readProjects().then(res=>{
+            setProjects(prepareProjects(res.data));
+        });
+    },[])
+
 
     return (
         <Box
@@ -71,7 +88,7 @@ function ProjectsList(){
             <DataGrid
                 aria-label="Projects List"
                 columns={columns}
-                rows={mockProjectFinal}
+                rows={projects}
                 components={{
                     Toolbar:GridToolbar
                 }}

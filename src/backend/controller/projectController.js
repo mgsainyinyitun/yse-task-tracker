@@ -1,9 +1,10 @@
 import { addProjects } from "../../redux/reducers/projectSlice";
-import { addProjectToStore } from "../firebase/firestore/projectStoreFunctions";
+import { addProjectToStore, readProjectsFromStore } from "../firebase/firestore/projectStoreFunctions";
 import { addTaskToStore } from "../firebase/firestore/taskStoreFunctions";
-import { addProjectsDataToLocal } from "../localstorage/projects";
-
-export async function addProject(project, tasks,dispatch) {
+import { addProjectsDataToLocal, getProjectsDatafromLocal } from "../localstorage/projects";
+import { store } from "../../redux/store";
+import { findProject } from "../../utils/commonFunctions";
+export async function addProject(project, tasks, dispatch) {
     /** Add tasks to firebase                         */
     /** Add projects with task id                    */
     /** Updat project's tasks (add task id lists)   */
@@ -32,4 +33,70 @@ export async function addProject(project, tasks,dispatch) {
             }
         });
     return res;
+}
+export async function readProjects() {
+    /** 1. Read from Redux (if not)         */
+    /** 2. Read from LocalStore (if not)    */
+    /** 3. Read from firestore              */
+
+    let projects = [];
+    // 1. Read form Redux store
+    const reduxProjects = store.getState().projects;
+    if (reduxProjects.data.length === 0) {
+        // 2. Read form local storage
+        const localstorageProjects = getProjectsDatafromLocal();
+        if (localstorageProjects) {
+            console.log('read from localstorage');
+            localstorageProjects.forEach(project => {
+                store.dispatch(addProjects(project));
+            });
+            projects = {
+                status:0,
+                data:localstorageProjects,
+            }
+        } else {
+            // 3. Read from firestore
+            projects =  await readProjectsFromStore()
+                .then(res => {
+                   return res;
+                });
+            projects.data.forEach(project =>{
+                addProjectsDataToLocal(project);
+            });
+        }
+    } else {
+        console.log('read from redux');
+        projects = {
+            status: 0,
+            data: reduxProjects.data
+        };
+    }
+    return Promise.resolve(projects);
+}
+
+export async function findProjectById(id) {
+    let project = null;
+    const reduxProjects = store.getState().projects;
+    if (reduxProjects.data.length === 0) {
+        // 2. Read form local storage
+        const localstorageProjects = getProjectsDatafromLocal();
+        if (localstorageProjects) {
+            localstorageProjects.forEach(project => {
+                store.dispatch(addProjects(project));
+            });
+            project = {
+                status:0,
+                data:findProject(id,localstorageProjects),
+            }
+        } else {
+            // 3. Read from firestore
+            // To-do
+        }
+    } else {
+        project = {
+            status: 0,
+            data: findProject(id,reduxProjects.data),
+        };
+    }
+    return Promise.resolve(project);
 }

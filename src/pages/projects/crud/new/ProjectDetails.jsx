@@ -18,7 +18,6 @@ function ProjectDetails({ register, errors,startDate,endDate,setStartDate,setEnd
         } return true;
     }
 
-
     useEffect(()=>{
         if(Object.keys(deps).length !== 0){
             setDepartment(deps.data);

@@ -1,6 +1,7 @@
 export function addProjectsDataToLocal(project) {
     const existingPjts = JSON.parse(localStorage.getItem('projects')) || [];
-    if (!existingPjts.includes(project)) {
+    let found = existingPjts.find(item => item.id === project.id);
+    if (!found) {
         // Append the new item to the array
         const updatedPjts = [...existingPjts, project];
         // Save the updated array back to localStorage

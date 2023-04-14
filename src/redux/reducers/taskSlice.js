@@ -7,10 +7,13 @@ export const taskSlice = createSlice({
         data:[],
     },
     reducers:{
-        addTask:(state,actions)=>{
-            return [state,actions.payload];
+        addTasks:(state,actions)=>{
+            const existing = state.data.find(item=>item.id === actions.payload.id);
+            if(!existing){
+                state.data.push(actions.payload);
+            }
         }
     }
 });
-export const {addTask} = taskSlice.actions;
+export const {addTasks} = taskSlice.actions;
 export default taskSlice.reducer;
