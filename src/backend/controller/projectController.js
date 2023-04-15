@@ -85,7 +85,6 @@ export async function readProjects() {
             projects.data = prepPjts;
         }
     } else {
-        console.log('read from redux');
         projects = {
             status: 0,
             data: reduxProjects.data

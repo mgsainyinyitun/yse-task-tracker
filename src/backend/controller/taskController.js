@@ -6,6 +6,7 @@ import { addTasks } from "../../redux/reducers/taskSlice";
 import { findTask } from "../../utils/commonFunctions";
 import { addProjectTaskId } from "../firebase/firestore/projectStoreFunctions";
 import { addProjectTask } from "../../redux/reducers/projectSlice";
+import { timestampToIsoString } from "../../utils/dateFunction";
 
 export async function addTask(projectID, task) {
     /** Add task to firebase  => id                  */
@@ -81,11 +82,22 @@ export async function readTasks() {
                 .then(res => {
                     return res;
                 });
-
+            let prepTasks = [];
             tasks.data.forEach(task => {
-                addTasksDataToLocal(task);
-                store.dispatch(addTasks(task));
+                let prepTask = {
+                    ...task,
+                    startDate: task.startDate ? timestampToIsoString(task.startDate) : null,
+                    dueDate: task.dueDate ? timestampToIsoString(task.dueDate) : null,
+                    finishedDate: task.finishedDate ? timestampToIsoString(task.finishedDate) : null,
+                }
+                delete prepTask.createdAt;
+                delete prepTask.updatedAt;
+                
+                prepTasks.push(prepTask);
+                addTasksDataToLocal(prepTask);
+                store.dispatch(addTasks(prepTask));
             });
+            tasks = [...prepTasks];
         }
     } else {
         tasks = {
