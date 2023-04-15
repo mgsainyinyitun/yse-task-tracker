@@ -13,7 +13,6 @@ export async function addTaskToStore(task){
         });
     })
     .catch(error=>{
-        console.log(error);
         return Promise.reject({
             status:1,
             error:error,

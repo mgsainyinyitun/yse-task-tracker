@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 const monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
 ];
@@ -34,3 +36,22 @@ export function formatDateMothName({ seconds, nanoseconds }) {
 
     return `${month} ${formattedDay} ${year}`; // Month DD YYYY
 }
+
+export function timestampToIsoString(timestamp) {
+    const date = new Timestamp(
+        timestamp.seconds,
+        timestamp.nanoseconds
+    ).toDate();
+    const isoString = date.toISOString();
+    return isoString;
+}
+
+export function isoDateStringToDateString(isoDateString) {
+    const date = new Date(isoDateString);
+    const formattedDate = date.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'numeric',
+      year: 'numeric',
+    });
+    return formattedDate;
+  }

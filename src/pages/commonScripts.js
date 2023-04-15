@@ -3,9 +3,22 @@ import { DeleteOutline, EditOutlined } from "@mui/icons-material";
 import NotStartedOutlinedIcon from '@mui/icons-material/NotStartedOutlined';
 import WorkHistoryOutlinedIcon from '@mui/icons-material/WorkHistoryOutlined';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { Link } from "react-router-dom";
-import { formatDate } from "../utils/dateFunction";
+import { formatDate, isoDateStringToDateString } from "../utils/dateFunction";
+import { green } from "@mui/material/colors";
 
+
+export function renderNumber(params) {
+    return <Avatar
+        sx={{
+            width: 25,
+            height: 25,
+            bgcolor: green[500],
+            color: 'blue',
+            fontSize: '14px',
+        }} >{params.value}</Avatar>
+}
 export function renderName(params) {
     if (params.value == null) {
         return '';
@@ -153,19 +166,31 @@ export function renderProgress(params) {
         </Box>);
 }
 
-export function renderDepartment(params){
-    if(params.value === 'All'){
-        return <Chip label='All' size="small"/>
-    }else{
-        return params.value?(<Chip label={params.value.name} size='small'/>):"";
+export function renderDepartment(params) {
+    if (params.value === 'All') {
+        return <Chip label='All' size="small" />
+    } else {
+        return params.value ? (<Chip label={params.value.name} size='small' />) : "";
     }
 }
 
-export function renderDate(params){
-    if(params.value){
-        return formatDate (params.value);
-    }else{
+export function renderDate(params) {
+    if (params.value) {
+        return isoDateStringToDateString(params.value);
+    } else {
         return "Not Defined";
     }
-    
+
+}
+
+export function renderAddTask(params, setOpen, setProjectId) {
+    const onClickOpenNewTaskModal = () => {
+        setProjectId(params.value);
+        setOpen(true);
+    }
+
+    return (
+        <IconButton sx={{ color: 'inherit', }} onClick={onClickOpenNewTaskModal}>
+            <AddCircleOutlineIcon />
+        </IconButton>);
 }

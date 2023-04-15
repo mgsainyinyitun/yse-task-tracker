@@ -4,6 +4,7 @@ import { addTaskToStore } from "../firebase/firestore/taskStoreFunctions";
 import { addProjectsDataToLocal, getProjectsDatafromLocal } from "../localstorage/projects";
 import { store } from "../../redux/store";
 import { findProject } from "../../utils/commonFunctions";
+import { timestampToIsoString } from "../../utils/dateFunction";
 export async function addProject(project, tasks, dispatch) {
     /** Add tasks to firebase                         */
     /** Add projects with task id                    */
@@ -24,8 +25,18 @@ export async function addProject(project, tasks, dispatch) {
     const res = await addProjectToStore({ ...project, tasks: res_tasks })
         .then((res) => {
             if (res.status === 0) {
-                dispatch(addProjects({ ...project, tasks: res_tasks }));
-                addProjectsDataToLocal({ ...project, tasks: res_tasks });
+                let prep_project = {
+                    ...project,
+                    tasks: res_tasks,
+                    id: res.docId,
+                    startDate: project.startDate ? project.startDate.toISOString() : null,
+                    endDate: project.endDate ? project.endDate.toISOString() : null,
+                }
+                delete prep_project.createdAt;
+                delete prep_project.updatedAt;
+                
+                dispatch(addProjects(prep_project));
+                addProjectsDataToLocal(prep_project);
                 return Promise.resolve(0);
             } else {
                 console.log(res);
@@ -51,18 +62,27 @@ export async function readProjects() {
                 store.dispatch(addProjects(project));
             });
             projects = {
-                status:0,
-                data:localstorageProjects,
+                status: 0,
+                data: localstorageProjects,
             }
         } else {
             // 3. Read from firestore
-            projects =  await readProjectsFromStore()
+            projects = await readProjectsFromStore()
                 .then(res => {
-                   return res;
+                    return res;
                 });
-            projects.data.forEach(project =>{
-                addProjectsDataToLocal(project);
+
+            let prepPjts = [];
+            projects.data.forEach(project => {
+                let prepPjt = {
+                    ...project,
+                    startDate: project.startDate ? timestampToIsoString(project.startDate) : null,
+                    endDate: project.endDate ? timestampToIsoString(project.endDate) : null,
+                }
+                prepPjts.push(prepPjt);
+                addProjectsDataToLocal(prepPjt);
             });
+            projects.data = prepPjts;
         }
     } else {
         console.log('read from redux');
@@ -85,8 +105,8 @@ export async function findProjectById(id) {
                 store.dispatch(addProjects(project));
             });
             project = {
-                status:0,
-                data:findProject(id,localstorageProjects),
+                status: 0,
+                data: findProject(id, localstorageProjects),
             }
         } else {
             // 3. Read from firestore
@@ -95,7 +115,7 @@ export async function findProjectById(id) {
     } else {
         project = {
             status: 0,
-            data: findProject(id,reduxProjects.data),
+            data: findProject(id, reduxProjects.data),
         };
     }
     return Promise.resolve(project);

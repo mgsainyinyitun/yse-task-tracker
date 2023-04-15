@@ -40,6 +40,7 @@ function TopBar() {
     const handleSignOut = () => {
         signOut(auth)
             .then(() => {
+                localStorage.clear();
                 navigate(PAGE.LINK.SIGNIN);
             });
     }

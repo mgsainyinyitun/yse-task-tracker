@@ -1,4 +1,4 @@
-import { collection, doc, getDocs, onSnapshot, query, setDoc, where } from "firebase/firestore";
+import { arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "../../../firebase";
 
 export async function addProjectToStore(project) {
@@ -29,17 +29,17 @@ export async function readProjectsFromStore() {
         .then(querySnapshot => {
             const documents = querySnapshot.docs.map((doc) => doc.data());
             return {
-                status:0,
-                data:documents,
+                status: 0,
+                data: documents,
             }
         })
-        .catch(error=>{
+        .catch(error => {
             return {
-                status:1,
-                error:error,
+                status: 1,
+                error: error,
             }
         });
-        return projects;
+    return projects;
 }
 
 let readProjectUnsubscribe = null;
@@ -56,4 +56,14 @@ export function onSnapshotProjectStore() {
         });
     });
     return { unscribe: readProjectUnsubscribe, data: data };
+}
+
+export async function addProjectTaskId(projectId, taskId) {
+    const projRef = doc(db, "projects", projectId);
+    try{
+        await updateDoc(projRef,{tasks:arrayUnion(taskId)});
+        return Promise.resolve(0);
+    }catch(err){
+       return Promise.reject(err);
+    }
 }

@@ -1,13 +1,59 @@
-import { findTaskByIdFromStore, readTasksFromStore } from "../firebase/firestore/taskStoreFunctions";
+import { addTaskToStore, findTaskByIdFromStore, readTasksFromStore } from "../firebase/firestore/taskStoreFunctions";
 import { getProjectsDatafromLocal } from "../localstorage/projects";
 import { store } from "../../redux/store";
 import { addTasksDataToLocal, getTasksDatafromLocal } from "../localstorage/tasks";
-import taskSlice, { addTasks } from "../../redux/reducers/taskSlice";
+import { addTasks } from "../../redux/reducers/taskSlice";
 import { findTask } from "../../utils/commonFunctions";
-export async function addTask(project, task, dispatch) {
-    /** Add task to firebase                         */
+import { addProjectTaskId } from "../firebase/firestore/projectStoreFunctions";
+import { addProjectTask } from "../../redux/reducers/projectSlice";
+
+export async function addTask(projectID, task) {
+    /** Add task to firebase  => id                  */
     /** Update project with task id (append task)    */
     /** Updat project's tasks (add task id lists)    */
+
+    let result = await addTaskToStore(task)
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+            return {
+                status: 1,
+                error: err,
+            }
+        });
+
+    if (result.status === 0) {
+        return await addProjectTaskId(projectID, result.docId)
+            .then(res => {
+                try {
+                    let prepTask = {
+                        ...task,
+                        id: result.docId,
+                        startDate: task.startDate ? task.startDate.toISOString() : null,
+                        dueDate: task.dueDate ? task.dueDate.toISOString() : null,
+                    }
+                    delete prepTask.createdAt;
+                    delete prepTask.updatedAt;
+                    store.dispatch(addTasks(prepTask))
+                    store.dispatch(addProjectTask(projectID, result.docId));
+                    addTasksDataToLocal(prepTask);
+
+                } catch (err) {
+                    console.log(err);
+                }
+                return Promise.resolve({
+                    status: 0,
+                    data: res,
+                })
+            })
+            .catch(err => {
+                return Promise.reject({
+                    status: 1,
+                    error: err,
+                })
+            });
+    }
 }
 
 export async function readTasks() {
@@ -50,16 +96,16 @@ export async function readTasks() {
     return Promise.resolve(tasks);
 }
 
-export async function findTasks(task_ids){
+export async function findTasks(task_ids) {
     let tasks = [];
-    for(const id of task_ids){
+    for (const id of task_ids) {
         let task = await findTaskById(id);
         tasks.push(task.data);
     }
-   return Promise.resolve(tasks);
+    return Promise.resolve(tasks);
 }
 
-export async function findTaskById(id){
+export async function findTaskById(id) {
     /** 1. find inside Redux (if not)         */
     /** 2. find inside LocalStore (if not)    */
     /** 3. find from firestore                */

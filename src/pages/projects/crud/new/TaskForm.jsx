@@ -19,7 +19,7 @@ function TaskForm({ register, setType, errors, skip, setSkip, taskStartDate, set
     const [loading, setLoading] = useState(false);
     const [users, setUsers] = useState([]);
     /** All user form redux */
-    const Susers = useSelector(state => state.users.all);
+    const Susers = useSelector(state => state.users.data);
     function handleAddTask() {
         setType('add');
         setSkip(false);
@@ -34,12 +34,12 @@ function TaskForm({ register, setType, errors, skip, setSkip, taskStartDate, set
                 users => {
                     setUsers(users);
                     dispatch(addAllUser(users));
-                    
+
                     setLoading(false);
                 }
             )
         }
-    },[])
+    }, [])
 
     return (
         <Stack spacing={2} mr={1}>

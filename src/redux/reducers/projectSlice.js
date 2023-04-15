@@ -11,8 +11,19 @@ export const projecSlice = createSlice({
             if (!existing) {
                 state.data.push(action.payload);
             }
+        },
+        addProjectTask: (state, action) => {
+            const { projectId, taskId } = action.payload;
+            let pjt = state.data.find(item => item.id === projectId);
+            if (pjt) {
+                let updatedPjt = { ...pjt, tasks: pjt.tasks.push(taskId) }
+                state.data = state.data.filter(project => project.id !== projectId);
+                state.data.push(updatedPjt);
+                console.log("updated:",updatedPjt)
+            }
+           
         }
     }
 });
-export const { addProjects } = projecSlice.actions;
+export const { addProjects,addProjectTask } = projecSlice.actions;
 export default projecSlice.reducer;

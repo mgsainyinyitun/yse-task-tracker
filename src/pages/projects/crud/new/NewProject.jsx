@@ -41,7 +41,7 @@ function NewProject() {
     const [departments,setDepartments] = useState([]);
     const dispatch = useDispatch();
     const user =    useSelector(state => state.users.user);
-    const Susers =  useSelector(state => state.users.all);
+    const Susers =  useSelector(state => state.users.data);
     const deps = useSelector(state =>  state.departments);
 
     const renderStepForm = () => {

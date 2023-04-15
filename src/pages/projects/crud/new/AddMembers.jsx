@@ -14,6 +14,7 @@ import { getAllUsers } from '../../../../backend/firebase/firestore/userStoreFun
 import { useDispatch, useSelector } from 'react-redux';
 import OverlayLoading from '../../../../components/OverlayLoading';
 import { addAllUser } from '../../../../redux/reducers/userSlice';
+import { readUsers } from '../../../../backend/controller/userController';
 
 function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -31,13 +32,13 @@ export function AddMembers({ setMembers }) {
   const [checked, setChecked] = useState([]);
   const [right, setRight] = useState([]);
   const [left, setLeft] = useState([]);
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
 
   /** All user form redux */
-  const users = useSelector(state=>state.users.all)
-  
+  const users = useSelector(state => state.users.data)
+
   const dispatch = useDispatch();
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -79,18 +80,11 @@ export function AddMembers({ setMembers }) {
 
   useEffect(() => {
     setLoading(true);
-    if(users){ /** user alreay in Redux (No Need to Read Again) */
-      setLeft(users);
-      setLoading(false);
-    }else{
-      getAllUsers().then(
-        users => {
-          setLeft(users);
-          dispatch(addAllUser(users));
-          setLoading(false);
-        }
-      )
-    }
+    readUsers()
+      .then(res => {
+        setLeft(res.data);
+        setLoading(false);
+      })
   }, []);
 
   const customList = (title, items) => (
