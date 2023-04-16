@@ -6,6 +6,7 @@ import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutli
 import { Link } from "react-router-dom";
 import { findTask } from "../../utils/commonFunctions";
 import { mockTasks } from "../../data/mockData";
+import { CONSTANTS } from "../constants";
 
 
 export function renderName(params) {
@@ -47,19 +48,19 @@ export function renderStatus(params) {
 
     let content = null;
     switch (params.value) {
-        case 'notyet':
+        case CONSTANTS.STATUS.NOTSTART:
             content =
                 <>
                     <NotStartedOutlinedIcon sx={{marginRight:'5px', color:'error.main'}}/>
                     {`Not Start`}
                 </>; break;
-        case 'inprogress':
+        case CONSTANTS.STATUS.INPROGRESS:
             content =
                 <>
                     <WorkHistoryOutlinedIcon sx={{marginRight:'5px',color:'primary.main'}}/>
                     {`In Progress`}
                 </>; break;
-        case 'finished':
+        case CONSTANTS.STATUS.FINISHED:
             content =
                 <>
                     <CheckCircleOutlineOutlinedIcon sx={{marginRight:'5px',color:'success.main'}}/>

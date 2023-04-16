@@ -1,8 +1,8 @@
-import { addTaskToStore, findTaskByIdFromStore, readTasksFromStore } from "../firebase/firestore/taskStoreFunctions";
+import { addTaskToStore, findTaskByIdFromStore, readTasksFromStore, updateTaskInStore } from "../firebase/firestore/taskStoreFunctions";
 import { getProjectsDatafromLocal } from "../localstorage/projects";
 import { store } from "../../redux/store";
-import { addTasksDataToLocal, getTasksDatafromLocal } from "../localstorage/tasks";
-import { addTasks } from "../../redux/reducers/taskSlice";
+import { addTasksDataToLocal, getTasksDatafromLocal, updateTasksDataInLocal } from "../localstorage/tasks";
+import { addTasks, updateTasks } from "../../redux/reducers/taskSlice";
 import { findTask } from "../../utils/commonFunctions";
 import { addProjectTaskId } from "../firebase/firestore/projectStoreFunctions";
 import { addProjectTask } from "../../redux/reducers/projectSlice";
@@ -12,7 +12,6 @@ export async function addTask(projectID, task) {
     /** Add task to firebase  => id                  */
     /** Update project with task id (append task)    */
     /** Updat project's tasks (add task id lists)    */
-
     let result = await addTaskToStore(task)
         .then(res => {
             return res;
@@ -92,7 +91,7 @@ export async function readTasks() {
                 }
                 delete prepTask.createdAt;
                 delete prepTask.updatedAt;
-                
+
                 prepTasks.push(prepTask);
                 addTasksDataToLocal(prepTask);
                 store.dispatch(addTasks(prepTask));
@@ -137,7 +136,6 @@ export async function findTaskById(id) {
             return Promise.resolve(task);
         }
     }
-
     // 2. find inside LocalStore 
     if (!found) {
         const localstorageProjects = getProjectsDatafromLocal();
@@ -172,4 +170,37 @@ export async function findTaskById(id) {
             })
     }
     return Promise.resolve(task);
+}
+
+export async function updateTask(task) {
+    let result = await updateTaskInStore(task)
+        .then(res => {
+            console.log('update success in store', res)
+            return { status: res, };
+        })
+        .catch(err => {
+            return {
+                status: 1,
+                error: err,
+            }
+        });
+    if (result.status === 0) {
+        let prepTask = {
+            ...task,
+            startDate: task.startDate ? task.startDate.toISOString() : null,
+            dueDate: task.dueDate ? task.dueDate.toISOString()  : null,
+            finishedDate: task.finishedDate ? task.finishedDate.toISOString(): null,
+        }
+        delete prepTask.updatedAt;
+        console.log('prepare task',prepTask)
+        try {
+            store.dispatch(updateTasks(prepTask));
+            updateTasksDataInLocal(prepTask);
+        } catch (err) {
+            console.log(err);
+        }
+        return Promise.resolve(result);
+    } else {
+        return Promise.reject(result);
+    }
 }

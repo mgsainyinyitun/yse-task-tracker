@@ -125,7 +125,23 @@ export function renderDelete(params) {
 }
 
 export function renderTotalTasks(params) {
-    return <p>{params.value.length}</p>;
+    return (
+        <Box
+            sx={{
+                width: '100%',
+                height: '100%',
+                display:'flex',
+                justifyContent:'center',
+                alignItems:'center'
+            }}
+        >
+            <Avatar
+                sx={{
+                    width: 25,
+                    height: 25
+                }}
+            >{params.value.length}</Avatar>
+        </Box>)
 }
 
 export function renderProgress(params) {
@@ -178,7 +194,7 @@ export function renderDate(params) {
     if (params.value) {
         return isoDateStringToDateString(params.value);
     } else {
-        return "Not Defined";
+        return <Typography variant="body2" color={"error"}>Not Defined</Typography>;
     }
 
 }

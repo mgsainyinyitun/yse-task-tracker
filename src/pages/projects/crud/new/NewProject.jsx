@@ -16,6 +16,7 @@ import SubmitProjectForm from "./SubmitProjectForm";
 import Success from "./Success";
 import { addProject } from "../../../../backend/controller/projectController";
 import { getDepartmentsDatafromLocal } from "../../../../backend/localstorage/departments";
+import { CONSTANTS } from "../../../constants";
 const steps = [
     'Project Detail',
     'Add Members',
@@ -134,7 +135,7 @@ function NewProject() {
                 username: consignee.username,
             } : null,
             priority: priority,
-            status: 'notyet',
+            status: CONSTANTS.STATUS.NOTSTART,
             startDate: taskStartDate ? new Date(taskStartDate) : null,
             dueDate: dueDate ? new Date(dueDate) : null,
             remarks: remark,

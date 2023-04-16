@@ -5,23 +5,18 @@ import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useForm } from "react-hook-form";
 import { checkEmpty } from "../../../validation/commonValidation";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { findUserByUsername } from "../../../utils/commonFunctions";
 import { serverTimestamp } from "firebase/firestore";
-import { addProjectTaskId } from "../../../backend/firebase/firestore/projectStoreFunctions";
 import OverlayLoading from "../../../components/OverlayLoading";
-import SuccessAlert from "../../../components/SuccessAlert";
-import ErrorAlert from "../../../components/ErrorAlert";
-import { addTaskToStore } from "../../../backend/firebase/firestore/taskStoreFunctions";
 import { addTask } from "../../../backend/controller/taskController";
+import { CONSTANTS } from "../../constants";
 const priority =
     [
         'Low',
         'High',
         'Medium',
     ];
-const successTitle = "Added Successful"
-const successMessage = "Successfully Added Task to Project";
 function NewTaskModal({ open, setOpen, projectId,setError,setSuccess,setErrorObj }) {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -29,9 +24,8 @@ function NewTaskModal({ open, setOpen, projectId,setError,setSuccess,setErrorObj
     const [dueDate, setDueDate] = useState(null);
     const { register, handleSubmit, formState, getValues, reset } = useForm();
     const user = useSelector(state => state.users.user);
-    const dispatch = useDispatch();
     const { errors } = formState;
-    useEffect(() => {
+useEffect(() => {
         readUsers()
             .then(res => {
                 setUsers(res.data);
@@ -53,7 +47,7 @@ function NewTaskModal({ open, setOpen, projectId,setError,setSuccess,setErrorObj
                 username: consignee.username,
             } : null,
             priority,
-            status: 'notyet',
+            status: CONSTANTS.STATUS.NOTSTART,
             startDate: stateDate ? new Date(stateDate) : null,
             dueDate: dueDate ? new Date(dueDate) : null,
             remarks: remark,

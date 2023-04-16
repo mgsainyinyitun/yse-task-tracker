@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getDocs, query, setDoc, where } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "../../../firebase";
 export async function addTaskToStore(task){
     const taskRef = doc(collection(db,"tasks"));
@@ -57,3 +57,13 @@ export async function findTaskByIdFromStore(id) {
         });
     return Promise.resolve(task);
   }
+
+  export async function updateTaskInStore(task) {
+    const taskRef = doc(db, "tasks", task.id);
+    try{
+        await updateDoc(taskRef,task);
+        return Promise.resolve(0);
+    }catch(err){
+       return Promise.reject(err);
+    }
+}

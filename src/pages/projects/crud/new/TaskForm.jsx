@@ -8,12 +8,8 @@ import { getAllUsers } from "../../../../backend/firebase/firestore/userStoreFun
 import OverlayLoading from "../../../../components/OverlayLoading";
 import { addAllUser } from "../../../../redux/reducers/userSlice";
 import { checkEmpty } from "../../../../validation/commonValidation";
-const priority =
-    [
-        'Low',
-        'High',
-        'Medium',
-    ];
+import { CONSTANTS } from "../../../constants";
+const priority = Object.values(CONSTANTS.PRIORITY);
 function TaskForm({ register, setType, errors, skip, setSkip, taskStartDate, setTaskStartDate, dueDate, setDueDate }) {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
