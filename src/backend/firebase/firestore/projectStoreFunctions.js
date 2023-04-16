@@ -1,4 +1,4 @@
-import { arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "../../../firebase";
 
 export async function addProjectToStore(project) {
@@ -62,6 +62,16 @@ export async function addProjectTaskId(projectId, taskId) {
     const projRef = doc(db, "projects", projectId);
     try{
         await updateDoc(projRef,{tasks:arrayUnion(taskId)});
+        return Promise.resolve(0);
+    }catch(err){
+       return Promise.reject(err);
+    }
+}
+
+export async function removeProjectTaskId(projectId, taskId) {
+    const projRef = doc(db, "projects", projectId);
+    try{
+        await updateDoc(projRef,{tasks:arrayRemove(taskId)});
         return Promise.resolve(0);
     }catch(err){
        return Promise.reject(err);

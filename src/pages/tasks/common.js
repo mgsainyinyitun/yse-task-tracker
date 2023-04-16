@@ -5,8 +5,8 @@ import WorkHistoryOutlinedIcon from '@mui/icons-material/WorkHistoryOutlined';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import { Link } from "react-router-dom";
 import { findTask } from "../../utils/commonFunctions";
-import { mockTasks } from "../../data/mockData";
 import { CONSTANTS } from "../constants";
+import { store } from "../../redux/store";
 
 
 export function renderName(params) {
@@ -108,9 +108,12 @@ export function renderEdit(params) {
         </IconButton>)
 
 }
+
+
 export function renderDelete(params,setOpen,setDeleteTask) {
+    const reduxTasks = store.getState().tasks.data;
     const onClickOpenDeleteModal = ()=>{
-        setDeleteTask(findTask(params.value,mockTasks));
+        setDeleteTask(findTask(params.value,reduxTasks));
         setOpen(true);
     }
     return (

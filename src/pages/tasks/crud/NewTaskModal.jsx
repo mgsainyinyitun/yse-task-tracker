@@ -1,11 +1,11 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, Box, Stack, TextField, Autocomplete } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField, Autocomplete } from "@mui/material";
 import { useEffect, useState } from "react";
 import { readUsers } from "../../../backend/controller/userController";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useForm } from "react-hook-form";
 import { checkEmpty } from "../../../validation/commonValidation";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { findUserByUsername } from "../../../utils/commonFunctions";
 import { serverTimestamp } from "firebase/firestore";
 import OverlayLoading from "../../../components/OverlayLoading";
@@ -17,15 +17,16 @@ const priority =
         'High',
         'Medium',
     ];
-function NewTaskModal({ open, setOpen, projectId,setError,setSuccess,setErrorObj }) {
+function NewTaskModal({ open, setOpen, projectId, setError, setSuccess, setErrorObj }) {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [stateDate, setStartDate] = useState(new Date());
     const [dueDate, setDueDate] = useState(null);
     const { register, handleSubmit, formState, getValues, reset } = useForm();
     const user = useSelector(state => state.users.user);
+    const dispatch = useDispatch();
     const { errors } = formState;
-useEffect(() => {
+    useEffect(() => {
         readUsers()
             .then(res => {
                 setUsers(res.data);
@@ -55,7 +56,6 @@ useEffect(() => {
             updatedAt: serverTimestamp(),
         }
         setLoading(true);
-
         addTask(projectId, task)
             .then(res => {
                 console.log(res);
@@ -72,13 +72,13 @@ useEffect(() => {
                 setError(true);
                 setErrorObj(err);
             })
-            reset();
+        reset();
     }
 
     return (
         <Dialog
             open={open}
-            onClose={() => { setOpen(false); reset();}}
+            onClose={() => { setOpen(false); reset(); }}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             fullWidth

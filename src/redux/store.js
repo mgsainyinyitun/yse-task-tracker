@@ -15,4 +15,5 @@ export const store = configureStore({
         tasks: taskReducer,
         projects: projectReducer,
     },
+    preloadedState:{}
 });

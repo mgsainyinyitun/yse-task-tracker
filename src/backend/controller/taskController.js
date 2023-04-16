@@ -1,12 +1,16 @@
-import { addTaskToStore, findTaskByIdFromStore, readTasksFromStore, updateTaskInStore } from "../firebase/firestore/taskStoreFunctions";
-import { getProjectsDatafromLocal } from "../localstorage/projects";
+import { addTaskToStore, deleteTaskInStore, findTaskByIdFromStore, readTasksFromStore, updateTaskInStore } from "../firebase/firestore/taskStoreFunctions";
+import { addProjectTaskToLocal, getProjectsDatafromLocal, removeProjectTaskFromLocal } from "../localstorage/projects";
 import { store } from "../../redux/store";
 import { addTasksDataToLocal, getTasksDatafromLocal, updateTasksDataInLocal } from "../localstorage/tasks";
 import { addTasks, updateTasks } from "../../redux/reducers/taskSlice";
 import { findTask } from "../../utils/commonFunctions";
-import { addProjectTaskId } from "../firebase/firestore/projectStoreFunctions";
+import { addProjectTaskId, removeProjectTaskId } from "../firebase/firestore/projectStoreFunctions";
 import { addProjectTask } from "../../redux/reducers/projectSlice";
 import { timestampToIsoString } from "../../utils/dateFunction";
+import { deleteTaskInLocal } from "../localstorage/tasks";
+import { deleteTasks } from "../../redux/reducers/taskSlice";
+import { removeProjectTask } from "../../redux/reducers/projectSlice";
+import { readProjects } from "./projectController";
 
 export async function addTask(projectID, task) {
     /** Add task to firebase  => id                  */
@@ -35,9 +39,15 @@ export async function addTask(projectID, task) {
                     }
                     delete prepTask.createdAt;
                     delete prepTask.updatedAt;
-                    store.dispatch(addTasks(prepTask))
-                    store.dispatch(addProjectTask(projectID, result.docId));
+
+                    try {
+                        store.dispatch(addTasks(prepTask))
+                        store.dispatch(addProjectTask({ projectId: projectID, taskId: result.docId }));
+                    } catch (err) {
+                        console.log(err);
+                    }
                     addTasksDataToLocal(prepTask);
+                    addProjectTaskToLocal(projectID, result.docId);
 
                 } catch (err) {
                     console.log(err);
@@ -53,6 +63,63 @@ export async function addTask(projectID, task) {
                     error: err,
                 })
             });
+    }
+}
+
+function findProject(projects, taskId) {
+    let found = null;
+    projects.forEach(project => {
+        if (project.tasks.indexOf(taskId) > 0) {
+            found = { ...project };
+            return;
+        }
+    });
+    return found;
+}
+
+export async function removeTask(taskId) {
+    let project = await readProjects()
+        .then(res => {
+            return findProject(res.data, taskId);
+        })
+    if (project) {
+        let projectId = project.id;
+        let result = await deleteTaskInStore(taskId)
+            .then(res => {
+                return {
+                    status: res,
+                };
+            })
+            .catch(err => {
+                return {
+                    status: 1,
+                    error: err,
+                }
+            });
+
+        if (result.status === 0) {
+            return await removeProjectTaskId(projectId, taskId)
+                .then(res => {
+                    try {
+                        store.dispatch(deleteTasks(taskId))
+                        store.dispatch(removeProjectTask({ projectId, taskId }));
+                        deleteTaskInLocal(taskId);
+                        removeProjectTaskFromLocal(projectId, taskId);
+                    } catch (err) {
+                        console.log(err);
+                    }
+                    return Promise.resolve({
+                        status: 0,
+                        data: res,
+                    })
+                })
+                .catch(err => {
+                    return Promise.reject({
+                        status: 1,
+                        error: err,
+                    })
+                });
+        }
     }
 }
 
@@ -188,11 +255,11 @@ export async function updateTask(task) {
         let prepTask = {
             ...task,
             startDate: task.startDate ? task.startDate.toISOString() : null,
-            dueDate: task.dueDate ? task.dueDate.toISOString()  : null,
-            finishedDate: task.finishedDate ? task.finishedDate.toISOString(): null,
+            dueDate: task.dueDate ? task.dueDate.toISOString() : null,
+            finishedDate: task.finishedDate ? task.finishedDate.toISOString() : null,
         }
         delete prepTask.updatedAt;
-        console.log('prepare task',prepTask)
+        console.log('prepare task', prepTask)
         try {
             store.dispatch(updateTasks(prepTask));
             updateTasksDataInLocal(prepTask);

@@ -9,6 +9,7 @@ import { readProjects } from '../../backend/controller/projectController';
 import NewTaskModal from '../tasks/crud/NewTaskModal';
 import SuccessAlert from '../../components/SuccessAlert';
 import ErrorAlert from '../../components/ErrorAlert';
+import { useSelector } from 'react-redux';
 const successTitle = "Added Successful"
 const successMessage = "Successfully Added Task to Project";
 function prepareProjects(projects) {
@@ -26,6 +27,8 @@ function ProjectsList() {
     const [error, setError] = useState(false);
     const [errorObj, setErrorObj] = useState(null);
     const [projectId, setProjectId] = useState(null);
+    const reduxProjects = useSelector(state => state.projects.data);
+
     const columns = [
         {
             field: 'no', headerName: 'No.', width: 70,
@@ -81,7 +84,7 @@ function ProjectsList() {
         readProjects().then(res => {
             setProjects(prepareProjects(res.data));
         });
-    }, [])
+    }, [reduxProjects])
 
 
     return (

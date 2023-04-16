@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "../../../firebase";
 export async function addTaskToStore(task){
     const taskRef = doc(collection(db,"tasks"));
@@ -62,6 +62,16 @@ export async function findTaskByIdFromStore(id) {
     const taskRef = doc(db, "tasks", task.id);
     try{
         await updateDoc(taskRef,task);
+        return Promise.resolve(0);
+    }catch(err){
+       return Promise.reject(err);
+    }
+}
+
+export async function deleteTaskInStore(taskId) {
+    const taskRef = doc(db, "tasks", taskId);
+    try{
+        await deleteDoc(taskRef);
         return Promise.resolve(0);
     }catch(err){
        return Promise.reject(err);

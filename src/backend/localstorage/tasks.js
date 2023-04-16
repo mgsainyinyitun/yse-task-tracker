@@ -17,9 +17,13 @@ export function updateTasksDataInLocal(task) {
     let found = existingTasks.find(item => item.id === task.id);
     if (found) {
         let updatedTasks = existingTasks.filter(item => item.id !== found.id);
-        updatedTasks.push({...found,...task});
+        updatedTasks.push({ ...found, ...task });
         window.localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-        console.log('update in local data',updatedTasks);
     }
-   
+}
+
+export function deleteTaskInLocal(taskId) {
+    const existingTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    let updatedTasks = existingTasks.filter(item => item.id !== taskId);
+    window.localStorage.setItem('tasks', JSON.stringify(updatedTasks));
 }

@@ -190,6 +190,7 @@ export function renderDepartment(params) {
     }
 }
 
+
 export function renderDate(params) {
     if (params.value) {
         return isoDateStringToDateString(params.value);
