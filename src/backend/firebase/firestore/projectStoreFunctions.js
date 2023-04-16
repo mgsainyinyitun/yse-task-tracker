@@ -77,3 +77,13 @@ export async function removeProjectTaskId(projectId, taskId) {
        return Promise.reject(err);
     }
 }
+
+  export async function updateProjectInStore(project) {
+    const projectRef = doc(db, "projects", project.id);
+    try{
+        await updateDoc(projectRef,project);
+        return Promise.resolve(0);
+    }catch(err){
+       return Promise.reject(err);
+    }
+}

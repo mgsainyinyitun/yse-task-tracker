@@ -24,11 +24,11 @@ export function addProjectTaskToLocal(projectId, taskId) {
             updatedPjt = { ...found, tasks: [...found.tasks, taskId] }
         }
     }
-    if(updatedPjt){
+    if (updatedPjt) {
         updatedPjts = existingPjts.filter(project => project.id !== projectId);
         updatedPjts.push(updatedPjt);
-    } else{
-        updatedPjts = {...existingPjts};
+    } else {
+        updatedPjts = { ...existingPjts };
     }
     window.localStorage.setItem('projects', JSON.stringify(updatedPjts));
 }
@@ -39,16 +39,26 @@ export function removeProjectTaskFromLocal(projectId, taskId) {
     let updatedPjt = null;
     let updatedPjts = [];
     if (found) {
-        if (found.tasks.indexOf(taskId)>0) {
+        if (found.tasks.indexOf(taskId) > 0) {
             let updatedTask = found.tasks.filter(arr => arr !== taskId);
-            updatedPjt = { ...found, tasks: [...updatedTask]}
+            updatedPjt = { ...found, tasks: [...updatedTask] }
         }
     }
-    if(updatedPjt){
+    if (updatedPjt) {
         updatedPjts = existingPjts.filter(project => project.id !== projectId);
         updatedPjts.push(updatedPjt);
-    } else{
-        updatedPjts = {...existingPjts};
+    } else {
+        updatedPjts = { ...existingPjts };
     }
     window.localStorage.setItem('projects', JSON.stringify(updatedPjts));
+}
+
+export function updateProjectsDataInLocal(project) {
+    const existingProjects = JSON.parse(localStorage.getItem('projects')) || [];
+    let found = existingProjects.find(item => item.id === project.id);
+    if (found) {
+        let updatedProjects = existingProjects.filter(item => item.id !== found.id);
+        updatedProjects.push({ ...found, ...project });
+        window.localStorage.setItem('projects', JSON.stringify(updatedProjects));
+    }
 }

@@ -1,7 +1,7 @@
-import { addProjects } from "../../redux/reducers/projectSlice";
-import { addProjectToStore, readProjectsFromStore } from "../firebase/firestore/projectStoreFunctions";
+import { addProjects, updateProjects } from "../../redux/reducers/projectSlice";
+import { addProjectToStore, readProjectsFromStore, updateProjectInStore } from "../firebase/firestore/projectStoreFunctions";
 import { addTaskToStore } from "../firebase/firestore/taskStoreFunctions";
-import { addProjectsDataToLocal, getProjectsDatafromLocal } from "../localstorage/projects";
+import { addProjectsDataToLocal, getProjectsDatafromLocal, updateProjectsDataInLocal } from "../localstorage/projects";
 import { store } from "../../redux/store";
 import { findProject } from "../../utils/commonFunctions";
 import { timestampToIsoString } from "../../utils/dateFunction";
@@ -118,4 +118,36 @@ export async function findProjectById(id) {
         };
     }
     return Promise.resolve(project);
+}
+
+export async function updateProject(project) {
+    let result = await updateProjectInStore(project)
+        .then(res => {
+            console.log('update success in store', res)
+            return { status: res, };
+        })
+        .catch(err => {
+            return {
+                status: 1,
+                error: err,
+            }
+        });
+    if (result.status === 0) {
+        let prepPjt = {
+            ...project,
+            startDate: project.startDate ? project.startDate.toISOString() : null,
+            endDate: project.endDate ? project.endDate.toISOString() : null,
+        }
+        delete prepPjt.updatedAt;
+        console.log('prepare project', prepPjt)
+        try {
+            store.dispatch(updateProjects(prepPjt));
+            updateProjectsDataInLocal(prepPjt);
+        } catch (err) {
+            console.log(err);
+        }
+        return Promise.resolve(result);
+    } else {
+        return Promise.reject(result);
+    }
 }

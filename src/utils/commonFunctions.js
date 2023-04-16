@@ -26,3 +26,17 @@ export function findObjectByName(name,objects){
         return obj.name===name;
     })
 }
+
+export function filterUsersByUids(users,subUsers){
+    let finalUsers = users.filter(user=>{
+        return !subUsers.some(sUser => sUser.uid === user.uid);
+    })
+    return finalUsers;
+}
+
+
+// const array2 = [{ uid: 2 }, { uid: 3 }];
+
+// const filteredArray = array1.filter((obj1) => {
+//   return !array2.some((obj2) => obj2.uid === obj1.uid);
+// });

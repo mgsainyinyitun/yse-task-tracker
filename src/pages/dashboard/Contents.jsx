@@ -6,12 +6,12 @@ import Home from "../home/Home";
 import { PAGE } from "../pageConstants";
 import Profile from "../profile/Profile";
 import DetailProject from "../projects/crud/detail/DetailProject";
-import EditProject from "../projects/crud/EditProject";
 import NewProject from "../projects/crud/new/NewProject";
 import ProjectsList from "../projects/ProjectsList";
 import TaskDetail from "../tasks/crud/TaskDetail";
 import TaskEdit from "../tasks/crud/TaskEdit";
 import TasksList from "../tasks/TasksList";
+import EditProject from "../projects/crud/edit/EditProject";
 
 const renderContents = (page) => {
     switch (page) {

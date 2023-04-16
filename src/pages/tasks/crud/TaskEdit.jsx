@@ -81,7 +81,6 @@ function TaskEdit() {
             deliverable,
             updatedAt: serverTimestamp(),
         }
-        console.log(task);
         setLoading(true);
         updateTask(task)
             .then(res => {
@@ -92,7 +91,6 @@ function TaskEdit() {
             });
         setLoading(false);
         setSuccess(true);
-        // nevigate(PAGE.LINK.TASKS.INDEX);
     }
 
     return (
