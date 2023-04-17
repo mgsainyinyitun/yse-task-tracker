@@ -17,6 +17,7 @@ import Success from "./Success";
 import { addProject } from "../../../../backend/controller/projectController";
 import { getDepartmentsDatafromLocal } from "../../../../backend/localstorage/departments";
 import { CONSTANTS } from "../../../constants";
+import { readDepartments } from "../../../../backend/controller/departmentController";
 const steps = [
     'Project Detail',
     'Add Members',
@@ -43,8 +44,6 @@ function NewProject() {
     const dispatch = useDispatch();
     const user =    useSelector(state => state.users.user);
     const Susers =  useSelector(state => state.users.data);
-    const deps = useSelector(state =>  state.departments);
-
     const renderStepForm = () => {
         switch (activeState) {
             case 0: return (
@@ -122,7 +121,8 @@ function NewProject() {
 
         /** Prepare task state */
         let consignee = findUserByUsername(assignTo, users);
-
+        console.log(consignee);
+        
         let task = {
             title: taskTitle,
             description: taskDescription,
@@ -198,12 +198,10 @@ function NewProject() {
 
     useEffect(() => {
         setLoading(true);
-        if(Object.keys(deps).length !== 0){
-            setDepartments(deps.data);
-        }else{
-            let deps = getDepartmentsDatafromLocal();
-            setDepartments(deps);
-        }
+        readDepartments()
+            .then(res=>{
+                setDepartments(res.data);
+            })
 
         if (Susers) {
             setUsers(Susers);

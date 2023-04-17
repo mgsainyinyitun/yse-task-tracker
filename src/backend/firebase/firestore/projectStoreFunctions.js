@@ -1,4 +1,4 @@
-import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { arrayRemove, arrayUnion, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "../../../firebase";
 
 export async function addProjectToStore(project) {
@@ -60,30 +60,55 @@ export function onSnapshotProjectStore() {
 
 export async function addProjectTaskId(projectId, taskId) {
     const projRef = doc(db, "projects", projectId);
-    try{
-        await updateDoc(projRef,{tasks:arrayUnion(taskId)});
+    try {
+        await updateDoc(projRef, { tasks: arrayUnion(taskId) });
         return Promise.resolve(0);
-    }catch(err){
-       return Promise.reject(err);
+    } catch (err) {
+        return Promise.reject(err);
     }
 }
 
 export async function removeProjectTaskId(projectId, taskId) {
     const projRef = doc(db, "projects", projectId);
-    try{
-        await updateDoc(projRef,{tasks:arrayRemove(taskId)});
+    try {
+        await updateDoc(projRef, { tasks: arrayRemove(taskId) });
         return Promise.resolve(0);
-    }catch(err){
-       return Promise.reject(err);
+    } catch (err) {
+        return Promise.reject(err);
     }
 }
 
-  export async function updateProjectInStore(project) {
+export async function updateProjectInStore(project) {
     const projectRef = doc(db, "projects", project.id);
-    try{
-        await updateDoc(projectRef,project);
+    try {
+        await updateDoc(projectRef, project);
         return Promise.resolve(0);
-    }catch(err){
-       return Promise.reject(err);
+    } catch (err) {
+        return Promise.reject(err);
     }
 }
+
+export async function deleteProjectInStore(projectId) {
+    const projectRef = doc(db, "projects", projectId);
+    try{
+        let res = await deleteDoc(projectRef);
+        console.log(res);
+        return Promise.resolve(0);
+    }catch(err){
+        console.error("Error removing document: ", err);
+        return Promise.reject(err);
+    }
+}
+
+// export const deleteProjectInStore = async (projectId) => {
+//     const documentRef = doc(db, 'projects', projectId);
+//     deleteDoc(documentRef)
+//         .then(() => {
+//             console.log('Document successfully deleted!');
+//             return Promise.resolve(0);
+//         })
+//         .catch((error) => {
+//             console.error('Error deleting document: ', error);
+//             return Promise.reject(error);
+//         });
+// };

@@ -51,8 +51,12 @@ export const projecSlice = createSlice({
                 state.data = state.data.filter(item => item.id !== pjt.id);
                 state.data.push({ ...pjt, ...project });
             }
+        },
+        deleteProjects: (state, actions) => {
+            const projectId = actions.payload;
+            state.data = state.data.filter(item => item.id !== projectId);
         }
     }
 });
-export const { addProjects, addProjectTask, removeProjectTask, updateProjects } = projecSlice.actions;
+export const { addProjects, addProjectTask, removeProjectTask, updateProjects, deleteProjects } = projecSlice.actions;
 export default projecSlice.reducer;

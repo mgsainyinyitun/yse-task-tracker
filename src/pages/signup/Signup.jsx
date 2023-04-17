@@ -104,7 +104,7 @@ function Signup() {
                 padding: 0,
                 margin: 0,
                 width: '100%',
-                height: '100%',
+                height: '100vh',
                 overflow: 'scroll',
                 display: 'flex',
                 flexDirection: 'column',
@@ -121,7 +121,7 @@ function Signup() {
                 maxWidth={'sm'}
                 sx={{
                     border: "none",
-                    overflow: 'hidden',
+                    overflow: 'auto',
                     padding: '1rem',
                 }}
             >

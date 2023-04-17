@@ -1,10 +1,14 @@
-import { addProjects, updateProjects } from "../../redux/reducers/projectSlice";
-import { addProjectToStore, readProjectsFromStore, updateProjectInStore } from "../firebase/firestore/projectStoreFunctions";
+import { addProjects, deleteProjects, updateProjects } from "../../redux/reducers/projectSlice";
+import { addProjectToStore, deleteProjectInStore, readProjectsFromStore, updateProjectInStore } from "../firebase/firestore/projectStoreFunctions";
 import { addTaskToStore } from "../firebase/firestore/taskStoreFunctions";
 import { addProjectsDataToLocal, getProjectsDatafromLocal, updateProjectsDataInLocal } from "../localstorage/projects";
 import { store } from "../../redux/store";
 import { findProject } from "../../utils/commonFunctions";
 import { timestampToIsoString } from "../../utils/dateFunction";
+import { deleteTaskInStore } from "../firebase/firestore/taskStoreFunctions";
+import { addTasks, deleteTasks } from "../../redux/reducers/taskSlice";
+import { deleteProjectInLocal } from "../localstorage/projects";
+import { addTasksDataToLocal, deleteTaskInLocal } from "../localstorage/tasks";
 export async function addProject(project, tasks, dispatch) {
     /** Add tasks to firebase                         */
     /** Add projects with task id                    */
@@ -14,6 +18,20 @@ export async function addProject(project, tasks, dispatch) {
         for (const task of tasks) {
             await addTaskToStore(task)
                 .then(res => {
+                    let prepTask = {
+                        ...task,
+                        id: res.docId,
+                        startDate: task.startDate ? task.startDate.toISOString() : null,
+                        dueDate: task.dueDate ? task.dueDate.toISOString() : null,
+                    }
+                    delete prepTask.createdAt;
+                    delete prepTask.updatedAt;
+                    try {
+                        store.dispatch(addTasks(prepTask))
+                    } catch (err) {
+                        console.log(err);
+                    }
+                    addTasksDataToLocal(prepTask);
                     console.log(res);
                     res_tasks.push(res.docId);
                 })
@@ -34,7 +52,7 @@ export async function addProject(project, tasks, dispatch) {
                 }
                 delete prep_project.createdAt;
                 delete prep_project.updatedAt;
-                
+
                 dispatch(addProjects(prep_project));
                 addProjectsDataToLocal(prep_project);
                 return Promise.resolve(0);
@@ -150,4 +168,41 @@ export async function updateProject(project) {
     } else {
         return Promise.reject(result);
     }
+}
+
+export async function removeProject(project) {
+    // Remove Projects From firestore
+    let result = await deleteProjectInStore(project.id)
+        .then(res => {
+            return {
+                status: res,
+            };
+        })
+        .catch(err => {
+            return {
+                status: 1,
+                error: err,
+            }
+        });
+    console.log(result);
+    if (result.status === 0) {
+        store.dispatch(deleteProjects(project.id));
+        deleteProjectInLocal(project.id);
+        // Remove Project's tasks form firestore
+        for (const taskId of project.tasks) {
+            await deleteTaskInStore(taskId)
+                .then(res => {
+                    if (res === 0) {
+                        store.dispatch(deleteTasks(taskId))
+                        deleteTaskInLocal(taskId);
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+    } else {
+        return Promise.reject(result);
+    }
+    return Promise.resolve(result);
 }

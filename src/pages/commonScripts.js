@@ -7,6 +7,8 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { Link } from "react-router-dom";
 import { formatDate, isoDateStringToDateString } from "../utils/dateFunction";
 import { green } from "@mui/material/colors";
+import { findProject } from "../utils/commonFunctions";
+import { store } from "../redux/store";
 
 
 export function renderNumber(params) {
@@ -117,9 +119,15 @@ export function renderEdit(params) {
         </IconButton>)
 
 }
-export function renderDelete(params) {
+export function renderDelete(params, setOpen, setDeleteProject) {
+
+    const reduxProjects = store.getState().projects.data;
+    const onClickOpenDeleteModal = () => {
+        setDeleteProject(findProject(params.value, reduxProjects));
+        setOpen(true);
+    }
     return (
-        <IconButton sx={{ color: 'red' }} >
+        <IconButton sx={{ color: 'red' }} onClick={onClickOpenDeleteModal}>
             <DeleteOutline />
         </IconButton>);
 }
@@ -130,9 +138,9 @@ export function renderTotalTasks(params) {
             sx={{
                 width: '100%',
                 height: '100%',
-                display:'flex',
-                justifyContent:'center',
-                alignItems:'center'
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
             }}
         >
             <Avatar

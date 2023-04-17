@@ -10,8 +10,14 @@ import NewTaskModal from '../tasks/crud/NewTaskModal';
 import SuccessAlert from '../../components/SuccessAlert';
 import ErrorAlert from '../../components/ErrorAlert';
 import { useSelector } from 'react-redux';
+import ProjectDeleteModal from './crud/ProjectDeleteModal';
+
 const successTitle = "Added Successful"
 const successMessage = "Successfully Added Task to Project";
+
+const deleteSuccessTitle = "Deleted Successful"
+const deleteSuccessMessage = "Successfully deleted project";
+
 function prepareProjects(projects) {
     const pProjects = projects.map((project, index) => {
         return { ...project, creator: project.creator.username, edit: project.id, delete: project.id, detail: project.id, addTask: project.id, no: index + 1 }
@@ -23,11 +29,17 @@ function ProjectsList() {
     const navigate = useNavigate();
     const [projects, setProjects] = useState([]);
     const [open, setOpen] = useState(false);
+    const [deleteOpen, setDeleteOpen] = useState(false);
+    const [deleteProject, setDeleteProject] = useState(null);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
     const [errorObj, setErrorObj] = useState(null);
     const [projectId, setProjectId] = useState(null);
     const reduxProjects = useSelector(state => state.projects.data);
+
+    const [deleteSuccess, setDeleteSuccess] = useState(false);
+    const [deleteError, setDeleteError] = useState(false);
+    const [deleteErrorObj, setDeleteErrorObj] = useState(null);
 
     const columns = [
         {
@@ -71,7 +83,7 @@ function ProjectsList() {
         },
         {
             field: 'delete', headerName: 'Delete', flex: 0.3,
-            renderCell: params => renderDelete(params),
+            renderCell: params => renderDelete(params, setDeleteOpen, setDeleteProject),
         },
         {
             field: 'addTask', headerName: 'Add Task', flex: 0.4,
@@ -79,14 +91,11 @@ function ProjectsList() {
         },
     ];
 
-
     useEffect(() => {
         readProjects().then(res => {
             setProjects(prepareProjects(res.data));
         });
     }, [reduxProjects])
-
-
     return (
         <Box
             sx={{
@@ -102,12 +111,22 @@ function ProjectsList() {
                 title={successTitle}
                 message={successMessage}
             />)}
-
+            {(deleteSuccess && <SuccessAlert
+                open={deleteSuccess}
+                title={deleteSuccessTitle}
+                message={deleteSuccessMessage}
+            />)}
             {(error && <ErrorAlert
                 open={error}
                 title={errorObj.code}
                 message={errorObj.message}
             />)}
+            {(deleteError && <ErrorAlert
+                open={deleteError}
+                title={deleteErrorObj.code}
+                message={deleteErrorObj.message}
+            />)}
+
             <Box m={1}>
                 <Button
                     variant="outlined" startIcon={<AddCircleOutlinedIcon color="primary" />}
@@ -130,14 +149,22 @@ function ProjectsList() {
                     boxShadow: 1,
                 }}
             />
-            <NewTaskModal 
-                open={open} 
-                setOpen={setOpen} 
+            <NewTaskModal
+                open={open}
+                setOpen={setOpen}
                 projectId={projectId}
                 setError={setError}
                 setSuccess={setSuccess}
                 setErrorObj={setErrorObj}
-             />
+            />
+            <ProjectDeleteModal
+                open={deleteOpen}
+                setOpen={setDeleteOpen}
+                deleteProject={deleteProject}
+                setDeleteError={setDeleteError}
+                setDeleteSuccess={setDeleteSuccess}
+                setDeleteErrorObj={setDeleteErrorObj}
+            />
         </Box>
     );
 }

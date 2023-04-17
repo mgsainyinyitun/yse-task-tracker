@@ -103,10 +103,10 @@ function SubmitProjectForm({getValues,members,startDate,endDate,tasks }) {
                     />
                      {
                         tasks.length>0?
-                        tasks.map(task=>{
+                        tasks.map((task,index)=>{
                             return(
                                 <ListItemText
-                                    key={task.title}
+                                    key={index}
                                     primary={task.title}
                                     secondary={task.description}
                                 />

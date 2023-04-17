@@ -62,3 +62,9 @@ export function updateProjectsDataInLocal(project) {
         window.localStorage.setItem('projects', JSON.stringify(updatedProjects));
     }
 }
+
+export function deleteProjectInLocal(projectId) {
+    const existingProjects = JSON.parse(localStorage.getItem('projects')) || [];
+    let updatedProjects = existingProjects.filter(item => item.id !== projectId);
+    window.localStorage.setItem('projects', JSON.stringify(updatedProjects));
+}
