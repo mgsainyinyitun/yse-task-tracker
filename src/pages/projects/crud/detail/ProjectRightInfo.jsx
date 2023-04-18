@@ -1,10 +1,8 @@
 import { Avatar, Box, Button, Card, CardContent, Divider, LinearProgress, linearProgressClasses, Paper, Typography } from "@mui/material";
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { Stack } from "@mui/system";
-import { mockTasks } from "../../../../data/mockData";
-import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined';
 import { useEffect, useState } from "react";
-import { findTaskById, findTasks } from "../../../../backend/controller/taskController";
+import { findTasks } from "../../../../backend/controller/taskController";
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: 15,
@@ -21,6 +19,7 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 function ProjectRightInfo({ project }) {
 
     const [tasks, setTasks] = useState([]);
+    const theme = useTheme();
 
     useEffect(() => {
         findTasks(project.tasks)
@@ -31,17 +30,20 @@ function ProjectRightInfo({ project }) {
 
     return (
         <Box
-            mt={4}
-            p={1}
+            mt={2}
             sx={{
                 height: '100%',
                 width: '100%',
+                display:'flex',
+                flexDirection:'column'
             }}
         >
             <Card
+                elevation={0}
                 sx={{
                     borderRadius: '10px',
                     padding: '1rem',
+                    background: theme.palette.custom.info
                 }}
             >
                 <BorderLinearProgress
@@ -66,7 +68,6 @@ function ProjectRightInfo({ project }) {
                     marginBottom: '1rem',
                 }} />
 
-
                 <Stack direction={'row'} spacing={3} >
                     <Typography variant="h5">
                         DEPARTMENT &nbsp; :
@@ -81,10 +82,14 @@ function ProjectRightInfo({ project }) {
                 </Stack>
             </Card>
             <Card
+                elevation={0}
                 sx={{
                     borderRadius: '10px',
-                    marginTop: '2rem',
+                    marginTop:2,
                     padding: '1rem',
+                    border:`1px solid ${theme.palette.custom.info}`,
+                    flexGrow:1,
+                    marginBottom:2,
                 }}
             >
                 <Typography variant="h4" sx={{ color: 'primary.main' }}>
@@ -92,9 +97,15 @@ function ProjectRightInfo({ project }) {
                 </Typography>
                 <Divider sx={{ marginTop: '10px', marginBottom: '10px', color: 'primary.main' }} />
                 {
-                    tasks.slice(0, 3).map((task,index) => {
+                    tasks.slice(0, 3).map((task, index) => {
                         return (
-                            <Paper sx={{ marginBottom: 1, marginTop: 1 }} key={index}>
+                            <Paper
+                                sx={{
+                                    marginBottom: 1,
+                                    marginTop: 1,
+                                    background: theme.palette.custom.info,
+                                    borderRadius: '10px'
+                                }} elevation={0} key={index}>
                                 <CardContent
                                     sx={{
                                         display: 'flex',
@@ -102,8 +113,12 @@ function ProjectRightInfo({ project }) {
                                         gap: 1,
                                     }}
                                 >
+
                                     <Avatar>{index + 1}</Avatar>
-                                    {task.title}
+                                    <Box>
+                                        <Typography variant="h6">{task.title}</Typography>
+                                        <Typography variant="body2" color="text.secondary">{task.description}</Typography>
+                                    </Box>
                                 </CardContent>
                             </Paper>
                         );

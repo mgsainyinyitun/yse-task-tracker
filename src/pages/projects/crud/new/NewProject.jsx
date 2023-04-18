@@ -1,4 +1,4 @@
-import { Box, Button, Card, Container, Typography } from "@mui/material";
+import { Box, Button, Card, Container, Typography, useTheme } from "@mui/material";
 import { serverTimestamp } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -40,10 +40,13 @@ function NewProject() {
     const [members, setMembers] = useState([]);
     const [tasks, addTasks] = useState([]);
     const [users, setUsers] = useState([]);
-    const [departments,setDepartments] = useState([]);
+    const [departments, setDepartments] = useState([]);
     const dispatch = useDispatch();
-    const user =    useSelector(state => state.users.user);
-    const Susers =  useSelector(state => state.users.data);
+    const user = useSelector(state => state.users.user);
+    const Susers = useSelector(state => state.users.data);
+
+    const theme = useTheme();
+
     const renderStepForm = () => {
         switch (activeState) {
             case 0: return (
@@ -122,7 +125,7 @@ function NewProject() {
         /** Prepare task state */
         let consignee = findUserByUsername(assignTo, users);
         console.log(consignee);
-        
+
         let task = {
             title: taskTitle,
             description: taskDescription,
@@ -147,7 +150,7 @@ function NewProject() {
 
     /** New Project Submit Function */
     function handleProjectSubmit(data, type) {
-        const { title, description,department } = data;
+        const { title, description, department } = data;
         if (type === 'add') {
             /** If it is add new task */
             handleAddTask(data);
@@ -176,10 +179,10 @@ function NewProject() {
                 tasks: null,
                 createdAt: serverTimestamp(),
                 updatedAt: serverTimestamp(),
-                departments:department?findObjectByName(department,departments):'All',
+                departments: department ? findObjectByName(department, departments) : 'All',
             }
             setLoading(true);
-            addProject(project, tasks,dispatch)
+            addProject(project, tasks, dispatch)
                 .then(res => {
                     console.log("Response", res);
                     if (res === 0) {
@@ -190,7 +193,7 @@ function NewProject() {
                         console.log(res);
                     }
                     setLoading(false);
-            });
+                });
         } else {
             nextStep(activeState)
         }
@@ -199,7 +202,7 @@ function NewProject() {
     useEffect(() => {
         setLoading(true);
         readDepartments()
-            .then(res=>{
+            .then(res => {
                 setDepartments(res.data);
             })
 
@@ -220,20 +223,13 @@ function NewProject() {
     return (
         <Box
             sx={{
-                display: 'flex',
                 width: '100%',
                 height: '100%',
                 overflow: 'auto',
-                flexDirection: 'column',
                 padding: '10px',
-                alignItems: 'flex-start',
             }}
         >
-            <Box
-                sx={{
-                    alignSelf: 'flex-start',
-                }}
-            >
+            <Box>
                 <BackButton />
             </Box>
 
@@ -242,34 +238,35 @@ function NewProject() {
                 current={activeState}
                 complete={success}
             />
-            <Container
-                maxWidth={'lg'}
-                sx={{
-                    height: '100%',
-                }}
-            >
+            <Container maxWidth={'md'}>
                 <Card
+                    elevation={0}
                     sx={{
                         borderRadius: '10px',
                         padding: '1rem',
                         marginBottom: '10px',
                         marginTop: '30px',
+                        background: theme.palette.custom.primary,
                     }}
                 >
                     <Typography
-                        color={'primary'}
+                        fontWeight={'bold'}
+                        color={'white'}
                         variant={'h6'}
                     >
                         {steps[activeState].toUpperCase()}
                     </Typography>
                 </Card>
                 <Card
+                    elevation={0}
                     sx={{
                         borderRadius: '10px',
                         padding: '1rem',
                         minHeight: '80%',
                         display: 'flex',
                         flexDirection: 'column',
+                        border: `1px solid ${theme.palette.custom.primary}`,
+                        
                     }}
                 >
                     <form onSubmit={handleSubmit(data => handleProjectSubmit(data, type))}

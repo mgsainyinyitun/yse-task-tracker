@@ -1,4 +1,4 @@
-import { Grid, IconButton, Typography,Box } from "@mui/material";
+import { Grid, IconButton, Typography, Box, Card, useTheme } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom"
 import ArrowBackIosOutlinedIcon from '@mui/icons-material/ArrowBackIosOutlined';
 import ProjectLeftInfo from "./ProjectLeftInfo";
@@ -12,7 +12,7 @@ function DetailProject() {
     const nevigate = useNavigate();
     const [project, setProject] = useState(null);
     const [loading, setLoading] = useState(false);
-
+    const theme = useTheme();
     useEffect(() => {
         setLoading(true);
         findProjectById(id)
@@ -53,11 +53,20 @@ function DetailProject() {
                             flex: 1,
                         }}
                     >
-                        <Typography variant="h4" color={'primary.main'}>
-                            {project.title || ""}
-                        </Typography>
+                        <Card 
+                            elevation={0}
+                            sx={{
+                                background:theme.palette.custom.info,
+                                padding:1,
+                                borderRadius:'10px'
+                            }}
+                        >
+                            <Typography variant="h4" color={'primary.main'}>
+                                {project.title || ""}
+                            </Typography>
+                        </Card>
 
-                        <Grid container>
+                        <Grid container spacing={1}>
                             <Grid item md={6} sm={12}>
                                 <ProjectLeftInfo project={project} />
                             </Grid>

@@ -1,7 +1,7 @@
-import { Box, FormGroup, TextField, Typography,Button } from "@mui/material";
+import { Box, FormGroup, TextField, Typography, Button } from "@mui/material";
 import BrushOutlinedIcon from '@mui/icons-material/BrushOutlined';
-function PasswordChangeCard(){
-    return(
+function PasswordChangeCard() {
+    return (
         <Box sx={{
             width: '100%',
             height: '100%',
@@ -14,6 +14,7 @@ function PasswordChangeCard(){
 
             <FormGroup sx={{ padding: '10px' }}>
                 <TextField
+                    size="small"
                     sx={{ marginBottom: '20px' }}
                     className="inputRounded"
                     label="Old Password"
@@ -22,6 +23,7 @@ function PasswordChangeCard(){
                     fullWidth
                 />
                 <TextField
+                    size="small"
                     sx={{ marginBottom: '20px' }}
                     className="inputRounded"
                     label="New Password"
@@ -30,6 +32,7 @@ function PasswordChangeCard(){
                     fullWidth
                 />
                 <TextField
+                    size="small"
                     sx={{ marginBottom: '20px' }}
                     className="inputRounded"
                     label="Confirm Password"
@@ -38,7 +41,7 @@ function PasswordChangeCard(){
                     fullWidth
                 />
                 <div>
-                    <Button variant="contained" width={200} size={'large'}  startIcon={<BrushOutlinedIcon/>}>Change</Button>
+                    <Button variant="contained" width={200} size={'large'} startIcon={<BrushOutlinedIcon />}>Change</Button>
                 </div>
             </FormGroup>
         </Box>

@@ -59,12 +59,12 @@ function Contents({ page }) {
     const background = theme.palette.mode === THEME.DARK.palette.mode ?
         theme.palette.grey[900] : theme.palette.custom.background;
 
-    console.log(theme.palette.custom.background);
     return (
         <Box 
             sx={{
                 flexGrow: 1,
                 background: `${theme.palette.background.paper}`,
+                // background:theme.palette.custom.secondary,
                 borderRadius: '10px',
                 display:'flex',
             }}

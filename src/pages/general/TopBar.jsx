@@ -22,6 +22,7 @@ function TopBar() {
     const { collapseSidebar, collapsed } = useProSidebar();
     const theme = useTheme();
     const paper = theme.palette.background.paper;
+    // const paper = theme.palette.custom.secondary;
     const colorMode = useContext(ColorModeContext);
     const navigate = useNavigate();
 

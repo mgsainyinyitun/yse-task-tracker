@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import OverlayLoading from '../../../../components/OverlayLoading';
 import { addAllUser } from '../../../../redux/reducers/userSlice';
 import { readUsers } from '../../../../backend/controller/userController';
+import { Divider, Typography, useTheme } from '@mui/material';
 
 function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -35,7 +36,7 @@ export function AddMembers({ setMembers }) {
   const [loading, setLoading] = useState(false);
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
-
+  const theme = useTheme();
   /** All user form redux */
   const users = useSelector(state => state.users.data)
 
@@ -88,10 +89,10 @@ export function AddMembers({ setMembers }) {
   }, []);
 
   const customList = (title, items) => (
-    <Card>
+    <Card elevation={0} sx={{border:`1px solid ${theme.palette.custom.info}`,borderRadius:'10px'}}>
       {/** Header Section */}
       <CardHeader
-        sx={{ px: 2, py: 1 }}
+        sx={{ px: 2, py: 1 ,background:theme.palette.custom.info}}
         avatar={
           <Checkbox
             onClick={handleToggleAll(items)}
@@ -105,7 +106,7 @@ export function AddMembers({ setMembers }) {
             }}
           />
         }
-        title={title}
+        title={ title }
         subheader={`${numberOfChecked(items)}/${items.length} selected`}
       />
       {/** User Lists Section */}

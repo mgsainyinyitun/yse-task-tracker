@@ -74,8 +74,6 @@ function SideMenuBar() {
         setMenuActiveBefore(menuBeforeActiveStyle);
     }
 
-
-
     useEffect(() => {
         changeMenuActiveStyleLeave();
     }, [theme]);

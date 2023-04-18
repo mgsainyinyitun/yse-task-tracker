@@ -19,12 +19,15 @@ function Profile() {
                 alignItems: 'center',
             }}
         >
-            <Container>
+            <Container maxWidth={'md'}>
                 <Card
+                    elevation={0}
                     sx={{
+                        marginTop:1,
                         display: 'flex',
                         borderRadius: '10px 10px 10px 10px',
                         flexDirection: 'column',
+                        border:t=>`1px solid ${t.palette.custom.info}`
                     }}
                 >
                     <img
@@ -43,7 +46,6 @@ function Profile() {
                 <Box>
                     <ProfileContents user={user}/>
                 </Box>
-
             </Container>
         </Box>
     );

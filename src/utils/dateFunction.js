@@ -49,9 +49,17 @@ export function timestampToIsoString(timestamp) {
 export function isoDateStringToDateString(isoDateString) {
     const date = new Date(isoDateString);
     const formattedDate = date.toLocaleDateString('en-GB', {
-      day: 'numeric',
-      month: 'numeric',
-      year: 'numeric',
+        day: 'numeric',
+        month: 'numeric',
+        year: 'numeric',
     });
     return formattedDate;
-  }
+}
+
+export function isoDateStringToFormattedDateString(isoDateString) {
+    const date = new Date(isoDateString);
+    const day = date.getDate();
+    const monthIndex = date.getMonth();
+    const year = date.getFullYear();
+    return `${monthNames[monthIndex]} ${day}, ${year}`;
+}

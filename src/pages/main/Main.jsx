@@ -36,10 +36,28 @@ function Main(props) {
         () =>
             createTheme({
                 palette: {
+                    background: {
+                        default: '#f5f5f5',
+                        // paper:'#E7C6FF'
+                    },
                     mode,
-                    custom: {
-                        background: '#eef2f6',
-                    }
+                    custom:
+                        mode !== THEME.DARK.palette.mode ?
+                            {
+                                // background: '#eef2f6',
+                                background: '#BBDEFB',
+                                secondary: '#48CAE4',
+                                // info:'#ADE8F4'
+                                info:'#A9D6E5',
+                                main:'#2A6F97',
+                                primary:'#0096C7'
+                            } :
+                            {
+                                secondary: '#3A0CA3',
+                                info:'#000814',
+                                primary:'#023E8A'
+
+                            }
                 },
                 breakpoints: {
                     values: {
