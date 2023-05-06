@@ -1,4 +1,4 @@
-import { addTaskToStore, deleteTaskInStore, findTaskByIdFromStore, readTasksFromStore, updateTaskInStore } from "../firebase/firestore/taskStoreFunctions";
+import { addTaskToStore, deleteTaskInStore, findTaskByIdFromStore, readTasksFromStore, readUserTasksFromStore, updateTaskInStore } from "../firebase/firestore/taskStoreFunctions";
 import { addProjectTaskToLocal, getProjectsDatafromLocal, removeProjectTaskFromLocal } from "../localstorage/projects";
 import { store } from "../../redux/store";
 import { addTasksDataToLocal, getTasksDatafromLocal, updateTasksDataInLocal } from "../localstorage/tasks";
@@ -270,4 +270,19 @@ export async function updateTask(task) {
     } else {
         return Promise.reject(result);
     }
+}
+
+export async function readUserTasks(uid) {
+    let user_tasks = [];
+
+
+
+
+
+    readUserTasksFromStore(uid)
+        .then(res=>{
+            console.log(res);
+        })
+    
+    return Promise.resolve(user_tasks);
 }

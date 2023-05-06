@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, Card, CardHeader, Divider, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, TextField, Typography, styled } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
-import { readTasks } from "../../backend/controller/taskController";
+import { readTasks, readUserTasks } from "../../backend/controller/taskController";
 import { CheckCircleOutlineOutlined, EditAttributesRounded, NotStartedOutlined, WorkHistoryOutlined } from "@mui/icons-material";
 import { CONSTANTS } from "../constants";
 import { isoDateStringToFormattedDateString } from "../../utils/dateFunction";
@@ -23,6 +23,7 @@ const StatusCard = styled(Card)(() => ({
 function HomeTasksList() {
     const theme = useTheme();
     const user = useSelector(state => state.users.user);
+    const reduxTasks = useSelector(state => state.tasks.data);
 
     function renderFinishedDate(finishedDate) {
         if (finishedDate) {
@@ -52,11 +53,18 @@ function HomeTasksList() {
 
     const [tasks, setTasks] = useState([]);
     useEffect(() => {
+        readUserTasks(user.uid)
+            .then(res=>{
+
+            })
+
         readTasks()
             .then(res => {
-                setTasks(res.data);
+                if(res.status===0){
+                    setTasks(res.data);
+                }
             })
-    }, [])
+    }, [reduxTasks])
 
     return (
         <Box pt={1} pl={1} pr={{ xs: 1, sm: 1, md: 0 }}
@@ -115,7 +123,7 @@ function HomeTasksList() {
 
             <Box mt={3} mb={1} ml={2}>
                 <Typography variant="body1" color={'grey'}>
-                    {tasks.length} Total Number of Tasks.
+                    {tasks?tasks.length:''} Total Number of Tasks.
                 </Typography>
             </Box>
 

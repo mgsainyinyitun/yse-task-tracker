@@ -98,7 +98,7 @@ function PersonalInformation({ user }) {
             <Grid item xs={6}>
                 <Button
                     variant="contained"
-                    size={'large'}
+                    size={'small'}
                     startIcon={<SaveOutlinedIcon />}
                 >
                     Save</Button>

@@ -40,6 +40,13 @@ function ProjectsList() {
     const [deleteSuccess, setDeleteSuccess] = useState(false);
     const [deleteError, setDeleteError] = useState(false);
     const [deleteErrorObj, setDeleteErrorObj] = useState(null);
+    const [selectedCell,setSelectedCell] = useState([]);
+
+    const handleCellClick = (params)=>{
+        // setSelectedCell(params.value)
+        console.log(params.field);
+    }
+
 
     const columns = [
         {
@@ -127,19 +134,24 @@ function ProjectsList() {
                 message={deleteErrorObj.message}
             />)}
 
-            <Box m={1}>
+            <Box m={1} display={'flex'} justifyContent={'space-between'}>
                 <Button
                     variant="outlined" startIcon={<AddCircleOutlinedIcon color="primary" />}
                     onClick={() => navigate(PAGE.LINK.PROJETCS.CREATE)}
                 >
                     NEW
                 </Button>
+                {/* <Typography>
+                    {selectedCell}
+                </Typography> */}
             </Box>
             <Divider />
             <DataGrid
                 aria-label="Projects List"
                 columns={columns}
                 rows={projects}
+                onCellClick={handleCellClick}
+                // selectionModel={selectedCell}
                 components={{
                     Toolbar: GridToolbar
                 }}

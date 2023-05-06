@@ -20,7 +20,7 @@ import { getUserDataInLocal } from '../../backend/localstorage/user';
 export const ColorModeContext = createContext({ toggleColorMode: () => { } });
 
 function Main(props) {
-    const [mode, setMode] = useState(THEME.DARK.palette.mode);
+    const [mode, setMode] = useState(THEME.LIGHT.palette.mode);
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();

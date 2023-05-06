@@ -41,7 +41,7 @@ function PasswordChangeCard() {
                     fullWidth
                 />
                 <div>
-                    <Button variant="contained" width={200} size={'large'} startIcon={<BrushOutlinedIcon />}>Change</Button>
+                    <Button variant="contained" width={200} size={'small'} startIcon={<BrushOutlinedIcon />}>Change</Button>
                 </div>
             </FormGroup>
         </Box>
