@@ -32,7 +32,7 @@ export const projecSlice = createSlice({
             let pjt = state.data.find(item => item.id === projectId);
 
             if (pjt) {
-                if (pjt.tasks.indexOf(taskId) > 0) {
+                if (pjt.tasks.indexOf(taskId) >= 0) {
                     // remove task Id
                     let updatedTask = pjt.tasks.filter(arr => arr !== taskId);
                     let updatedPjt = { ...pjt, tasks: [...updatedTask] }

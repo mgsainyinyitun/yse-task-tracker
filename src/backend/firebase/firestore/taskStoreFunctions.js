@@ -90,7 +90,8 @@ export async function updateTaskInStore(task) {
 export async function deleteTaskInStore(taskId) {
     const taskRef = doc(db, "tasks", taskId);
     try {
-        await deleteDoc(taskRef);
+        let res = await deleteDoc(taskRef);
+        console.log(res);
         return Promise.resolve(0);
     } catch (err) {
         return Promise.reject(err);
