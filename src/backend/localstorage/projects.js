@@ -39,7 +39,7 @@ export function removeProjectTaskFromLocal(projectId, taskId) {
     let updatedPjt = null;
     let updatedPjts = [];
     if (found) {
-        if (found.tasks.indexOf(taskId) > 0) {
+        if (found.tasks.indexOf(taskId) >= 0) {
             let updatedTask = found.tasks.filter(arr => arr !== taskId);
             updatedPjt = { ...found, tasks: [...updatedTask] }
         }

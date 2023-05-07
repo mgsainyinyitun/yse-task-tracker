@@ -9,8 +9,10 @@ import { useState } from "react";
 
 function TaskDeleteModal({ open, setOpen, deleteTask, setDeleteError, setDeleteSuccess, setErrors }) {
     function onTaskDelete() {
+        console.log('delete task')
         removeTask(deleteTask.id)
             .then(res => {
+                console.log(res);
                 if (res.status === 0) {
                     setDeleteSuccess(true);
                     setDeleteError(false);
@@ -23,7 +25,6 @@ function TaskDeleteModal({ open, setOpen, deleteTask, setDeleteError, setDeleteS
             })
             setOpen(false);
     }
-
     return (
         <Dialog
             open={open}

@@ -69,19 +69,30 @@ export async function addTask(projectID, task) {
 function findProject(projects, taskId) {
     let found = null;
     projects.forEach(project => {
-        if (project.tasks.indexOf(taskId) > 0) {
+        console.log(project.tasks[0])
+        console.log(taskId);
+        console.log(project.tasks.indexOf(taskId));
+        if (project.tasks.indexOf(taskId) >= 0) {
             found = { ...project };
-            return;
         }
     });
+    console.log(found);
     return found;
 }
 
+
+
+
 export async function removeTask(taskId) {
-    let project = await readProjects()
+    let projects = await readProjects()
         .then(res => {
-            return findProject(res.data, taskId);
+            if(res.status===0){
+                return res.data;
+            }else{
+                return [];
+            }
         })
+    let project=findProject(projects,taskId);
     if (project) {
         let projectId = project.id;
         let result = await deleteTaskInStore(taskId)
