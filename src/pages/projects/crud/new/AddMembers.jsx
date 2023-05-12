@@ -9,13 +9,15 @@ import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
 import ArrowBackIosOutlinedIcon from '@mui/icons-material/ArrowBackIosOutlined';
+import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import { useEffect, useState } from 'react';
 import { getAllUsers } from '../../../../backend/firebase/firestore/userStoreFunction';
 import { useDispatch, useSelector } from 'react-redux';
 import OverlayLoading from '../../../../components/OverlayLoading';
 import { addAllUser } from '../../../../redux/reducers/userSlice';
 import { readUsers } from '../../../../backend/controller/userController';
-import { Divider, Typography, useTheme } from '@mui/material';
+import { Box, Divider, Typography, useTheme } from '@mui/material';
+import { useProSidebar } from 'react-pro-sidebar';
 
 function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -30,6 +32,7 @@ function union(a, b) {
 }
 
 export function AddMembers({ setMembers }) {
+  const { broken } = useProSidebar();
   const [checked, setChecked] = useState([]);
   const [right, setRight] = useState([]);
   const [left, setLeft] = useState([]);
@@ -89,10 +92,10 @@ export function AddMembers({ setMembers }) {
   }, []);
 
   const customList = (title, items) => (
-    <Card elevation={0} sx={{border:`1px solid ${theme.palette.custom.info}`,borderRadius:'10px'}}>
+    <Card elevation={0} sx={{ border: `1px solid ${theme.palette.custom.info}`, borderRadius: '10px' }}>
       {/** Header Section */}
       <CardHeader
-        sx={{ px: 2, py: 1 ,background:theme.palette.custom.info}}
+        sx={{ px: 2, py: 1, background: theme.palette.custom.info }}
         avatar={
           <Checkbox
             onClick={handleToggleAll(items)}
@@ -106,7 +109,7 @@ export function AddMembers({ setMembers }) {
             }}
           />
         }
-        title={ title }
+        title={title}
         subheader={`${numberOfChecked(items)}/${items.length} selected`}
       />
       {/** User Lists Section */}
@@ -155,17 +158,28 @@ export function AddMembers({ setMembers }) {
   );
 
   return (
-    <Grid
-      container
-      alignItems="center"
-      spacing={1}
-      flex={1}
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: !broken ? "row" : "column",
+      }}
     >
-      <Grid flex={1} item >
+      {/** Left Member List */}
+      <Box
+        sx={{ flex: 1 }}
+      >
         {customList('All Members', left)}
-      </Grid>
-      <Grid item>
-        <Grid container direction="column" alignItems="center">
+      </Box>
+
+      {/** Arrow Member List */}
+
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <Grid container direction={broken ? "row" : "column"} alignItems="center" justifyContent={'center'}>
           <Button
             sx={{ my: 0.5 }}
             // variant="outlined"
@@ -174,7 +188,12 @@ export function AddMembers({ setMembers }) {
             disabled={leftChecked.length === 0}
             aria-label="move selected right"
           >
-            <ArrowForwardIosOutlinedIcon />
+            <ArrowForwardIosOutlinedIcon
+              sx={{
+                transform: !broken ? 'rotate(0deg)' : 'rotate(90deg)',
+              }}
+            />
+
           </Button>
           <Button
             sx={{ my: 0.5 }}
@@ -183,18 +202,23 @@ export function AddMembers({ setMembers }) {
             disabled={rightChecked.length === 0}
             aria-label="move selected left"
           >
-            <ArrowBackIosOutlinedIcon />
+            <ArrowBackIosOutlinedIcon
+              sx={{
+                transform: !broken ? 'rotate(0deg)' : 'rotate(90deg)',
+              }}
+            />
           </Button>
         </Grid>
-      </Grid>
-      <Grid
-        item
-        flex={1}
+      </Box>
+
+      {/** Right Member List */}
+      <Box
+        sx={{ flex: 1 }}
       >
         {customList('Added Members', right)}
-      </Grid>
+      </Box>
       <OverlayLoading open={loading} />
-    </Grid>
+    </Box>
   );
 }
 export default AddMembers;

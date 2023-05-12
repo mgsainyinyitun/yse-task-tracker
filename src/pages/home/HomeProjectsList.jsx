@@ -52,7 +52,7 @@ function HomeProjectsList() {
                     {
                         projects.map(project => {
                             return (
-                                <Grid item md={6} xs={6}>
+                                <Grid item md={6} sm={6} xs={12}>
                                     <Card elevation={0}
                                         sx={{
                                             marginBottom: 1,

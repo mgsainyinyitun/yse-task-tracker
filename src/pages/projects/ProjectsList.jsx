@@ -52,17 +52,17 @@ function ProjectsList() {
             case "endDate":
                 params.value?setSelectedCell(isoDateStringToDateString(params.value)):setSelectedCell('Not Defined');break;
             case "progress":setSelectedCell(`${params.value}%`);break;
-            case "departments":setSelectedCell(params.value);break;
+            case "departments":setSelectedCell(params.value.name);break;
             default:setSelectedCell("");
         }
     }
 
     const columns = [
         {
-            field: 'no', headerName: 'No.', width: 70,
+            field: 'no', headerName: 'No.',width:50,
             renderCell: params => renderNumber(params),
         },
-        { field: 'title', headerName: 'Title', minWidth: 50, flex: 1 },
+        { field: 'title', headerName: 'Title', minWidth: 150, flex: 1 },
         {
             field: 'creator', headerName: 'Creator', flex: 0.5,minWidth:120,
             renderCell: params => renderName(params),
@@ -82,15 +82,15 @@ function ProjectsList() {
             type: 'date',
         },
         {
-            field: 'progress', headerName: 'Progress', flex: 0.5,
+            field: 'progress', headerName: 'Progress', flex: 0.5,minWidth:100,
             renderCell: params => renderProgress(params),
         },
         {
-            field: 'departments', headerName: 'Departments', flex: 1,
+            field: 'departments', headerName: 'Departments', flex: 1,minWidth:100,
             renderCell: params => renderDepartment(params),
         },
         {
-            field: 'detail', headerName: 'Detail', flex: 0.5,
+            field: 'detail', headerName: 'Detail', flex: 0.5,minWidth:80,
             renderCell: params => renderDetail(params),
         },
         {

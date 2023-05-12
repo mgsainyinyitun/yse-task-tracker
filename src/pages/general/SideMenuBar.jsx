@@ -109,6 +109,7 @@ function SideMenuBar() {
                     height={'100%'}
                     sx={{
                         direction: "ltr",
+                        paddingRight:broken?"7px":0,
                     }}
                 >
                     
@@ -302,7 +303,6 @@ function SideMenuBar() {
                                 borderRadius: "10px",
                                 padding: "0.5rem",
                                 minHeight: '150px',
-                                boxShadow: 1,
                             }}
                                 mt={1}
                                 mb={2}
@@ -326,10 +326,8 @@ function SideMenuBar() {
                                 background: `${paper}`,
                                 padding: "0.5rem",
                                 borderRadius: "10px",
-                                boxShadow: 1,
                             }}
                                 mt={1}
-                                mb={1}
                             >
                                 <Typography sx={{
                                     color: "primary.main",
@@ -340,8 +338,6 @@ function SideMenuBar() {
                                 }}>
                                     Youth Society for Education
                                 </Typography>
-
-
                             </Box>
                         )}
                     </Menu>

@@ -40,10 +40,10 @@ function TasksList() {
     const reduxTasks = useSelector(state => state.tasks.data);
     const columns = [
         {
-            field: 'no', headerName: 'No.', width: 70,
+            field: 'no', headerName: 'No.', width: 50,
             renderCell: params => renderNumber(params),
         },
-        { field: 'title', headerName: 'Title', minWidth: 50, flex: 1 },
+        { field: 'title', headerName: 'Title', minWidth: 150, flex: 1 },
         {
             field: 'consigner', headerName: 'Assign By', flex: 0.5,minWidth:120,
             renderCell: params => renderName(params),
@@ -57,27 +57,27 @@ function TasksList() {
             renderCell: params => renderPriority(params),
         },
         {
-            field: 'status', headerName: 'Status', flex: 0.6,
+            field: 'status', headerName: 'Status', flex: 0.6,minWidth:110,
             renderCell: params => renderStatus(params),
         },
         {
-            field: 'startDate', headerName: 'Start In', flex: 0.5,
+            field: 'startDate', headerName: 'Start In', flex: 0.5,minWidth:90,
             type: 'date',
             renderCell: params => renderDate(params),
         },
         {
-            field: 'dueDate', headerName: 'Due In', flex: 0.5,
+            field: 'dueDate', headerName: 'Due In', flex: 0.5,minWidth:90,
             renderCell: params => renderDate(params),
             type: 'date',
         },
         {
-            field: 'finishedDate', headerName: 'Finished In', flex: 0.5,
+            field: 'finishedDate', headerName: 'Finished In', flex: 0.5,minWidth:90,
             renderCell: params => renderDate(params),
             editable: true,
             type: 'date',
         },
         {
-            field: 'detail', headerName: 'Detail', flex: 0.5,
+            field: 'detail', headerName: 'Detail', flex: 0.5,minWidth:80,
             renderCell: params => renderDetail(params),
         },
         {

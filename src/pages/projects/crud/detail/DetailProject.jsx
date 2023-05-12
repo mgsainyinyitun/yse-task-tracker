@@ -67,10 +67,10 @@ function DetailProject() {
                         </Card>
 
                         <Grid container spacing={1}>
-                            <Grid item md={6} sm={12}>
+                            <Grid item md={6} sm={12} xs={12}>
                                 <ProjectLeftInfo project={project} />
                             </Grid>
-                            <Grid item md={6} sm={12}>
+                            <Grid item md={6} sm={12} xs={12}>
                                 <ProjectRightInfo project={project} />
                             </Grid>
                         </Grid>

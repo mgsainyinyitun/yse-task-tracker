@@ -18,6 +18,7 @@ import { addProject } from "../../../../backend/controller/projectController";
 import { getDepartmentsDatafromLocal } from "../../../../backend/localstorage/departments";
 import { CONSTANTS } from "../../../constants";
 import { readDepartments } from "../../../../backend/controller/departmentController";
+import { useProSidebar } from "react-pro-sidebar";
 const steps = [
     'Project Detail',
     'Add Members',
@@ -26,6 +27,7 @@ const steps = [
 ];
 function NewProject() {
     const { register, handleSubmit, formState, getValues, reset } = useForm();
+    const {broken} = useProSidebar();
     const [activeState, setActiveState] = useState(0);
     const [success, setSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -241,7 +243,7 @@ function NewProject() {
                 current={activeState}
                 complete={success}
             />
-            <Container maxWidth={'md'}>
+            <Container maxWidth={'md'} disableGutters={broken?true:false}>
                 <Card
                     elevation={0}
                     sx={{

@@ -1,8 +1,9 @@
-import { Avatar, Box, Button, Card, CardContent, Divider, LinearProgress, linearProgressClasses, Paper, Typography } from "@mui/material";
+import { Avatar, Box, Button, Card, CardContent, Chip, Divider, LinearProgress, linearProgressClasses, Paper, Typography } from "@mui/material";
 import { styled, useTheme } from '@mui/material/styles';
 import { Stack } from "@mui/system";
 import { useEffect, useState } from "react";
 import { findTasks } from "../../../../backend/controller/taskController";
+import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: 15,
@@ -34,8 +35,8 @@ function ProjectRightInfo({ project }) {
             sx={{
                 height: '100%',
                 width: '100%',
-                display:'flex',
-                flexDirection:'column'
+                display: 'flex',
+                flexDirection: 'column'
             }}
         >
             <Card
@@ -46,21 +47,50 @@ function ProjectRightInfo({ project }) {
                     background: theme.palette.custom.info
                 }}
             >
-                <BorderLinearProgress
-                    variant="determinate"
-                    value={project.progress}
+                <Box
                     sx={{
-                        marginBottom: '1rem',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        marginBottom: 1,
                     }}
-                />
+                >
+                    <Box sx={{ width: 200 }}>
+                        <CircularProgressbar
+                            value={parseInt(project.progress)}
+                            text={`${parseInt(project.progress)}%`}
+                            strokeWidth={10}
+                            styles={buildStyles({
+                                textColor: 'white',
+                                pathColor: 'green'
+                            })}
+                        /></Box>
+                </Box>
+
                 <Stack direction={'row'} spacing={3} alignItems={'center'}>
-                    <Typography variant="h4">
-                        {project.progress} %
-                    </Typography>
-                    <Box>
-                        <Typography variant="h5" sx={{ color: 'primary.dark' }}>
-                            CREATED BY: {project.creator.username}
+                    <Box
+                        sx={{
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            padding: 2,
+                            border: '1px solid green',
+                            borderRadius: "10px"
+
+                        }}
+                    >
+                        <Typography variant="h5">
+                            CREATED BY:
                         </Typography>
+                        <Chip
+                            sx={{ padding: 1, marginTop: 1 }}
+                            label={
+                                <Typography variant="h4">
+                                    {project.creator.username}
+                                </Typography>
+                            }
+                        />
+
                     </Box>
                 </Stack>
                 <Divider sx={{
@@ -68,14 +98,16 @@ function ProjectRightInfo({ project }) {
                     marginBottom: '1rem',
                 }} />
 
-                <Stack direction={'row'} spacing={3} >
-                    <Typography variant="h5">
-                        DEPARTMENT &nbsp; :
-                    </Typography>
-                    <Typography variant="h5">
+                <Stack direction={'column'} spacing={3} >
+                    <Chip
+                        label={<Typography variant="h5">
+                            DEPARTMENT
+                        </Typography>}
+                    />
+                    <Typography variant="h5" textAlign={'center'}>
                         {
                             project.departments === 'All' ?
-                                `${project.departments.toUpperCase()}` :
+                                `All Departments` :
                                 project.departments ? project.departments.name : 'Null'
                         }
                     </Typography>
@@ -85,11 +117,11 @@ function ProjectRightInfo({ project }) {
                 elevation={0}
                 sx={{
                     borderRadius: '10px',
-                    marginTop:2,
+                    marginTop: 2,
                     padding: '1rem',
-                    border:`1px solid ${theme.palette.custom.info}`,
-                    flexGrow:1,
-                    marginBottom:2,
+                    border: `1px solid ${theme.palette.custom.info}`,
+                    flexGrow: 1,
+                    marginBottom: 2,
                 }}
             >
                 <Typography variant="h4" sx={{ color: 'primary.main' }}>

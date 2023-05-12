@@ -99,8 +99,12 @@ function TaskDetail() {
                 <>
                     <Container disableGutters={true} >
                         <Grid container spacing={2}>
-                            <Grid item sm={12} >
-                                <Card sx={{ borderRadius: '10px', background: theme.palette.custom.info, }} elevation={0}>
+                            <Grid item sm={12} xs={12} >
+                                <Card sx={{ 
+                                    borderRadius: '10px', 
+                                    background: theme.palette.custom.info,
+                                    width:'100%',
+                             }} elevation={0}>
                                     <CardHeader
                                         title={task.title}
                                     />

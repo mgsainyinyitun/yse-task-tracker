@@ -1,6 +1,6 @@
 import { Avatar, Card, Divider, TextField, Typography, useTheme } from "@mui/material"
 import { Box, Stack } from "@mui/system"
-import { formatDateMothName } from "../../../../utils/dateFunction";
+import { formatDateMothName, isoDateStringToFormattedDateString } from "../../../../utils/dateFunction";
 
 function ProjectLeftInfo({ project }) {
     const theme = useTheme();
@@ -11,7 +11,7 @@ function ProjectLeftInfo({ project }) {
                 height: '100%',
                 width: '100%',
                 display:'flex',
-                flexDirection:'column'
+                flexDirection:'column',
             }}
         >
             <Card 
@@ -52,18 +52,18 @@ function ProjectLeftInfo({ project }) {
 
                     <Typography variant="h6">
                         {
-                            project.startDate ? formatDateMothName(project.startDate) : 'Not Defined'
+                            project.startDate ? isoDateStringToFormattedDateString(project.startDate) : 'Not Defined'
                         }
                     </Typography>
                 </Stack>
                 <Stack direction={'row'}>
                     <Typography variant="h6">
-                        END &nbsp;&nbsp;&nbsp;&nbsp;: &nbsp; &nbsp;
+                        END  &nbsp;&nbsp;&nbsp;: &nbsp; &nbsp;
                     </Typography>
 
                     <Typography variant="h6">
                         {
-                            project.endDate ? formatDateMothName(project.endDate) : 'Not Defined'
+                        project.endDate ? isoDateStringToFormattedDateString(project.endDate) : 'Not Defined'
                         }
                     </Typography>
                 </Stack>
