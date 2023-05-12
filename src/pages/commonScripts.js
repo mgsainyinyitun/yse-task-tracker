@@ -9,6 +9,7 @@ import { formatDate, isoDateStringToDateString } from "../utils/dateFunction";
 import { green } from "@mui/material/colors";
 import { findProject } from "../utils/commonFunctions";
 import { store } from "../redux/store";
+import { checkProjectDeleteable, checkProjectEditable } from "../utils/permission";
 
 
 export function renderNumber(params) {
@@ -107,7 +108,7 @@ export function renderDetail(params) {
 
 export function renderEdit(params) {
     return (
-        <IconButton sx={{ color: 'primary.dark' }}>
+        <IconButton sx={{ color: 'primary.dark' }} disabled={checkProjectEditable(params.value)}>
             <Link to={`edit/${params.value}`}
                 style={{
                     textDecoration: 'none',
@@ -127,7 +128,7 @@ export function renderDelete(params, setOpen, setDeleteProject) {
         setOpen(true);
     }
     return (
-        <IconButton sx={{ color: 'red' }} onClick={onClickOpenDeleteModal}>
+        <IconButton sx={{ color: 'red' }} onClick={onClickOpenDeleteModal} disabled={checkProjectDeleteable(params.value)}>
             <DeleteOutline />
         </IconButton>);
 }

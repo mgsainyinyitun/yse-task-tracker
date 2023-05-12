@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import { renderDelete, renderEdit, renderName, renderPriority, renderStatus, renderDetail } from "./common";
+import { renderDelete, renderName, renderPriority, renderStatus, renderDetail, renderTaskEdit } from "./common";
 import TaskDeleteModal from "./crud/TaskDeleteModal";
 import { readTasks } from "../../backend/controller/taskController";
 import { renderDate, renderNumber } from "../commonScripts";
@@ -45,11 +45,11 @@ function TasksList() {
         },
         { field: 'title', headerName: 'Title', minWidth: 50, flex: 1 },
         {
-            field: 'consigner', headerName: 'Assign By', flex: 0.5,
+            field: 'consigner', headerName: 'Assign By', flex: 0.5,minWidth:120,
             renderCell: params => renderName(params),
         },
         {
-            field: 'consignee', headerName: 'Assign To', flex: 0.5,
+            field: 'consignee', headerName: 'Assign To', flex: 0.5,minWidth:120,
             renderCell: params => renderName(params),
         },
         {
@@ -82,7 +82,7 @@ function TasksList() {
         },
         {
             field: 'edit', headerName: 'Edit', flex: 0.3,
-            renderCell: params => renderEdit(params),
+            renderCell: params => renderTaskEdit(params),
         },
         {
             field: 'delete', headerName: 'Delete', flex: 0.3,
@@ -123,6 +123,7 @@ function TasksList() {
             components={{
                 Toolbar: GridToolbar,
             }}
+            
             rowsPerPageOptions={[10, 15, 20]}
             pageSize={pageSize}
             onPageSizeChange={newPageSize => setPageSize(newPageSize)}
@@ -138,6 +139,7 @@ function TasksList() {
             setDeleteError={setDeleteError}
             setDeleteSuccess={setDeleteSuccess}
             setErrors={setErrors}
+            
         />
     </Box>
 }

@@ -1,4 +1,4 @@
-import { addTaskToStore, deleteTaskInStore, findTaskByIdFromStore, readTasksFromStore, readUserTasksFromStore, updateTaskInStore } from "../firebase/firestore/taskStoreFunctions";
+import { addTaskToStore, deleteTaskInStore, findTaskByIdFromStore, readTasksFromStore, readUserDepartmentTasksFromStore, readUserTasksFromStore, updateTaskInStore } from "../firebase/firestore/taskStoreFunctions";
 import { addProjectTaskToLocal, getProjectsDatafromLocal, removeProjectTaskFromLocal } from "../localstorage/projects";
 import { store } from "../../redux/store";
 import { addTasksDataToLocal, getTasksDatafromLocal, updateTasksDataInLocal } from "../localstorage/tasks";
@@ -11,6 +11,7 @@ import { deleteTaskInLocal } from "../localstorage/tasks";
 import { deleteTasks } from "../../redux/reducers/taskSlice";
 import { removeProjectTask } from "../../redux/reducers/projectSlice";
 import { readProjects } from "./projectController";
+import { ROLES } from "../../constant";
 
 export async function addTask(projectID, task) {
     /** Add task to firebase  => id                  */
@@ -86,13 +87,13 @@ function findProject(projects, taskId) {
 export async function removeTask(taskId) {
     let projects = await readProjects()
         .then(res => {
-            if(res.status===0){
+            if (res.status === 0) {
                 return res.data;
-            }else{
+            } else {
                 return [];
             }
         })
-    let project=findProject(projects,taskId);
+    let project = findProject(projects, taskId);
     if (project) {
         let projectId = project.id;
         let result = await deleteTaskInStore(taskId)
@@ -155,10 +156,23 @@ export async function readTasks() {
             }
         } else {
             // 3. Read from firestore
-            tasks = await readTasksFromStore()
-                .then(res => {
-                    return res;
-                });
+            const department = store.getState().users.user.department;
+            const roles = store.getState().users.user.role;
+
+            if (roles.includes(ROLES.ADMIN)) {
+                console.log(`Read task (all)`);
+                tasks = await readTasksFromStore()
+                    .then(res => {
+                        return res;
+                    });
+            } else {
+                console.log(`read task (department)`);
+                tasks = await readUserDepartmentTasksFromStore(department.id)
+                    .then(res=>{
+                        return res;
+                    })
+            }
+
             let prepTasks = [];
             tasks.data.forEach(task => {
                 let prepTask = {
@@ -285,15 +299,10 @@ export async function updateTask(task) {
 
 export async function readUserTasks(uid) {
     let user_tasks = [];
-
-
-
-
-
     readUserTasksFromStore(uid)
-        .then(res=>{
+        .then(res => {
             console.log(res);
         })
-    
+
     return Promise.resolve(user_tasks);
 }

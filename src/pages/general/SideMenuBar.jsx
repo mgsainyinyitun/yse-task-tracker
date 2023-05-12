@@ -8,9 +8,11 @@ import { useTheme } from "@mui/material";
 import { THEME } from "../../themes";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { checkIsAdmin } from "../../utils/commonFunctions";
 
 function SideMenuBar() {
-    const user = useSelector(state=>state.users.user);
+    const user = useSelector(state => state.users.user);
+    let isAdmin = checkIsAdmin(user);
     const currentRoute = window.location.pathname;
     const theme = useTheme();
     const paper = theme.palette.background.paper;
@@ -83,7 +85,7 @@ function SideMenuBar() {
             sx={{
                 display: 'flex',
                 flexGrow: '1',
-                height:'100%',
+                height: '100%',
                 overflow: 'auto',
                 borderRadius: '10px 10px 10px 10px',
                 '& .ps-menu-button.ps-active': menuActive,
@@ -91,6 +93,7 @@ function SideMenuBar() {
                 '& .ps-menu-button.ps-active:after': menuActiveAfter,
             }}
         >
+            
             <Sidebar
                 backgroundColor={background}
                 breakPoint={'md'}
@@ -108,6 +111,7 @@ function SideMenuBar() {
                         direction: "ltr",
                     }}
                 >
+                    
                     <Menu
                         rootStyles={{
                             height: "100%",
@@ -170,12 +174,12 @@ function SideMenuBar() {
                                 mb={1}
                             >
                                 <Avatar
-                                >{user.username.slice(0,2).toUpperCase()}</Avatar>
+                                >{user.username.slice(0, 2).toUpperCase()}</Avatar>
                                 <Typography
                                     variant="h6"
                                     mt={1}
                                 >
-                                   {user.username}
+                                    {user.username}
                                 </Typography>
                                 <Typography
                                     variant="body2"
@@ -259,7 +263,7 @@ function SideMenuBar() {
                             }
 
                             {/** Admin Role Only  */}
-                            {(!collapsed &&
+                            {(!collapsed && isAdmin &&
                                 <Typography
                                     variant="body1"
                                     m={1}
@@ -269,7 +273,7 @@ function SideMenuBar() {
                                 </Typography>
                             )}
                             {
-                                ADMIN_MENU.items.map(item => {
+                                isAdmin ? ADMIN_MENU.items.map(item => {
                                     return (
                                         <MenuItem
                                             active={currentRoute === item.link}
@@ -284,7 +288,7 @@ function SideMenuBar() {
                                             </Typography>
                                         </MenuItem>
                                     );
-                                })
+                                }) : null
                             }
                         </Box>
                         {(!collapsed &&
@@ -322,17 +326,17 @@ function SideMenuBar() {
                                 background: `${paper}`,
                                 padding: "0.5rem",
                                 borderRadius: "10px",
-                                boxShadow:1,
+                                boxShadow: 1,
                             }}
                                 mt={1}
                                 mb={1}
                             >
                                 <Typography sx={{
-                                    color:"primary.main",
-                                    writingMode:'vertical-lr',
-                                    transform:'rotate(180deg)',
-                                    textAlign:'center',
-                                    fontWeight:'bold',
+                                    color: "primary.main",
+                                    writingMode: 'vertical-lr',
+                                    transform: 'rotate(180deg)',
+                                    textAlign: 'center',
+                                    fontWeight: 'bold',
                                 }}>
                                     Youth Society for Education
                                 </Typography>

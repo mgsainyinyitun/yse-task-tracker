@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import { findTask } from "../../utils/commonFunctions";
 import { CONSTANTS } from "../constants";
 import { store } from "../../redux/store";
+import { checkTaskDeleteable, checkTaskEditable } from "../../utils/permission";
+
 
 
 export function renderName(params) {
@@ -94,9 +96,9 @@ export function renderDetail(params) {
         </Button>);
 }
 
-export function renderEdit(params) {
+export function renderTaskEdit(params) {
     return (
-        <IconButton sx={{color:'primary.dark'}}>
+        <IconButton sx={{color:'primary.dark'}} disabled={checkTaskEditable(params.value)}>
             <Link to={`edit/${params.value}`}
                 style={{
                     textDecoration: 'none',
@@ -117,7 +119,7 @@ export function renderDelete(params,setOpen,setDeleteTask) {
         setOpen(true);
     }
     return (
-    <IconButton sx={{color:'red'}} onClick={onClickOpenDeleteModal}>
+    <IconButton sx={{color:'red'}} onClick={onClickOpenDeleteModal} disabled={checkTaskDeleteable(params.value)}>
         <DeleteOutline />
     </IconButton>);
 }

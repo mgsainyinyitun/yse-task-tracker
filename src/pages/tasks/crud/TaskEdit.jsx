@@ -12,10 +12,11 @@ import { readUsers } from "../../../backend/controller/userController";
 import OverlayLoading from "../../../components/OverlayLoading";
 import { useForm } from "react-hook-form";
 import { checkEmpty } from "../../../validation/commonValidation";
-import { findUserByUsername } from "../../../utils/commonFunctions";
+import { findObjectByName, findUserByUsername } from "../../../utils/commonFunctions";
 import { serverTimestamp } from "firebase/firestore";
 import { PAGE } from "../../pageConstants";
 import SuccessPage from "../../general/SuccessPage";
+import { readDepartments } from "../../../backend/controller/departmentController";
 
 const priority = Object.values(CONSTANTS.PRIORITY);
 const status = Object.values(CONSTANTS.STATUS);
@@ -23,6 +24,7 @@ const status = Object.values(CONSTANTS.STATUS);
 function TaskEdit() {
     const { id } = useParams();
     const [task, setTask] = useState(null);
+    const [departments,setDepartments] = useState([]);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(null);
@@ -36,6 +38,10 @@ function TaskEdit() {
 
     useEffect(() => {
         setLoading(true);
+        readDepartments()
+        .then(res => {
+            setDepartments(res.data);
+        })
         findTaskById(id)
             .then((res) => {
                 setTask(res.data);
@@ -64,6 +70,8 @@ function TaskEdit() {
     function handleTaskEditForm(data) {
         const { title, description, consignee, priority, status, deliverable, remarks } = data;
         let consigneeObj = findUserByUsername(consignee, users);
+        let department = findObjectByName(consigneeObj.department, departments);
+
         let task = {
             id,
             title,
@@ -71,6 +79,7 @@ function TaskEdit() {
             consignee: consignee ? {
                 uid: consigneeObj.uid,
                 username: consigneeObj.username,
+                department:department.id,
             } : null,
             priority,
             status,

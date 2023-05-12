@@ -58,7 +58,7 @@ function Signup() {
                     getUserById(response.user.uid).then(
                         userData => {
                             if (userData) {
-                                console.log('userData', userData);
+                                // console.log('userData', userData);
                                 setLoading(false);
                                 setUserDataToLocal(userData);
                                 dispatch(addUser(userData));

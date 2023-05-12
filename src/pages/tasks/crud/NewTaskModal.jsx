@@ -6,11 +6,12 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useForm } from "react-hook-form";
 import { checkEmpty } from "../../../validation/commonValidation";
 import { useDispatch, useSelector } from "react-redux";
-import { findUserByUsername } from "../../../utils/commonFunctions";
+import { findObjectByName, findUserByUsername } from "../../../utils/commonFunctions";
 import { serverTimestamp } from "firebase/firestore";
 import OverlayLoading from "../../../components/OverlayLoading";
 import { addTask } from "../../../backend/controller/taskController";
 import { CONSTANTS } from "../../constants";
+import { readDepartments } from "../../../backend/controller/departmentController";
 const priority =
     [
         'Low',
@@ -19,14 +20,18 @@ const priority =
     ];
 function NewTaskModal({ open, setOpen, projectId, setError, setSuccess, setErrorObj }) {
     const [users, setUsers] = useState([]);
+    const [departments, setDepartments] = useState([]);
     const [loading, setLoading] = useState(false);
     const [stateDate, setStartDate] = useState(new Date());
     const [dueDate, setDueDate] = useState(null);
     const { register, handleSubmit, formState, getValues, reset } = useForm();
     const user = useSelector(state => state.users.user);
-    const dispatch = useDispatch();
     const { errors } = formState;
     useEffect(() => {
+        readDepartments()
+            .then(res => {
+                setDepartments(res.data);
+            })
         readUsers()
             .then(res => {
                 setUsers(res.data);
@@ -36,6 +41,8 @@ function NewTaskModal({ open, setOpen, projectId, setError, setSuccess, setError
     function submitNewTaskForm(data) {
         const { title, description, assignTo, priority, remark } = data;
         let consignee = findUserByUsername(assignTo, users);
+
+        let department = findObjectByName(consignee.department, departments);
         let task = {
             title,
             description,
@@ -46,6 +53,7 @@ function NewTaskModal({ open, setOpen, projectId, setError, setSuccess, setError
             consignee: assignTo ? {
                 uid: consignee.uid,
                 username: consignee.username,
+                department: department.id,
             } : null,
             priority,
             status: CONSTANTS.STATUS.NOTSTART,

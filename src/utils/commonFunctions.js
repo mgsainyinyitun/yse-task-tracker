@@ -1,3 +1,4 @@
+import { ROLES } from "../constant";
 import { CONSTANTS } from "../pages/constants";
 
 export function findProject(id, projects) {
@@ -49,11 +50,13 @@ export function counteStatus(tasks) {
             case CONSTANTS.STATUS.FINISHED: result.finished++; break;
         }
     });
+    console.log(result);
     return result;
 }
 
-// const array2 = [{ uid: 2 }, { uid: 3 }];
-
-// const filteredArray = array1.filter((obj1) => {
-//   return !array2.some((obj2) => obj2.uid === obj1.uid);
-// });
+export function checkIsAdmin(user) {
+    if (user.role.includes(ROLES.ADMIN)) {
+        return true;
+    }
+    return false;
+}

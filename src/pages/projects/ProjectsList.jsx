@@ -11,6 +11,7 @@ import SuccessAlert from '../../components/SuccessAlert';
 import ErrorAlert from '../../components/ErrorAlert';
 import { useSelector } from 'react-redux';
 import ProjectDeleteModal from './crud/ProjectDeleteModal';
+import { isoDateStringToDateString } from '../../utils/dateFunction';
 
 const successTitle = "Added Successful"
 const successMessage = "Successfully Added Task to Project";
@@ -43,10 +44,18 @@ function ProjectsList() {
     const [selectedCell,setSelectedCell] = useState([]);
 
     const handleCellClick = (params)=>{
-        // setSelectedCell(params.value)
-        console.log(params.field);
+        switch(params.field){
+            case "title":setSelectedCell(params.value);break;
+            case "creator":setSelectedCell(params.value);break;
+            case "tasks":setSelectedCell(`No. of Task : ${params.value.length}`);break;
+            case "startDate":setSelectedCell(isoDateStringToDateString(params.value));break;
+            case "endDate":
+                params.value?setSelectedCell(isoDateStringToDateString(params.value)):setSelectedCell('Not Defined');break;
+            case "progress":setSelectedCell(`${params.value}%`);break;
+            case "departments":setSelectedCell(params.value);break;
+            default:setSelectedCell("");
+        }
     }
-
 
     const columns = [
         {
@@ -55,7 +64,7 @@ function ProjectsList() {
         },
         { field: 'title', headerName: 'Title', minWidth: 50, flex: 1 },
         {
-            field: 'creator', headerName: 'Creator', flex: 0.5,
+            field: 'creator', headerName: 'Creator', flex: 0.5,minWidth:120,
             renderCell: params => renderName(params),
         },
         {
@@ -133,17 +142,16 @@ function ProjectsList() {
                 title={deleteErrorObj.code}
                 message={deleteErrorObj.message}
             />)}
-
-            <Box m={1} display={'flex'} justifyContent={'space-between'}>
+            <Box m={1} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
                 <Button
                     variant="outlined" startIcon={<AddCircleOutlinedIcon color="primary" />}
                     onClick={() => navigate(PAGE.LINK.PROJETCS.CREATE)}
                 >
                     NEW
                 </Button>
-                {/* <Typography>
+                <Typography fontWeight={'bold'} color={'info.dark'}>
                     {selectedCell}
-                </Typography> */}
+                </Typography>
             </Box>
             <Divider />
             <DataGrid
@@ -151,7 +159,7 @@ function ProjectsList() {
                 columns={columns}
                 rows={projects}
                 onCellClick={handleCellClick}
-                // selectionModel={selectedCell}
+                selectionModel={selectedCell}
                 components={{
                     Toolbar: GridToolbar
                 }}

@@ -59,6 +59,26 @@ export async function readUserTasksFromStore(uid) {
     return tasks;
 }
 
+export async function readUserDepartmentTasksFromStore(departmentId) {
+    const q = query(collection(db, "tasks"), where("consignee.department", "==", departmentId));
+    const tasks = await getDocs(q)
+        .then(querySnapshot => {
+            const documents = querySnapshot.docs.map((doc) => doc.data());
+            return {
+                status: 0,
+                data: documents,
+            }
+        })
+        .catch(error => {
+            return {
+                status: 1,
+                error: error,
+            }
+        });
+    return tasks;
+}
+
+
 export async function findTaskByIdFromStore(id) {
     const task = await getDoc(doc(db, 'tasks', id))
         .then(res => {

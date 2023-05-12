@@ -126,6 +126,8 @@ function NewProject() {
         let consignee = findUserByUsername(assignTo, users);
         console.log(consignee);
 
+        let department = findObjectByName(consignee.department, departments);
+
         let task = {
             title: taskTitle,
             description: taskDescription,
@@ -136,6 +138,7 @@ function NewProject() {
             consignee: assignTo ? {
                 uid: consignee.uid,
                 username: consignee.username,
+                department: department.id,
             } : null,
             priority: priority,
             status: CONSTANTS.STATUS.NOTSTART,

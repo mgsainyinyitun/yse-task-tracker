@@ -2,16 +2,19 @@ import { useEffect } from "react";
 import MainRoutes from "./routes";
 
 function App() {
-  // useEffect(() => {
-  //   const handleBeforeUnload = () => {
-  //     localStorage.clear();
-  //   };
-  //   window.addEventListener('beforeunload', handleBeforeUnload);
-  //   return () => {
-  //     window.removeEventListener('beforeunload', handleBeforeUnload);
-  //   };
-  // }, []);
 
-  return <MainRoutes/>
+  useEffect(() => {
+    window.addEventListener("beforeunload", alertUser);
+    return () => {
+      window.removeEventListener("beforeunload", alertUser);
+    };
+  }, []);
+  const alertUser = (e) => {
+    // e.preventDefault();
+    localStorage.clear();
+    console.log('clearing')
+    // e.returnValue = "";
+  };
+  return <MainRoutes />
 }
 export default App;

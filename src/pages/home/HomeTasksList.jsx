@@ -8,6 +8,8 @@ import { isoDateStringToFormattedDateString } from "../../utils/dateFunction";
 import ModeIcon from '@mui/icons-material/Mode';
 import { useTheme } from "@mui/material";
 import { useSelector } from "react-redux";
+import { counteStatus } from "../../utils/commonFunctions";
+import { Link } from "react-router-dom";
 
 const StatusCard = styled(Card)(() => ({
     height: 150,
@@ -22,6 +24,11 @@ const StatusCard = styled(Card)(() => ({
 
 function HomeTasksList() {
     const theme = useTheme();
+    const [allStatus, setAllStatus] = useState({
+        notstart: 0,
+        inprogress: 0,
+        finished: 0,
+    });
     const user = useSelector(state => state.users.user);
     const reduxTasks = useSelector(state => state.tasks.data);
 
@@ -53,15 +60,12 @@ function HomeTasksList() {
 
     const [tasks, setTasks] = useState([]);
     useEffect(() => {
-        readUserTasks(user.uid)
-            .then(res=>{
-
-            })
-
         readTasks()
             .then(res => {
-                if(res.status===0){
-                    setTasks(res.data);
+                if (res.status === 0) {
+                    let userTasks = res.data.filter(task => task.consignee.uid === user.uid);
+                    setTasks(userTasks);
+                    setAllStatus(counteStatus(userTasks))
                 }
             })
     }, [reduxTasks])
@@ -93,7 +97,7 @@ function HomeTasksList() {
                             NOT START
                         </Typography>
                         <Typography variant="h3" color={'white'} fontWeight={'bold'}>
-                            3
+                            {allStatus.notstart}
                         </Typography>
                     </StatusCard>
                 </Grid>
@@ -104,7 +108,7 @@ function HomeTasksList() {
                             IN PROGRESS
                         </Typography>
                         <Typography variant="h3" color={'white'} fontWeight={'bold'}>
-                            1
+                            {allStatus.inprogress}
                         </Typography>
                     </StatusCard>
                 </Grid>
@@ -115,7 +119,7 @@ function HomeTasksList() {
                             FINISHED
                         </Typography>
                         <Typography variant="h3" color={'white'} fontWeight={'bold'}>
-                            0
+                            {allStatus.finished}
                         </Typography>
                     </StatusCard>
                 </Grid>
@@ -123,7 +127,7 @@ function HomeTasksList() {
 
             <Box mt={3} mb={1} ml={2}>
                 <Typography variant="body1" color={'grey'}>
-                    {tasks?tasks.length:''} Total Number of Tasks.
+                    {tasks ? tasks.length : ''} Total Number of Tasks.
                 </Typography>
             </Box>
 
@@ -182,7 +186,9 @@ function HomeTasksList() {
                                             />
                                             <Avatar>
                                                 <IconButton>
-                                                    <ModeIcon color="primary" />
+                                                    <Link to={`user/tasks/edit/${task.id}`}>
+                                                        <ModeIcon color="primary" />
+                                                    </Link>
                                                 </IconButton>
                                             </Avatar>
                                         </Box>
@@ -190,7 +196,10 @@ function HomeTasksList() {
                                 </ListItem>
                                 <Divider />
                                 <ListItem sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
-                                    <Button variant="contained">Detail</Button>
+                                    <Link to={`user/tasks/detail/${task.id}`} >
+                                        <Button variant="contained">
+                                            Detail</Button>
+                                    </Link>
                                 </ListItem>
                             </Card>)
                     })

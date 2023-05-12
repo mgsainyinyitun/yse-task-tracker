@@ -1,20 +1,13 @@
-import { Avatar, Card, CardContent, CardHeader, Divider, Container,Grid, IconButton, Paper, Stack, TextField, Typography } from "@mui/material";
+import { Avatar, Card, CardContent, CardHeader, Divider, Container, Grid, IconButton, Paper, Stack, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import ArrowBackIosOutlinedIcon from '@mui/icons-material/ArrowBackIosOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { CalendarTodayOutlined, VerifiedUserOutlined } from "@mui/icons-material";
 import { useEffect } from "react";
 import { useState } from "react";
 import { findTaskById } from "../../../backend/controller/taskController";
-
-const CommonCard = styled(Card)(() => ({
-    borderRadius: '10px',
-    minHeight: '25%',
-    height: '100%',
-    width: '100%',
-}));
 
 function TaskDetail() {
     const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -23,12 +16,21 @@ function TaskDetail() {
     const { id } = useParams();
     const nevigate = useNavigate();
     const [task, setTask] = useState(null);
+    const theme = useTheme();
     useEffect(() => {
         findTaskById(id)
             .then((res) => {
                 setTask(res.data);
             })
     }, []);
+
+    const CommonCard = styled(Card)(() => ({
+        borderRadius: '10px',
+        border: `1px solid ${theme.palette.custom.info}`,
+        minHeight: '25%',
+        height: '100%',
+        width: '100%',
+    }));
 
     function renderDate(isoDateString) {
         if (isoDateString) {
@@ -98,7 +100,7 @@ function TaskDetail() {
                     <Container disableGutters={true} >
                         <Grid container spacing={2}>
                             <Grid item sm={12} >
-                                <Card sx={{ borderRadius: '10px' }}>
+                                <Card sx={{ borderRadius: '10px', background: theme.palette.custom.info, }} elevation={0}>
                                     <CardHeader
                                         title={task.title}
                                     />
@@ -111,7 +113,7 @@ function TaskDetail() {
                             </Grid>
 
                             <Grid item md={4} xs={12}>
-                                <CommonCard>
+                                <CommonCard elevation={0}>
                                     <CardHeader
                                         sx={{ color: 'primary.dark' }}
                                         avatar={<CalendarTodayOutlined />}
@@ -124,7 +126,7 @@ function TaskDetail() {
                             </Grid>
 
                             <Grid item md={4} xs={12}>
-                                <CommonCard>
+                                <CommonCard elevation={0}>
                                     <CardHeader
                                         sx={{ color: 'error.dark' }}
                                         avatar={<CalendarTodayOutlined />}
@@ -136,13 +138,12 @@ function TaskDetail() {
                                 </CommonCard></Grid>
 
                             <Grid item md={4} xs={12}>
-                                <CommonCard
+                                <CommonCard elevation={0}
                                 >
                                     <CardHeader
                                         sx={{ color: 'main.dark' }}
                                         avatar={<CalendarTodayOutlined />}
-                                        t
-                                        itle={'FINISHED DATE'}
+                                        title={'FINISHED DATE'}
                                     />
                                     <CardContent>
                                         {renderDate(task.finishedDate)}
@@ -153,7 +154,7 @@ function TaskDetail() {
                             <Grid item md={3} xs={12}>
                                 <Grid container spacing={2}>
                                     <Grid item md={12} xs={6}>
-                                        <CommonCard>
+                                        <CommonCard elevation={0}>
                                             <CardHeader
                                                 sx={{ color: 'main.dark' }}
                                                 avatar={<PersonOutlinedIcon />}
@@ -169,7 +170,7 @@ function TaskDetail() {
                                         </CommonCard>
                                     </Grid>
                                     <Grid item md={12} xs={6}>
-                                        <CommonCard>
+                                        <CommonCard elevation={0}>
                                             <CardHeader
                                                 sx={{ color: 'main.dark' }}
                                                 avatar={<PersonOutlinedIcon />}
@@ -188,7 +189,7 @@ function TaskDetail() {
                             </Grid>
 
                             <Grid item md={9} xs={12}>
-                                <Card sx={{ height: '100%' }}>
+                                <Card sx={{ height: '100%', borderRadius: '10px', border: `1px solid ${theme.palette.custom.info}`, }} elevation={0}>
                                     <CardHeader
                                         sx={{ color: 'main.dark' }}
                                         avatar={<VerifiedUserOutlined />}
