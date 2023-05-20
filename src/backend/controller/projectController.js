@@ -9,6 +9,62 @@ import { deleteTaskInStore } from "../firebase/firestore/taskStoreFunctions";
 import { addTasks, deleteTasks } from "../../redux/reducers/taskSlice";
 import { deleteProjectInLocal } from "../localstorage/projects";
 import { addTasksDataToLocal, deleteTaskInLocal } from "../localstorage/tasks";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { db } from "../../firebase";
+
+
+let readProjectUnsubscribe = null;
+export function onSnapshotProjectStore() {
+    const q = query(collection(db, "projects"), where("id", "!=", ""));
+    if (readProjectUnsubscribe) {
+        return;
+    }
+    readProjectUnsubscribe = onSnapshot(q, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+                console.log("added data", change.doc.data());
+
+                let project = change.doc.data();
+                let prep_project = {
+                    ...project,
+                    startDate: project.startDate ? timestampToIsoString(project.startDate) : null,
+                    endDate: project.endDate ? timestampToIsoString(project.endDate) : null,
+                }
+                delete prep_project.createdAt;
+                delete prep_project.updatedAt;
+
+                store.dispatch(addProjects(prep_project));
+                addProjectsDataToLocal(prep_project);
+
+            }
+            if (change.type === "modified") {
+                let project = change.doc.data();
+                let prepPjt = {
+                    ...project,
+                    startDate: project.startDate ? timestampToIsoString(project.startDate) : null,
+                    endDate: project.endDate ? timestampToIsoString(project.endDate) : null,
+                }
+                delete prepPjt.createdAt;
+                delete prepPjt.updatedAt;
+                store.dispatch(updateProjects(prepPjt));
+                updateProjectsDataInLocal(prepPjt);
+            }
+            if (change.type === "removed") {
+                console.log("Removed data: ", change.doc.data());
+                let project = change.doc.data();
+                store.dispatch(deleteProjects(project.id));
+                deleteProjectInLocal(project.id);
+                // Remove Project's tasks form firestore
+                for (const taskId of project.tasks) {
+                    store.dispatch(deleteTasks(taskId))
+                    deleteTaskInLocal(taskId);
+                }
+            }
+        });
+    });
+    return readProjectUnsubscribe;
+}
+
 export async function addProject(project, tasks, dispatch) {
     /** Add tasks to firebase                         */
     /** Add projects with task id                    */

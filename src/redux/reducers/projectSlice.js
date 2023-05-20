@@ -45,6 +45,7 @@ export const projecSlice = createSlice({
             }
         },
         updateProjects: (state, actions) => {
+            console.log('update in slice')
             const project = actions.payload;
             let pjt = state.data.find(item => item.id === project.id);
             if (pjt) {

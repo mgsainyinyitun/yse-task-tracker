@@ -25,6 +25,7 @@ import { getUserById } from "../../backend/firebase/firestore/userStoreFunction"
 import { setUserDataToLocal } from "../../backend/localstorage/user";
 import { addUser } from "../../redux/reducers/userSlice";
 import { getPositionsData } from "../../backend/firebase/firestore/positionStoreFunctions";
+import { onSnapshotProjectStore } from "../../backend/controller/projectController";
 
 function Signin() {
     const [loading, setLoading] = useState(false);
@@ -76,9 +77,11 @@ function Signin() {
     useEffect(() => {
         getDepartmentsData(dispatch);
         getPositionsData(dispatch);
-
         onAuthStateChanged(auth, (user) => {
+            let readProjectUnsubscribe = null;
             if (user) {
+                // subscripe to realtime data changes
+                readProjectUnsubscribe = onSnapshotProjectStore();
                 getUserById(user.uid).then(
                     userData=>{
                         setUserDataToLocal(userData);
@@ -86,6 +89,10 @@ function Signin() {
                         navigate(PAGE.LINK.HOME)
                     }
                 );
+            }else{
+                if(readProjectUnsubscribe){
+                    readProjectUnsubscribe();
+                }
             }
         });
     }, [])

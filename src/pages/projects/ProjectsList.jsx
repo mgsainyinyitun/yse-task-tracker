@@ -21,6 +21,9 @@ const deleteSuccessMessage = "Successfully deleted project";
 
 function prepareProjects(projects) {
     const pProjects = projects.map((project, index) => {
+        // Find Task's Project
+        
+
         return { ...project, creator: project.creator.username, edit: project.id, delete: project.id, detail: project.id, addTask: project.id, no: index + 1 }
     })
     return pProjects;

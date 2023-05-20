@@ -26,8 +26,10 @@ export function checkProjectEditable(id) {
     let projects = store.getState().projects.data;
     let user = store.getState().users.user;
     let project = projects.find(project => project.id === id);
-    if (user.uid === project.creator.uid) {
-        return false;
+    if (project) {
+        if (user.uid === project.creator.uid) {
+            return false;
+        }
     }
     return true;
 }
@@ -36,8 +38,9 @@ export function checkProjectDeleteable(id) {
     let projects = store.getState().projects.data;
     let user = store.getState().users.user;
     let project = projects.find(project => project.id === id);
+    if(project){
     if (user.uid === project.creator.uid) {
         return false;
-    }
+    }}
     return true;
 }

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { isoDateStringToFormattedDateString } from "../../utils/dateFunction";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { grey } from "@mui/material/colors";
+import { useSelector } from "react-redux";
 
 function renderDate(startDate, dueDate) {
     if (dueDate) {
@@ -13,10 +14,10 @@ function renderDate(startDate, dueDate) {
     }
 }
 
-
 function HomeProjectsList() {
     const theme = useTheme();
     const [projects, setProjects] = useState([]);
+    const storePjt = useSelector(state => state.projects.data)
     useEffect(() => {
         readProjects()
             .then(res => {
@@ -24,7 +25,7 @@ function HomeProjectsList() {
                     setProjects(res.data);
                 }
             })
-    }, []);
+    }, [storePjt]);
     return (
         <Box
             pt={1} pb={1} pr={1}

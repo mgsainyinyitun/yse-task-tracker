@@ -42,21 +42,6 @@ export async function readProjectsFromStore() {
     return projects;
 }
 
-let readProjectUnsubscribe = null;
-export function onSnapshotProjectStore() {
-    let data = [];
-    const q = query(collection(db, "projects"), where("id", "!=", ""));
-    if (readProjectUnsubscribe) {
-        return;
-    }
-    readProjectUnsubscribe = onSnapshot(q, (snapshot) => {
-        snapshot.docChanges().forEach((change) => {
-            console.log('change detected', change.doc.data());
-            data.push(change.doc.data());
-        });
-    });
-    return { unscribe: readProjectUnsubscribe, data: data };
-}
 
 export async function addProjectTaskId(projectId, taskId) {
     const projRef = doc(db, "projects", projectId);
@@ -92,7 +77,6 @@ export async function deleteProjectInStore(projectId) {
     const projectRef = doc(db, "projects", projectId);
     try{
         let res = await deleteDoc(projectRef);
-        console.log(res);
         return Promise.resolve(0);
     }catch(err){
         console.error("Error removing document: ", err);

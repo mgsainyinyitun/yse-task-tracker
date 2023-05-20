@@ -12,6 +12,14 @@ export function findTask(id, tasks) {
     });
 }
 
+export function findTaskContainedProject(taskId,projects){
+    let found = projects.find(project=>{
+        return project.tasks.includes(taskId);
+    });
+    if(found)return found;
+    return null;
+}
+
 export function findDepartment(id, departments) {
     return departments.find(item => {
         return item.id === parseInt(id);
