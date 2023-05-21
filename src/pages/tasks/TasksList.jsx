@@ -1,4 +1,4 @@
-import { Alert, Box, Card, Snackbar, Typography } from "@mui/material";
+import { Alert, Box, Card, Divider, IconButton, Snackbar, Typography, useTheme } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { renderDelete, renderName, renderPriority, renderStatus, renderDetail, renderTaskEdit, renderTaskTitle } from "./common";
@@ -10,6 +10,7 @@ import SuccessAlert from "../../components/SuccessAlert";
 import ErrorAlert from "../../components/ErrorAlert";
 import { readProjects } from "../../backend/controller/projectController";
 import { findTaskContainedProject } from "../../utils/commonFunctions";
+import { isoDateStringToDateString } from "../../utils/dateFunction";
 
 
 const deleteSuccessTitle = "Delete Successful"
@@ -42,6 +43,8 @@ function TasksList() {
     const [deleteError, setDeleteError] = useState(false);
     const [errors, setErrors] = useState(null);
     const reduxTasks = useSelector(state => state.tasks.data);
+    const [selectedCell, setSelectedCell] = useState('');
+    const theme = useTheme();
     const columns = [
         {
             field: 'no', headerName: 'No.', width: 50,
@@ -110,6 +113,26 @@ function TasksList() {
             })
     }, [reduxTasks]);
 
+    const handleCellClick = (params) => {
+        switch (params.field) {
+            case "title": setSelectedCell(
+                <Box>
+                    <Typography>{params.value.task || ''}</Typography>
+                    <Typography variant="body2" fontSize={12} color={'error'}>{params.value.project || ''}</Typography>
+                </Box>
+            ); break;
+            case "consigner": setSelectedCell(params.value); break;
+            case "consignee": setSelectedCell(params.value); break;
+            case "priority": setSelectedCell(params.value); break;
+            case "status": setSelectedCell(params.value); break;
+            case "startDate": setSelectedCell(isoDateStringToDateString(params.value)); break;
+            case "dueDate":
+                params.value ? setSelectedCell(isoDateStringToDateString(params.value)) : setSelectedCell('Not Defined'); break;
+            case "finishedDate":
+                params.value ? setSelectedCell(isoDateStringToDateString(params.value)) : setSelectedCell('Not Defined'); break;
+            default: setSelectedCell("");
+        }
+    }
     return <Box
         sx={{
             display: 'flex',
@@ -122,31 +145,24 @@ function TasksList() {
             open={deletSuccess}
             title={deleteSuccessTitle}
             message={deleteSuccessMessage}
+            setSucces={setDeleteSuccess}
         />)}
 
         {(deleteError && <ErrorAlert
             open={deleteError}
             title={errors.code}
             message={errors.message}
+            setError={setDeleteError}
         />)}
 
-        {/* <Snackbar
-            open={true}
-            autoHideDuration={6000}
-            onClose={() => console.log('close')}
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-            sx={{
-                // border: '1px solid red',
-                minWidth: 500,
-            }}
-        >
-            <Card sx={{width:'100%',padding:1,}}>
-                <Typography>
-                    abcdef
-                </Typography>
-            </Card>
-        </Snackbar> */}
-
+        <Box m={1} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+            <Box sx={{ minHeight: 36 }}>
+            </Box>
+            <Typography fontWeight={'bold'} color={'info.dark'}>
+                {selectedCell}
+            </Typography>
+        </Box>
+        <Divider />
         <DataGrid
             aria-label="Tasks List"
             columns={columns}
@@ -154,7 +170,7 @@ function TasksList() {
             components={{
                 Toolbar: GridToolbar,
             }}
-
+            onCellClick={handleCellClick}
             rowsPerPageOptions={[10, 15, 20]}
             pageSize={pageSize}
             onPageSizeChange={newPageSize => setPageSize(newPageSize)}

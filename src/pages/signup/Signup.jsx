@@ -116,6 +116,7 @@ function Signup() {
                 open={error}
                 title={errorTitle}
                 message={errorMessage}
+                setError={setError}
             />
             <Container
                 maxWidth={'sm'}

@@ -111,6 +111,7 @@ function EditProject() {
                 open={error}
                 title={errorObj.code}
                 message={errorObj.message}
+                setError={setError}
             />)}
             {(project && success && <>
                 <SuccessPage

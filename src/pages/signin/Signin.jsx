@@ -124,6 +124,7 @@ function Signin() {
                 open={error}
                 title={errorTitle}
                 message={errorMessage}
+                setError={setError}
             />
             <Container
                 maxWidth={'xs'}

@@ -135,16 +135,19 @@ function ProjectsList() {
                 open={deleteSuccess}
                 title={deleteSuccessTitle}
                 message={deleteSuccessMessage}
+                setSucces={setDeleteSuccess}
             />)}
             {(error && <ErrorAlert
                 open={error}
                 title={errorObj.code}
                 message={errorObj.message}
+                setError={setError}
             />)}
             {(deleteError && <ErrorAlert
                 open={deleteError}
                 title={deleteErrorObj.code}
                 message={deleteErrorObj.message}
+                setError={setDeleteError}
             />)}
             <Box m={1} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
                 <Button
