@@ -53,7 +53,7 @@ function HomeProjectsList() {
                     {
                         projects.map(project => {
                             return (
-                                <Grid item md={6} sm={6} xs={12}>
+                                <Grid item md={6} sm={6} xs={12} key={project.id}>
                                     <Card elevation={0}
                                         sx={{
                                             marginBottom: 1,
@@ -61,7 +61,7 @@ function HomeProjectsList() {
                                             borderRadius: '10px',
                                             height: '100%'
                                         }}>
-                                        <ListItem>
+                                        <ListItem key={project.id}>
                                             <ListItemText
                                                 primary={
                                                     <Typography variant="h6" color={'white'}

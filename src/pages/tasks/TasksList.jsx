@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Alert, Box, Card, Snackbar, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { renderDelete, renderName, renderPriority, renderStatus, renderDetail, renderTaskEdit, renderTaskTitle } from "./common";
@@ -18,10 +18,10 @@ const deleteSuccessMessage = "Successfully deleted Task from Project";
 function prepareTasks(projects, tasks) {
     let pTasks = [];
     pTasks = tasks.map((task, index) => {
-        let pjt = findTaskContainedProject(task.id,projects);
+        let pjt = findTaskContainedProject(task.id, projects);
         return {
             ...task,
-            title:{task:task.title,project:pjt.title},
+            title: { task: task.title, project: pjt.title },
             consignee: task.consignee ? task.consignee.username : null,
             consigner: task.consigner ? task.consigner.username : null,
             edit: task.id,
@@ -47,8 +47,9 @@ function TasksList() {
             field: 'no', headerName: 'No.', width: 50,
             renderCell: params => renderNumber(params),
         },
-        { field: 'title', headerName: 'Title', minWidth: 150, flex: 1,
-          renderCell: params => renderTaskTitle(params),
+        {
+            field: 'title', headerName: 'Title', minWidth: 150, flex: 1,
+            renderCell: params => renderTaskTitle(params),
         },
         {
             field: 'consigner', headerName: 'Assign By', flex: 0.5, minWidth: 120,
@@ -128,6 +129,24 @@ function TasksList() {
             title={errors.code}
             message={errors.message}
         />)}
+
+        {/* <Snackbar
+            open={true}
+            autoHideDuration={6000}
+            onClose={() => console.log('close')}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            sx={{
+                // border: '1px solid red',
+                minWidth: 500,
+            }}
+        >
+            <Card sx={{width:'100%',padding:1,}}>
+                <Typography>
+                    abcdef
+                </Typography>
+            </Card>
+        </Snackbar> */}
+
         <DataGrid
             aria-label="Tasks List"
             columns={columns}
@@ -142,7 +161,7 @@ function TasksList() {
             sx={{
                 border: 'none',
                 boxShadow: 1,
-                overflowY:'scroll',
+                overflowY: 'scroll',
             }}
         />
         <TaskDeleteModal

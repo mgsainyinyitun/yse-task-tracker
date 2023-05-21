@@ -12,6 +12,60 @@ import { deleteTasks } from "../../redux/reducers/taskSlice";
 import { removeProjectTask } from "../../redux/reducers/projectSlice";
 import { readProjects } from "./projectController";
 import { ROLES } from "../../constant";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { db } from "../../firebase";
+
+
+
+let readTasksUnsubscribe = null;
+export function onSnapshotTaskStore(user) {
+
+    const q = query(collection(db, "tasks"), where("consignee.department", "==", user.department.id));
+
+    if (readTasksUnsubscribe) {
+        return;
+    }
+    readTasksUnsubscribe = onSnapshot(q, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+                console.log('added data',change.doc.data());
+                let task = change.doc.data();
+                let prep_task = {
+                    ...task,
+                    startDate: task.startDate ? timestampToIsoString(task.startDate) : null,
+                    dueDate: task.endDate ? timestampToIsoString(task.endDate) : null,
+                    finishedDate: task.finishedDate ? timestampToIsoString(task.finishedDate) : null,
+                }
+                delete prep_task.createdAt;
+                delete prep_task.updatedAt;
+                store.dispatch(addTasks(prep_task));
+                addTasksDataToLocal(prep_task);
+            }
+            if (change.type === "modified") {
+                console.log('modify data',change.doc.data());
+                let task = change.doc.data();
+                let prep_task = {
+                    ...task,
+                    startDate: task.startDate ? timestampToIsoString(task.startDate) : null,
+                    dueDate: task.endDate ? timestampToIsoString(task.endDate) : null,
+                    finishedDate: task.finishedDate ? timestampToIsoString(task.finishedDate) : null,
+                }
+                delete prep_task.createdAt;
+                delete prep_task.updatedAt;
+                store.dispatch(updateTasks(prep_task));
+                updateTasksDataInLocal(prep_task);
+            }
+            if (change.type === "removed") {
+                console.log("Removed data: ", change.doc.data());
+                let task = change.doc.data();
+                store.dispatch(deleteTasks(task.id));
+                deleteTaskInLocal(task.id);
+            }
+        });
+    });
+    return readTasksUnsubscribe;
+}
+
 
 export async function addTask(projectID, task) {
     /** Add task to firebase  => id                  */
@@ -80,9 +134,6 @@ function findProject(projects, taskId) {
     console.log(found);
     return found;
 }
-
-
-
 
 export async function removeTask(taskId) {
     let projects = await readProjects()
@@ -168,7 +219,7 @@ export async function readTasks() {
             } else {
                 console.log(`read task (department)`);
                 tasks = await readUserDepartmentTasksFromStore(department.id)
-                    .then(res=>{
+                    .then(res => {
                         return res;
                     })
             }

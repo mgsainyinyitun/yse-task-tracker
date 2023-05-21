@@ -42,6 +42,26 @@ export async function readProjectsFromStore() {
     return projects;
 }
 
+export async function readAllProjectRelatedDepartmentFromStore(departmentId) {
+    const q1 = query(collection(db, "projects"), where("departments", "==", "All"));
+    const q2 = query(collection(db, "projects"), where("departments.id", "==", departmentId));
+    const tasks = await getDocs(q1)
+        .then(querySnapshot => {
+            const documents = querySnapshot.docs.map((doc) => doc.data());
+            return {
+                status: 0,
+                data: documents,
+            }
+        })
+        .catch(error => {
+            return {
+                status: 1,
+                error: error,
+            }
+        });
+    return tasks;
+}
+
 
 export async function addProjectTaskId(projectId, taskId) {
     const projRef = doc(db, "projects", projectId);
@@ -75,10 +95,10 @@ export async function updateProjectInStore(project) {
 
 export async function deleteProjectInStore(projectId) {
     const projectRef = doc(db, "projects", projectId);
-    try{
+    try {
         let res = await deleteDoc(projectRef);
         return Promise.resolve(0);
-    }catch(err){
+    } catch (err) {
         console.error("Error removing document: ", err);
         return Promise.reject(err);
     }

@@ -129,6 +129,7 @@ function ProjectsList() {
                 open={success}
                 title={successTitle}
                 message={successMessage}
+                setSucces={setSuccess}
             />)}
             {(deleteSuccess && <SuccessAlert
                 open={deleteSuccess}

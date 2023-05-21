@@ -25,7 +25,8 @@ import { getUserById } from "../../backend/firebase/firestore/userStoreFunction"
 import { setUserDataToLocal } from "../../backend/localstorage/user";
 import { addUser } from "../../redux/reducers/userSlice";
 import { getPositionsData } from "../../backend/firebase/firestore/positionStoreFunctions";
-import { onSnapshotProjectStore } from "../../backend/controller/projectController";
+import { onSnapshotDepartmentProjectStore, onSnapshotProjectStore } from "../../backend/controller/projectController";
+import { onSnapshotTaskStore } from "../../backend/controller/taskController";
 
 function Signin() {
     const [loading, setLoading] = useState(false);
@@ -79,6 +80,8 @@ function Signin() {
         getPositionsData(dispatch);
         onAuthStateChanged(auth, (user) => {
             let readProjectUnsubscribe = null;
+            let readDepartmentProjectUnsubscribe = null;
+            let readUserTaskUnsubscribe = null;
             if (user) {
                 // subscripe to realtime data changes
                 readProjectUnsubscribe = onSnapshotProjectStore();
@@ -86,12 +89,17 @@ function Signin() {
                     userData=>{
                         setUserDataToLocal(userData);
                         dispatch(addUser(userData));
+                        console.log(userData);
+                        readDepartmentProjectUnsubscribe = onSnapshotDepartmentProjectStore(userData.department.id);
+                        readUserTaskUnsubscribe = onSnapshotTaskStore(userData);
                         navigate(PAGE.LINK.HOME)
                     }
                 );
             }else{
                 if(readProjectUnsubscribe){
                     readProjectUnsubscribe();
+                    readDepartmentProjectUnsubscribe();
+                    readUserTaskUnsubscribe();
                 }
             }
         });

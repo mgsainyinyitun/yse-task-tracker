@@ -1,5 +1,5 @@
 import { addProjects, deleteProjects, updateProjects } from "../../redux/reducers/projectSlice";
-import { addProjectToStore, deleteProjectInStore, readProjectsFromStore, updateProjectInStore } from "../firebase/firestore/projectStoreFunctions";
+import { addProjectToStore, deleteProjectInStore, readAllProjectRelatedDepartmentFromStore, readProjectsFromStore, updateProjectInStore } from "../firebase/firestore/projectStoreFunctions";
 import { addTaskToStore } from "../firebase/firestore/taskStoreFunctions";
 import { addProjectsDataToLocal, getProjectsDatafromLocal, updateProjectsDataInLocal } from "../localstorage/projects";
 import { store } from "../../redux/store";
@@ -15,15 +15,14 @@ import { db } from "../../firebase";
 
 let readProjectUnsubscribe = null;
 export function onSnapshotProjectStore() {
-    const q = query(collection(db, "projects"), where("id", "!=", ""));
+    const q = query(collection(db, "projects"), where("departments", "==", "All"));
     if (readProjectUnsubscribe) {
         return;
     }
     readProjectUnsubscribe = onSnapshot(q, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
             if (change.type === "added") {
-                console.log("added data", change.doc.data());
-
+                console.log("added data");
                 let project = change.doc.data();
                 let prep_project = {
                     ...project,
@@ -35,7 +34,6 @@ export function onSnapshotProjectStore() {
 
                 store.dispatch(addProjects(prep_project));
                 addProjectsDataToLocal(prep_project);
-
             }
             if (change.type === "modified") {
                 let project = change.doc.data();
@@ -63,6 +61,56 @@ export function onSnapshotProjectStore() {
         });
     });
     return readProjectUnsubscribe;
+}
+
+let readDepartmentProjectUnsubscribe = null;
+export function onSnapshotDepartmentProjectStore(departmentId) {
+    const q = query(collection(db, "projects"), where("departments.id", "==", departmentId));
+    if (readDepartmentProjectUnsubscribe) {
+        return;
+    }
+    readDepartmentProjectUnsubscribe = onSnapshot(q, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+                console.log("added data");
+                let project = change.doc.data();
+                let prep_project = {
+                    ...project,
+                    startDate: project.startDate ? timestampToIsoString(project.startDate) : null,
+                    endDate: project.endDate ? timestampToIsoString(project.endDate) : null,
+                }
+                delete prep_project.createdAt;
+                delete prep_project.updatedAt;
+
+                store.dispatch(addProjects(prep_project));
+                addProjectsDataToLocal(prep_project);
+            }
+            if (change.type === "modified") {
+                let project = change.doc.data();
+                let prepPjt = {
+                    ...project,
+                    startDate: project.startDate ? timestampToIsoString(project.startDate) : null,
+                    endDate: project.endDate ? timestampToIsoString(project.endDate) : null,
+                }
+                delete prepPjt.createdAt;
+                delete prepPjt.updatedAt;
+                store.dispatch(updateProjects(prepPjt));
+                updateProjectsDataInLocal(prepPjt);
+            }
+            if (change.type === "removed") {
+                console.log("Removed data: ", change.doc.data());
+                let project = change.doc.data();
+                store.dispatch(deleteProjects(project.id));
+                deleteProjectInLocal(project.id);
+                // Remove Project's tasks form firestore
+                for (const taskId of project.tasks) {
+                    store.dispatch(deleteTasks(taskId))
+                    deleteTaskInLocal(taskId);
+                }
+            }
+        });
+    });
+    return readDepartmentProjectUnsubscribe;
 }
 
 export async function addProject(project, tasks, dispatch) {
@@ -141,7 +189,17 @@ export async function readProjects() {
             }
         } else {
             // 3. Read from firestore
-            projects = await readProjectsFromStore()
+
+            // 1. Get Department
+            // 2. read 'All' project and department
+
+            // projects = await readProjectsFromStore()
+            //     .then(res => {
+            //         return res;
+            //     });
+            const department = store.getState().users.user.department;
+
+            projects = await readAllProjectRelatedDepartmentFromStore(department.id)
                 .then(res => {
                     return res;
                 });
