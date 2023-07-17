@@ -1,10 +1,8 @@
-
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../../firebase";
-import { addUser } from "../../redux/reducers/userSlice";
+import { auth } from "../../../firebase";
 import { addNewUser } from "../firestore/userStoreFunction";
 
-export async function signin(email, password, dispatch) {
+export async function signin(email, password) {
     let response =
         await signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
@@ -39,7 +37,7 @@ export async function signup(username, email, phone,address, department, positio
                 address,
                 department,
                 position,
-                role:'user', // Default Role is User
+                role:['user'], // Default Role is User
             }
             updateProfile(auth.currentUser, { displayName: username })
                 .then(() => {

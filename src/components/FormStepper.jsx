@@ -3,7 +3,7 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 
-export function FormStepper({steps,current}) {
+export function FormStepper({steps,current,complete}) {
     return (
         <Box sx={{ width: '100%' }}>
             <Stepper 
@@ -14,7 +14,9 @@ export function FormStepper({steps,current}) {
                 }}
             >
                 {steps.map((label) => (
-                    <Step key={label}>
+                    <Step key={label}
+                        completed={complete?complete:undefined}
+                    >
                         <StepLabel>{label}</StepLabel>
                     </Step>
                 ))}

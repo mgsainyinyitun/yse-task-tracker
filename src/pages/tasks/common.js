@@ -1,11 +1,14 @@
-import { Avatar, Chip, Box, Button, IconButton } from "@mui/material";
+import { Avatar, Chip, Box, Button, IconButton, Typography } from "@mui/material";
 import { DeleteOutline, EditOutlined } from "@mui/icons-material";
 import NotStartedOutlinedIcon from '@mui/icons-material/NotStartedOutlined';
 import WorkHistoryOutlinedIcon from '@mui/icons-material/WorkHistoryOutlined';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import { Link } from "react-router-dom";
 import { findTask } from "../../utils/commonFunctions";
-import { mockTasks } from "../../data/mockData";
+import { CONSTANTS } from "../constants";
+import { store } from "../../redux/store";
+import { checkTaskDeleteable, checkTaskEditable } from "../../utils/permission";
+
 
 
 export function renderName(params) {
@@ -17,6 +20,21 @@ export function renderName(params) {
             avatar={<Avatar>{params.value[0]}</Avatar>}
             label={params.value}
         />)
+}
+
+export function renderTaskTitle(params) {
+    if (params.value === null) {
+        return '';
+    }
+    return (
+        <Box>
+            <Typography variant="h6">
+                {params.value.task}
+            </Typography>
+            <Typography variant="body2" fontSize={12} color={'error'}>
+                {params.value.project}
+            </Typography>
+        </Box>);
 }
 
 export function renderPriority(params) {
@@ -47,22 +65,22 @@ export function renderStatus(params) {
 
     let content = null;
     switch (params.value) {
-        case 'notyet':
+        case CONSTANTS.STATUS.NOTSTART:
             content =
                 <>
-                    <NotStartedOutlinedIcon sx={{marginRight:'5px', color:'error.main'}}/>
+                    <NotStartedOutlinedIcon sx={{ marginRight: '5px', color: 'error.main' }} />
                     {`Not Start`}
                 </>; break;
-        case 'inprogress':
+        case CONSTANTS.STATUS.INPROGRESS:
             content =
                 <>
-                    <WorkHistoryOutlinedIcon sx={{marginRight:'5px',color:'primary.main'}}/>
+                    <WorkHistoryOutlinedIcon sx={{ marginRight: '5px', color: 'primary.main' }} />
                     {`In Progress`}
                 </>; break;
-        case 'finished':
+        case CONSTANTS.STATUS.FINISHED:
             content =
                 <>
-                    <CheckCircleOutlineOutlinedIcon sx={{marginRight:'5px',color:'success.main'}}/>
+                    <CheckCircleOutlineOutlinedIcon sx={{ marginRight: '5px', color: 'success.main' }} />
                     {`Finished`}
                 </>; break;
     }
@@ -93,9 +111,9 @@ export function renderDetail(params) {
         </Button>);
 }
 
-export function renderEdit(params) {
+export function renderTaskEdit(params) {
     return (
-        <IconButton sx={{color:'primary.dark'}}>
+        <IconButton sx={{ color: 'primary.dark' }} disabled={checkTaskEditable(params.value)}>
             <Link to={`edit/${params.value}`}
                 style={{
                     textDecoration: 'none',
@@ -107,13 +125,16 @@ export function renderEdit(params) {
         </IconButton>)
 
 }
-export function renderDelete(params,setOpen,setDeleteTask) {
-    const onClickOpenDeleteModal = ()=>{
-        setDeleteTask(findTask(params.value,mockTasks));
+
+
+export function renderDelete(params, setOpen, setDeleteTask) {
+    const reduxTasks = store.getState().tasks.data;
+    const onClickOpenDeleteModal = () => {
+        setDeleteTask(findTask(params.value, reduxTasks));
         setOpen(true);
     }
     return (
-    <IconButton sx={{color:'red'}} onClick={onClickOpenDeleteModal}>
-        <DeleteOutline />
-    </IconButton>);
+        <IconButton sx={{ color: 'red' }} onClick={onClickOpenDeleteModal} disabled={checkTaskDeleteable(params.value)}>
+            <DeleteOutline />
+        </IconButton>);
 }

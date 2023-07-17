@@ -8,6 +8,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import MenuOpenOutlinedIcon from '@mui/icons-material/MenuOpenOutlined';
+import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import { useTheme } from "@mui/material";
 import { useContext, useState } from "react";
 import { ColorModeContext } from "../main/Main";
@@ -19,9 +20,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { PAGE } from "../pageConstants";
 
 function TopBar() {
-    const { collapseSidebar, collapsed } = useProSidebar();
+    const { collapseSidebar, broken, collapsed, toggleSidebar } = useProSidebar();
     const theme = useTheme();
     const paper = theme.palette.background.paper;
+    // const paper = theme.palette.custom.secondary;
     const colorMode = useContext(ColorModeContext);
     const navigate = useNavigate();
 
@@ -40,6 +42,7 @@ function TopBar() {
     const handleSignOut = () => {
         signOut(auth)
             .then(() => {
+                localStorage.clear();
                 navigate(PAGE.LINK.SIGNIN);
             });
     }
@@ -72,17 +75,21 @@ function TopBar() {
                             alignItems: 'center',
                             flexGrow: 1,
                         }}>
-                        <IconButton onClick={() => collapseSidebar()}>
 
-                            <MenuOpenOutlinedIcon sx={{
-                                transform: !collapsed ? 'rotate(0deg)' : 'rotate(180deg)',
-                            }} />
-                        </IconButton>
-                        <Search
-                            sx={{
+                        {broken && (
+                            <IconButton onClick={()=>toggleSidebar()}>
+                                <MenuOutlinedIcon/>
+                            </IconButton>
+                        )}
+                        {!broken && (
+                            <IconButton onClick={() => collapseSidebar()}>
 
-                            }}
-                        >
+                                <MenuOpenOutlinedIcon sx={{
+                                    transform: !collapsed ? 'rotate(0deg)' : 'rotate(180deg)',
+                                }} />
+                            </IconButton>
+                        )}
+                        <Search>
                             <SearchIconWrapper>
                                 <SearchIcon />
                             </SearchIconWrapper>
@@ -161,13 +168,13 @@ function TopBar() {
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
                 <MenuItem onClick={handleClose}>
-                    <Link to={PAGE.LINK.PROFILE} 
+                    <Link to={PAGE.LINK.PROFILE}
                         style={{
-                            textDecoration:'none',
-                            color:'inherit',
-                            display:'flex',
-                            alignItems:'center',
-                    }}>
+                            textDecoration: 'none',
+                            color: 'inherit',
+                            display: 'flex',
+                            alignItems: 'center',
+                        }}>
                         <Avatar /> Profile
                     </Link>
                 </MenuItem>

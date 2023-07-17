@@ -1,35 +1,48 @@
-import { Avatar, Card, Divider, TextField, Typography } from "@mui/material"
+import { Avatar, Card, Divider, TextField, Typography, useTheme } from "@mui/material"
 import { Box, Stack } from "@mui/system"
+import { formatDateMothName, isoDateStringToFormattedDateString } from "../../../../utils/dateFunction";
 
 function ProjectLeftInfo({ project }) {
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ];
+    const theme = useTheme();
     return (
         <Box
-            p={2}
+            mt={2}
             sx={{
                 height: '100%',
                 width: '100%',
+                display:'flex',
+                flexDirection:'column',
             }}
         >
-            <Typography variant="body1">
-                DESCRIPTION:
-            </Typography>
-            <TextField
-                color="primary"
-                defaultValue={project.description}
-                multiline
-                fullWidth
-                rows={3}
-            />
+            <Card 
+                elevation={0}
+                sx={{
+                    padding:1,
+                    border:`1px solid ${theme.palette.custom.info}`,
+                    borderRadius:'10px'
+                }}
+            >
+                <Typography variant="body1">
+                    DESCRIPTION:
+                </Typography>
+                <TextField
+                    disabled={true}
+                    color="primary"
+                    defaultValue={project.description}
+                    multiline
+                    fullWidth
+                    rows={3}
+                />
+            </Card>
 
             {/** Start Date and End Date */}
-            <Card 
+            <Card
+                elevation={0}
                 sx={{
-                    borderRadius:'10px',
-                    padding:'1rem',
-                    marginTop:'2rem',
+                    borderRadius: '10px',
+                    padding: '1rem',
+                    marginTop:2,
+                    background:theme.palette.custom.info,
                 }}
             >
                 <Stack direction={'row'}>
@@ -39,74 +52,68 @@ function ProjectLeftInfo({ project }) {
 
                     <Typography variant="h6">
                         {
-                            project.startDate ?
-                                `${monthNames[project.startDate.getMonth()]} ,
-                         ${project.startDate.getDay()} ,
-                         ${project.startDate.getFullYear()}
-                        `
-                                :
-                                'Not Defined'
+                            project.startDate ? isoDateStringToFormattedDateString(project.startDate) : 'Not Defined'
                         }
                     </Typography>
                 </Stack>
                 <Stack direction={'row'}>
                     <Typography variant="h6">
-                        END &nbsp;&nbsp;&nbsp;&nbsp;: &nbsp; &nbsp;
+                        END  &nbsp;&nbsp;&nbsp;: &nbsp; &nbsp;
                     </Typography>
 
                     <Typography variant="h6">
                         {
-                            project.startDate ?
-                                `${monthNames[project.endDate.getMonth()]},
-                         ${project.endDate.getDay()} ,
-                         ${project.endDate.getFullYear()}
-                        `
-                                :
-                                'Not Defined'
+                        project.endDate ? isoDateStringToFormattedDateString(project.endDate) : 'Not Defined'
                         }
                     </Typography>
                 </Stack>
             </Card>
             {/**Members Lists */}
             <Card
-             sx={{
-                marginTop: '2rem',
-                borderRadius:'10px',
-                padding:'1rem',
-            }}
+                elevation={0}
+                sx={{
+                    marginTop: 2,
+                    marginBottom:2,
+                    borderRadius: '10px',
+                    padding:1,
+                    background:theme.palette.custom.info,
+                    flexGrow:1
+                }}
             >
-            <Stack
-                direction={'column'}
-                spacing={1}
-            >
-                <Typography variant="h5">
-                    Member Lists
-                </Typography>
-                <Divider sx={{
-                    margin:'10px 0 10px 0'
-                }}/>
-                {
-                    project.members.map(member => {
-                        return (
-                            <Box
-                                key={member.id}
-                                sx={{
-                                    display: 'flex',
-                                    gap: 2,
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <Avatar sx={{ width: 25, height: 25 }}>
-                                    {member.name[0]}
-                                </Avatar>
-                                <Typography>
-                                    {member.name}
-                                </Typography>
-                            </Box>
-                        )
-                    })
-                }
-            </Stack>
+                <Stack
+                    direction={'column'}
+                    spacing={1}
+                >
+                    <Typography variant="h5">
+                        Member Lists
+                    </Typography>
+                    <Divider sx={{
+                        margin: '10px 0 10px 0'
+                    }} />
+
+                    {
+                        project.members ?
+                            project.members.map(member => {
+                                return (
+                                    <Box
+                                        key={member.uid}
+                                        sx={{
+                                            display: 'flex',
+                                            gap: 2,
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        <Avatar sx={{ width: 25, height: 25 }}>
+                                            {member.username[0]}
+                                        </Avatar>
+                                        <Typography>
+                                            {member.username}
+                                        </Typography>
+                                    </Box>
+                                )
+                            }) : 'Empty'
+                    }
+                </Stack>
             </Card>
         </Box>
     )

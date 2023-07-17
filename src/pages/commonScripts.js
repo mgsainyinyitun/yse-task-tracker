@@ -3,10 +3,25 @@ import { DeleteOutline, EditOutlined } from "@mui/icons-material";
 import NotStartedOutlinedIcon from '@mui/icons-material/NotStartedOutlined';
 import WorkHistoryOutlinedIcon from '@mui/icons-material/WorkHistoryOutlined';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { Link } from "react-router-dom";
-import { findTask } from "../utils/commonFunctions";
-import { mockTasks,mockDepartment } from "../data/mockData";
+import { formatDate, isoDateStringToDateString } from "../utils/dateFunction";
+import { green } from "@mui/material/colors";
+import { findProject } from "../utils/commonFunctions";
+import { store } from "../redux/store";
+import { checkProjectDeleteable, checkProjectEditable } from "../utils/permission";
 
+
+export function renderNumber(params) {
+    return <Avatar
+        sx={{
+            width: 25,
+            height: 25,
+            bgcolor: green[500],
+            color: 'blue',
+            fontSize: '14px',
+        }} >{params.value}</Avatar>
+}
 export function renderName(params) {
     if (params.value == null) {
         return '';
@@ -93,7 +108,7 @@ export function renderDetail(params) {
 
 export function renderEdit(params) {
     return (
-        <IconButton sx={{ color: 'primary.dark' }}>
+        <IconButton sx={{ color: 'primary.dark' }} disabled={checkProjectEditable(params.value)}>
             <Link to={`edit/${params.value}`}
                 style={{
                     textDecoration: 'none',
@@ -105,15 +120,37 @@ export function renderEdit(params) {
         </IconButton>)
 
 }
-export function renderDelete(params) {
+export function renderDelete(params, setOpen, setDeleteProject) {
+
+    const reduxProjects = store.getState().projects.data;
+    const onClickOpenDeleteModal = () => {
+        setDeleteProject(findProject(params.value, reduxProjects));
+        setOpen(true);
+    }
     return (
-        <IconButton sx={{ color: 'red' }} >
+        <IconButton sx={{ color: 'red' }} onClick={onClickOpenDeleteModal} disabled={checkProjectDeleteable(params.value)}>
             <DeleteOutline />
         </IconButton>);
 }
 
 export function renderTotalTasks(params) {
-    return <p>{params.value.length}</p>;
+    return (
+        <Box
+            sx={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}
+        >
+            <Avatar
+                sx={{
+                    width: 25,
+                    height: 25
+                }}
+            >{params.value.length}</Avatar>
+        </Box>)
 }
 
 export function renderProgress(params) {
@@ -154,18 +191,32 @@ export function renderProgress(params) {
         </Box>);
 }
 
+export function renderDepartment(params) {
+    if (params.value === 'All') {
+        return <Chip label='All' size="small" />
+    } else {
+        return params.value ? (<Chip label={params.value.name} size='small' />) : "";
+    }
+}
 
-export function renderDepartment(params){
-    if(params.value === 'all'){
-        return <Chip label='All' size="small"/>
+
+export function renderDate(params) {
+    if (params.value) {
+        return isoDateStringToDateString(params.value);
+    } else {
+        return <Typography variant="body2" color={"error"}>Not Defined</Typography>;
     }
 
-    let department = mockDepartment.find(dep=>{
-        return dep.id === params.value;
-    })
+}
 
-    if(department){;
-        return <Chip label={department.name} size='small'/>
+export function renderAddTask(params, setOpen, setProjectId) {
+    const onClickOpenNewTaskModal = () => {
+        setProjectId(params.value);
+        setOpen(true);
     }
-    return;
+
+    return (
+        <IconButton sx={{ color: 'inherit', }} onClick={onClickOpenNewTaskModal}>
+            <AddCircleOutlineIcon />
+        </IconButton>);
 }

@@ -1,16 +1,18 @@
-import { Avatar, Box, Typography,Paper } from "@mui/material";
+import { Avatar, Box, Typography,Paper, useTheme } from "@mui/material";
 import PersonIcon from '@mui/icons-material/Person';
 
 function ProfileHeader({user}) {
+    const theme = useTheme();
     return (
         <Paper
             display={'flex'}
-            elevation={3}
+            elevation={0}
             sx={{
                 borderRadius:'10px',
                 justifyContent: 'center',
                 flexDirection: 'column',
                 padding:'10px',
+                background:theme.palette.custom.info,
             }}
         >
             <Avatar
@@ -30,10 +32,10 @@ function ProfileHeader({user}) {
                     {user.username}
                 </Typography>
                 <Typography variant="body1">
-                    {user.position}
+                    {user.position.name}
                 </Typography>
                 <Typography variant="body2">
-                    {user.department}
+                    {user.department.name}
                 </Typography>
             </Box>
         </Paper>

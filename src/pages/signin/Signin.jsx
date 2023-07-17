@@ -13,18 +13,22 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+
+import { PAGE } from "../pageConstants";
 import YSELOGO from "../../assets/images/YSE Logo (Color).png";
 import ErrorAlert from "../../components/ErrorAlert";
 import OverlayLoading from "../../components/OverlayLoading";
 import { auth } from "../../firebase";
-import { signin } from "../../firebase/auth/userFunction";
-import { getUserById } from "../../firebase/firestore/userStoreFunction";
-import { setUserDataToLocal } from "../../localstorage/user";
+import {signin} from "../../backend/firebase/auth/userFunction";
+import { getDepartmentsData } from "../../backend/firebase/firestore/departmentStoreFunctionns";
+import { getUserById } from "../../backend/firebase/firestore/userStoreFunction";
+import { setUserDataToLocal } from "../../backend/localstorage/user";
 import { addUser } from "../../redux/reducers/userSlice";
-import { PAGE } from "../pageConstants";
+import { getPositionsData } from "../../backend/firebase/firestore/positionStoreFunctions";
+import { onSnapshotDepartmentProjectStore, onSnapshotProjectStore } from "../../backend/controller/projectController";
+import { onSnapshotTaskStore } from "../../backend/controller/taskController";
 
 function Signin() {
-
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [errorTitle, setErrorTitle] = useState('');
@@ -64,6 +68,7 @@ function Signin() {
                         setError(true);
                         setErrorTitle(data.error.code);
                         setErrorMessage(data.error.message);
+                        setLoading(false);
                     }
                 });
         }
@@ -71,16 +76,31 @@ function Signin() {
 
     /** If Already Signin => Redirect to Home Page */
     useEffect(() => {
+        getDepartmentsData(dispatch);
+        getPositionsData(dispatch);
         onAuthStateChanged(auth, (user) => {
+            let readProjectUnsubscribe = null;
+            let readDepartmentProjectUnsubscribe = null;
+            let readUserTaskUnsubscribe = null;
             if (user) {
-                console.log(user.uid);
+                // subscripe to realtime data changes
+                readProjectUnsubscribe = onSnapshotProjectStore();
                 getUserById(user.uid).then(
                     userData=>{
                         setUserDataToLocal(userData);
                         dispatch(addUser(userData));
+                        console.log(userData);
+                        readDepartmentProjectUnsubscribe = onSnapshotDepartmentProjectStore(userData.department.id);
+                        readUserTaskUnsubscribe = onSnapshotTaskStore(userData);
                         navigate(PAGE.LINK.HOME)
                     }
                 );
+            }else{
+                if(readProjectUnsubscribe){
+                    readProjectUnsubscribe();
+                    readDepartmentProjectUnsubscribe();
+                    readUserTaskUnsubscribe();
+                }
             }
         });
     }, [])
@@ -104,6 +124,7 @@ function Signin() {
                 open={error}
                 title={errorTitle}
                 message={errorMessage}
+                setError={setError}
             />
             <Container
                 maxWidth={'xs'}

@@ -7,8 +7,12 @@ import YSE_LOGO from "../../assets/images/YSE Logo (Color).png";
 import { useTheme } from "@mui/material";
 import { THEME } from "../../themes";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { checkIsAdmin } from "../../utils/commonFunctions";
 
 function SideMenuBar() {
+    const user = useSelector(state => state.users.user);
+    let isAdmin = checkIsAdmin(user);
     const currentRoute = window.location.pathname;
     const theme = useTheme();
     const paper = theme.palette.background.paper;
@@ -72,8 +76,6 @@ function SideMenuBar() {
         setMenuActiveBefore(menuBeforeActiveStyle);
     }
 
-
-
     useEffect(() => {
         changeMenuActiveStyleLeave();
     }, [theme]);
@@ -83,7 +85,7 @@ function SideMenuBar() {
             sx={{
                 display: 'flex',
                 flexGrow: '1',
-                height:'100%',
+                height: '100%',
                 overflow: 'auto',
                 borderRadius: '10px 10px 10px 10px',
                 '& .ps-menu-button.ps-active': menuActive,
@@ -91,6 +93,7 @@ function SideMenuBar() {
                 '& .ps-menu-button.ps-active:after': menuActiveAfter,
             }}
         >
+            
             <Sidebar
                 backgroundColor={background}
                 breakPoint={'md'}
@@ -106,8 +109,10 @@ function SideMenuBar() {
                     height={'100%'}
                     sx={{
                         direction: "ltr",
+                        paddingRight:broken?"7px":0,
                     }}
                 >
+                    
                     <Menu
                         rootStyles={{
                             height: "100%",
@@ -170,18 +175,18 @@ function SideMenuBar() {
                                 mb={1}
                             >
                                 <Avatar
-                                >SN</Avatar>
+                                >{user.username.slice(0, 2).toUpperCase()}</Avatar>
                                 <Typography
                                     variant="h6"
                                     mt={1}
                                 >
-                                    Sai Nyi Nyi Tun
+                                    {user.username}
                                 </Typography>
                                 <Typography
                                     variant="body2"
                                     mt={1}
                                 >
-                                    Web Designer
+                                    {user.position.name}
                                 </Typography>
                                 <Box
                                     sx={{
@@ -196,7 +201,7 @@ function SideMenuBar() {
                                     color={'GrayText'}
                                     textAlign={'center'}
                                 >
-                                    Social Media and Design Department
+                                    {user.department.name || ''}
                                 </Typography>
                             </Box>)}
 
@@ -259,7 +264,7 @@ function SideMenuBar() {
                             }
 
                             {/** Admin Role Only  */}
-                            {(!collapsed &&
+                            {(!collapsed && isAdmin &&
                                 <Typography
                                     variant="body1"
                                     m={1}
@@ -269,7 +274,7 @@ function SideMenuBar() {
                                 </Typography>
                             )}
                             {
-                                ADMIN_MENU.items.map(item => {
+                                isAdmin ? ADMIN_MENU.items.map(item => {
                                     return (
                                         <MenuItem
                                             active={currentRoute === item.link}
@@ -284,7 +289,7 @@ function SideMenuBar() {
                                             </Typography>
                                         </MenuItem>
                                     );
-                                })
+                                }) : null
                             }
                         </Box>
                         {(!collapsed &&
@@ -298,7 +303,6 @@ function SideMenuBar() {
                                 borderRadius: "10px",
                                 padding: "0.5rem",
                                 minHeight: '150px',
-                                boxShadow: 1,
                             }}
                                 mt={1}
                                 mb={2}
@@ -322,22 +326,18 @@ function SideMenuBar() {
                                 background: `${paper}`,
                                 padding: "0.5rem",
                                 borderRadius: "10px",
-                                boxShadow:1,
                             }}
                                 mt={1}
-                                mb={1}
                             >
                                 <Typography sx={{
-                                    color:"primary.main",
-                                    writingMode:'vertical-lr',
-                                    transform:'rotate(180deg)',
-                                    textAlign:'center',
-                                    fontWeight:'bold',
+                                    color: "primary.main",
+                                    writingMode: 'vertical-lr',
+                                    transform: 'rotate(180deg)',
+                                    textAlign: 'center',
+                                    fontWeight: 'bold',
                                 }}>
                                     Youth Society for Education
                                 </Typography>
-
-
                             </Box>
                         )}
                     </Menu>

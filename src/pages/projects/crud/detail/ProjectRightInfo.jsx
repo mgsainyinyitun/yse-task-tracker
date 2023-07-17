@@ -1,9 +1,9 @@
-import { Box, Button, Card, CardContent, Divider, LinearProgress, linearProgressClasses, Paper, Typography } from "@mui/material";
-import { styled } from '@mui/material/styles';
+import { Avatar, Box, Button, Card, CardContent, Chip, Divider, LinearProgress, linearProgressClasses, Paper, Typography } from "@mui/material";
+import { styled, useTheme } from '@mui/material/styles';
 import { Stack } from "@mui/system";
-import { mockDepartment, mockTasks } from "../../../../data/mockData";
-import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined';
-import { findDepartment } from "../../../../utils/commonFunctions";
+import { useEffect, useState } from "react";
+import { findTasks } from "../../../../backend/controller/taskController";
+import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: 15,
@@ -18,36 +18,79 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 }));
 
 function ProjectRightInfo({ project }) {
+
+    const [tasks, setTasks] = useState([]);
+    const theme = useTheme();
+
+    useEffect(() => {
+        findTasks(project.tasks)
+            .then(res => {
+                setTasks(res);
+            })
+    }, []);
+
     return (
         <Box
-            mt={4}
-            p={1}
+            mt={2}
             sx={{
                 height: '100%',
                 width: '100%',
+                display: 'flex',
+                flexDirection: 'column'
             }}
         >
             <Card
+                elevation={0}
                 sx={{
                     borderRadius: '10px',
                     padding: '1rem',
+                    background: theme.palette.custom.info
                 }}
             >
-                <BorderLinearProgress
-                    variant="determinate"
-                    value={project.progress}
+                <Box
                     sx={{
-                        marginBottom: '1rem',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        marginBottom: 1,
                     }}
-                />
+                >
+                    <Box sx={{ width: 200 }}>
+                        <CircularProgressbar
+                            value={parseInt(project.progress)}
+                            text={`${parseInt(project.progress)}%`}
+                            strokeWidth={10}
+                            styles={buildStyles({
+                                textColor: 'white',
+                                pathColor: 'green'
+                            })}
+                        /></Box>
+                </Box>
+
                 <Stack direction={'row'} spacing={3} alignItems={'center'}>
-                    <Typography variant="h4">
-                        {project.progress} %
-                    </Typography>
-                    <Box>
-                        <Typography variant="h5" sx={{ color: 'primary.dark' }}>
-                            CREATED BY: {project.creator.name}
+                    <Box
+                        sx={{
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            padding: 2,
+                            border: '1px solid green',
+                            borderRadius: "10px"
+
+                        }}
+                    >
+                        <Typography variant="h5">
+                            CREATED BY:
                         </Typography>
+                        <Chip
+                            sx={{ padding: 1, marginTop: 1 }}
+                            label={
+                                <Typography variant="h4">
+                                    {project.creator.username}
+                                </Typography>
+                            }
+                        />
+
                     </Box>
                 </Stack>
                 <Divider sx={{
@@ -55,37 +98,46 @@ function ProjectRightInfo({ project }) {
                     marginBottom: '1rem',
                 }} />
 
-
-                <Stack direction={'row'} spacing={3} >
-                    <Typography variant="h5">
-                        DEPARTMENT &nbsp; : 
-                    </Typography>
-                    <Typography variant="h5">
+                <Stack direction={'column'} spacing={3} >
+                    <Chip
+                        label={<Typography variant="h5">
+                            DEPARTMENT
+                        </Typography>}
+                    />
+                    <Typography variant="h5" textAlign={'center'}>
                         {
-                            project.scope === 'all' ?
-                                `${project.scope.toUpperCase()}` :
-                                findDepartment(project.scope, mockDepartment).name
+                            project.departments === 'All' ?
+                                `All Departments` :
+                                project.departments ? project.departments.name : 'Null'
                         }
                     </Typography>
                 </Stack>
             </Card>
-
             <Card
+                elevation={0}
                 sx={{
                     borderRadius: '10px',
-                    marginTop: '2rem',
+                    marginTop: 2,
                     padding: '1rem',
+                    border: `1px solid ${theme.palette.custom.info}`,
+                    flexGrow: 1,
+                    marginBottom: 2,
                 }}
             >
                 <Typography variant="h4" sx={{ color: 'primary.main' }}>
                     Recent Tasks
                 </Typography>
                 <Divider sx={{ marginTop: '10px', marginBottom: '10px', color: 'primary.main' }} />
-
                 {
-                    mockTasks.slice(0, 3).map(task => {
+                    tasks.slice(0, 3).map((task, index) => {
                         return (
-                            <Paper sx={{ marginBottom: 1, marginTop: 1 }}>
+                            <Paper
+                                sx={{
+                                    marginBottom: 1,
+                                    marginTop: 1,
+                                    background: theme.palette.custom.info,
+                                    borderRadius: '10px'
+                                }} elevation={0} key={index}>
                                 <CardContent
                                     sx={{
                                         display: 'flex',
@@ -93,24 +145,22 @@ function ProjectRightInfo({ project }) {
                                         gap: 1,
                                     }}
                                 >
-                                    <InsertLinkOutlinedIcon />
-                                    {task.title}
+
+                                    <Avatar>{index + 1}</Avatar>
+                                    <Box>
+                                        <Typography variant="h6">{task.title}</Typography>
+                                        <Typography variant="body2" color="text.secondary">{task.description}</Typography>
+                                    </Box>
                                 </CardContent>
                             </Paper>
                         );
                     })
                 }
-
                 <Box>
-                    <Button variant="contained"
-                        sx={{
-                            borderRadius:'10px',
-                        }}
-                    >
+                    <Button variant="contained">
                         More
                     </Button>
                 </Box>
-
             </Card>
 
         </Box>
