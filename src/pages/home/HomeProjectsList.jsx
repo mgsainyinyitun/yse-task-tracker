@@ -65,18 +65,18 @@ function HomeProjectsList() {
                                             <ListItemText
                                                 primary={
                                                     <Typography variant="h6" color={'white'}
-                                                        sx={{minHeight:60}}
+                                                        sx={{ minHeight: 60 }}
                                                     >
                                                         {project.title}
                                                     </Typography>
                                                 }
                                                 secondary={
-                                                    <Typography color={'blue'} sx={{minHeight:60}}>
+                                                    <Typography color={'blue'} sx={{ minHeight: 60 }}>
                                                         {renderDate(project.startDate, project.endDate)}
                                                     </Typography>
                                                 } />
                                         </ListItem>
-                                        <ListItem sx={{ display: 'flex', justifyContent: 'center',marginBottom:4 }}>
+                                        <ListItem sx={{ display: 'flex', justifyContent: 'center', marginBottom: 4 }}>
                                             <Box
                                                 sx={{
                                                     width: 100,
@@ -100,22 +100,22 @@ function HomeProjectsList() {
                                             display: 'flex',
                                             flexDirection: 'row',
                                             alignItems: 'center',
-                                            justifyContent:'space-between'
+                                            justifyContent: 'space-between'
                                         }}>
-                                            
+
                                             <AvatarGroup max={4}
                                                 sx={{
                                                     '& .MuiAvatar-root': { width: 24, height: 24, fontSize: 15 },
                                                 }}  >
-                                            
+
                                                 {
-                                                    project.members.map(member=>{
-                                                        return  <Avatar sx={{ width: 24, height: 24 }}>{member.username[0].toUpperCase()}</Avatar>
+                                                    project.members.map(member => {
+                                                        return <Avatar sx={{ width: 24, height: 24 }}>{member.username[0].toUpperCase()}</Avatar>
                                                     })
                                                 }
                                             </AvatarGroup>
                                             <Typography variant="body2" color={grey[300]} display={'flex'} alignItems={'center'}>
-                                                 <Avatar sx={{ width: 24, height: 24,marginRight:1, }}> {project.tasks.length} </Avatar> Total Tasks
+                                                <Avatar sx={{ width: 24, height: 24, marginRight: 1, }}> {project.tasks.length} </Avatar> Total Tasks
                                             </Typography>
                                         </ListItem>
                                     </Card>
@@ -123,7 +123,6 @@ function HomeProjectsList() {
                             );
                         })
                     }
-
                 </Grid>
             </List>
 
